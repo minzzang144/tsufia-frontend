@@ -1,5 +1,6 @@
-import { HeadingProps } from '@atoms/Heading';
 import styled, { css } from 'styled-components';
+
+import { HeadingProps } from '@atoms/Heading';
 
 type LevelType = Pick<HeadingProps, 'level'>;
 
