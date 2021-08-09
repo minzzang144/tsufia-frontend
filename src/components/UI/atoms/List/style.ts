@@ -1,17 +1,17 @@
 import styled, { css } from 'styled-components';
 
-import { ListColorProp, ListProps } from '@atoms/List';
+import * as I from '.';
 
-type ColorPick = Pick<ListProps, 'colorProp'>;
+type ColorPick = Pick<I.ListProps, 'colorProp'>;
 
 const colorStyles = css<ColorPick>`
   ${({ colorProp }) =>
-    colorProp === ListColorProp.Black &&
+    colorProp === I.ColorProp.Black &&
     css`
       color: ${({ theme }) => theme.color.dark};
     `}
   ${({ colorProp }) =>
-    colorProp === ListColorProp.Black &&
+    colorProp === I.ColorProp.Black &&
     css`
       color: ${({ theme }) => theme.color.light};
     `}

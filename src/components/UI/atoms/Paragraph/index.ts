@@ -1,13 +1,13 @@
 export enum FontSizeProp {
-  Small = 'small',
-  Medium = 'medium',
-  Large = 'large',
+  Small,
+  Medium,
+  Large,
 }
 
 export enum ColorProp {
-  Black = 'black',
-  White = 'white',
-  Red = 'red',
+  Black,
+  White,
+  Red,
 }
 
 export interface ParagraphProps {

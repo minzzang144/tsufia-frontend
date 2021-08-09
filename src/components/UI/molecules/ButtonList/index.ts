@@ -1,6 +1,6 @@
 export enum FlexDirectionProp {
-  Row = 'Row',
-  Column = 'Column',
+  Row,
+  Column,
 }
 
 export interface ButtonListProps {

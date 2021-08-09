@@ -1,19 +1,19 @@
 import styled, { css } from 'styled-components';
 
-import { ButtonProps, ColorProp } from '@atoms/Button';
+import * as I from '.';
 
-type ColorType = Pick<ButtonProps, 'color'>;
+type ColorPick = Pick<I.ButtonProps, 'colorProp'>;
 
-const sizeStyles = css<ColorType>`
-  ${({ color }) =>
-    color === ColorProp.Black &&
+const sizeStyles = css<ColorPick>`
+  ${({ colorProp }) =>
+    colorProp === I.ColorProp.Black &&
     css`
       border: 2px solid ${({ theme }) => theme.color.light};
       color: ${({ theme }) => theme.color.light};
       background-color: transparent;
     `}
-  ${({ color }) =>
-    color === ColorProp.White &&
+  ${({ colorProp }) =>
+    colorProp === I.ColorProp.White &&
     css`
       border: 2px solid ${({ theme }) => theme.color.dark};
       color: ${({ theme }) => theme.color.dark};

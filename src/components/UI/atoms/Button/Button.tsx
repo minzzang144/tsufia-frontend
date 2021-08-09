@@ -8,5 +8,5 @@ export const Button: React.FC<I.ButtonProps> = ({ children, ...rest }) => (
 );
 
 Button.defaultProps = {
-  color: I.ColorProp.Black,
+  colorProp: I.ColorProp.Black,
 };

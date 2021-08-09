@@ -1,8 +1,8 @@
 export enum ColorProp {
-  Black = 'Black',
-  White = 'White',
+  Black,
+  White,
 }
 
 export interface ButtonProps {
-  color?: ColorProp;
+  colorProp?: ColorProp;
 }

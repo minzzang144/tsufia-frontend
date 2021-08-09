@@ -1,17 +1,17 @@
 import styled, { css } from 'styled-components';
 
-import { ButtonListProps, FlexDirectionProp } from '@molecules/ButtonList';
+import * as I from '.';
 
-type FlexDirection = Pick<ButtonListProps, 'flexDirection'>;
+type FlexDirectionPick = Pick<I.ButtonListProps, 'flexDirection'>;
 
-const flexDirectionStyles = css<FlexDirection>`
+const flexDirectionStyles = css<FlexDirectionPick>`
   ${({ flexDirection }) =>
-    flexDirection === FlexDirectionProp.Row &&
+    flexDirection === I.FlexDirectionProp.Row &&
     css`
       flex-direction: row;
     `}
   ${({ flexDirection }) =>
-    flexDirection === FlexDirectionProp.Column &&
+    flexDirection === I.FlexDirectionProp.Column &&
     css`
       flex-direction: column;
     `}

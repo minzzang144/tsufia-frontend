@@ -17,5 +17,5 @@ export const List: React.FC<I.ListProps> = ({ children, to, ...rest }) => (
 );
 
 List.defaultProps = {
-  colorProp: I.ListColorProp.White,
+  colorProp: I.ColorProp.White,
 };

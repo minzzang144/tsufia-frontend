@@ -1,9 +1,9 @@
-export enum ListColorProp {
-  Black = 'black',
-  White = 'white',
+export enum ColorProp {
+  Black,
+  White,
 }
 
 export interface ListProps {
   to?: string;
-  colorProp?: ListColorProp;
+  colorProp?: ColorProp;
 }

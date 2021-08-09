@@ -2,9 +2,9 @@ import styled, { css } from 'styled-components';
 
 import { HeadingProps } from '@atoms/Heading';
 
-type LevelType = Pick<HeadingProps, 'level'>;
+type LevelPick = Pick<HeadingProps, 'level'>;
 
-const commonStyles = css<LevelType>`
+const commonStyles = css<LevelPick>`
   margin: 0;
   margin-top: 0.85714em;
   margin-bottom: 0.57142em;

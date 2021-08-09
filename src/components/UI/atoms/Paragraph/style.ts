@@ -1,24 +1,24 @@
 import styled, { css } from 'styled-components';
 
-import { ColorProp, FontSizeProp, ParagraphProps } from '@atoms/Paragraph';
+import * as I from '.';
 
-type FontSizePick = Pick<ParagraphProps, 'fontSizeProp'>;
+type FontSizePick = Pick<I.ParagraphProps, 'fontSizeProp'>;
 
-type ColorPick = Pick<ParagraphProps, 'colorProp'>;
+type ColorPick = Pick<I.ParagraphProps, 'colorProp'>;
 
 const fontSizeStyles = css<FontSizePick>`
   ${({ fontSizeProp }) =>
-    fontSizeProp === FontSizeProp.Small &&
+    fontSizeProp === I.FontSizeProp.Small &&
     css`
       font-size: small;
     `}
   ${({ fontSizeProp }) =>
-    fontSizeProp === FontSizeProp.Medium &&
+    fontSizeProp === I.FontSizeProp.Medium &&
     css`
       font-size: medium;
     `}
   ${({ fontSizeProp }) =>
-    fontSizeProp === FontSizeProp.Large &&
+    fontSizeProp === I.FontSizeProp.Large &&
     css`
       font-size: large;
     `}
@@ -26,17 +26,17 @@ const fontSizeStyles = css<FontSizePick>`
 
 const colorStyles = css<ColorPick>`
   ${({ colorProp }) =>
-    colorProp === ColorProp.Black &&
+    colorProp === I.ColorProp.Black &&
     css`
       color: ${({ theme }) => theme.color.dark};
     `}
   ${({ colorProp }) =>
-    colorProp === ColorProp.White &&
+    colorProp === I.ColorProp.White &&
     css`
       color: ${({ theme }) => theme.color.light};
     `}
   ${({ colorProp }) =>
-    colorProp === ColorProp.Red &&
+    colorProp === I.ColorProp.Red &&
     css`
       color: ${({ theme }) => theme.color.red};
     `}
