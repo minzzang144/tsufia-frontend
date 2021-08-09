@@ -8,6 +8,7 @@ const theme: DefaultTheme = {
   color: {
     dark: '#000000',
     light: '#FFFFFF',
+    red: '#FF0000',
   },
 };
 
