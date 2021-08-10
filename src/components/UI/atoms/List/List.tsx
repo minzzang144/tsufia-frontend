@@ -11,11 +11,12 @@ export const List: React.FC<I.ListProps> = ({ children, to, ...rest }) => (
         <Link to={to}>{children}</Link>
       </S.Wrapper>
     ) : (
-      <S.Wrapper>{children}</S.Wrapper>
+      <S.Wrapper {...rest}>{children}</S.Wrapper>
     )}
   </React.Fragment>
 );
 
 List.defaultProps = {
   colorProp: I.ColorProp.White,
+  paddingProp: ['0'],
 };

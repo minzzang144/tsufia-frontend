@@ -5,5 +5,6 @@ export enum ColorProp {
 
 export interface ListProps {
   to?: string;
+  paddingProp?: string[];
   colorProp?: ColorProp;
 }
