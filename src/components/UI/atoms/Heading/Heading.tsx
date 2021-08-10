@@ -4,7 +4,7 @@ import * as I from '.';
 import * as S from '@atoms/Heading/style';
 
 export const Heading: React.FC<I.HeadingProps> = ({ children, ...rest }) => {
-  const { level } = rest;
+  const { levelProp } = rest;
   const levelConfirm = (level: number) => {
     switch (level) {
       case 1:
@@ -24,12 +24,13 @@ export const Heading: React.FC<I.HeadingProps> = ({ children, ...rest }) => {
     }
   };
 
-  if (level) {
-    return levelConfirm(level);
+  if (levelProp) {
+    return levelConfirm(levelProp);
   }
   return <S.H4 {...rest} />;
 };
 
 Heading.defaultProps = {
-  level: 4,
+  marginProp: ['', ''],
+  levelProp: 4,
 };

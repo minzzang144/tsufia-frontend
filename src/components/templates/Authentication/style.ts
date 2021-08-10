@@ -17,8 +17,14 @@ export const Header = styled.div`
 `;
 
 export const LeftSide = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 5%;
   width: 70%;
   background-image: url(${MainPoster});
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
 `;
 
 export const RightSide = styled.div`

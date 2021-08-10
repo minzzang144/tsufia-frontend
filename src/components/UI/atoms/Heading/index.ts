@@ -1,3 +1,4 @@
 export interface HeadingProps {
-  level?: number;
+  levelProp?: number;
+  marginProp?: string[];
 }
