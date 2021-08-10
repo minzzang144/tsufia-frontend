@@ -8,5 +8,6 @@ export const ButtonList: React.FC<I.ButtonListProps> = ({ children, ...rest }) =
 );
 
 ButtonList.defaultProps = {
-  flexDirection: I.FlexDirectionProp.Row,
+  flexDirectionProp: I.FlexDirectionProp.Row,
+  gapProp: ['0'],
 };

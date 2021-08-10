@@ -2,36 +2,35 @@ import styled, { css } from 'styled-components';
 
 import * as I from '.';
 
-type FlexDirectionPick = Pick<I.ButtonListProps, 'flexDirection'>;
-
-type GapPick = Pick<I.ButtonListProps, 'gap'>;
+type FlexDirectionPick = Pick<I.ButtonListProps, 'flexDirectionProp'>;
+type GapPick = Pick<I.ButtonListProps, 'gapProp'>;
 
 const flexDirectionStyles = css<FlexDirectionPick>`
-  ${({ flexDirection }) =>
-    flexDirection === I.FlexDirectionProp.Row &&
+  ${({ flexDirectionProp }) =>
+    flexDirectionProp === I.FlexDirectionProp.Row &&
     css`
       flex-direction: row;
     `}
-  ${({ flexDirection }) =>
-    flexDirection === I.FlexDirectionProp.Column &&
+  ${({ flexDirectionProp }) =>
+    flexDirectionProp === I.FlexDirectionProp.Column &&
     css`
       flex-direction: column;
     `}
 `;
 
 const gapStyles = css<GapPick>`
-  ${({ gap }) =>
-    gap &&
-    gap.length === 1 &&
+  ${({ gapProp }) =>
+    gapProp &&
+    gapProp.length === 1 &&
     css`
-      gap: ${gap[0]};
+      gap: ${gapProp[0]};
     `}
-  ${({ gap }) =>
-    gap &&
-    gap.length === 2 &&
+  ${({ gapProp }) =>
+    gapProp &&
+    gapProp.length === 2 &&
     css`
-      column-gap: ${gap[0]};
-      row-gap: ${gap[1]};
+      column-gap: ${gapProp[0]};
+      row-gap: ${gapProp[1]};
     `}
 `;
 

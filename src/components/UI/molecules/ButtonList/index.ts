@@ -4,6 +4,6 @@ export enum FlexDirectionProp {
 }
 
 export interface ButtonListProps {
-  flexDirection?: FlexDirectionProp;
-  gap?: string[];
+  flexDirectionProp?: FlexDirectionProp;
+  gapProp?: string[];
 }
