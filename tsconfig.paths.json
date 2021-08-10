@@ -6,7 +6,8 @@
       "@molecules/*": ["src/components/UI/molecules/*"],
       "@organisms/*": ["src/components/UI/organisms/*"],
       "@pages/*": ["src/components/pages/*"],
-      "@templates/*": ["src/components/pages/templates/*"],
+      "@templates/*": ["src/components/templates/*"],
+      "@assets": ["src/assets/*"],
       "@theme": ["src/theme"],
       "@theme/*": ["src/theme/*"],
       "@/*": ["src/*"]
