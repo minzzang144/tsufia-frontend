@@ -8,6 +8,14 @@ export const Wrapper = styled.div`
   height: 100vh;
 `;
 
+export const Header = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  position: absolute;
+  top: 0;
+  right: 0;
+`;
+
 export const LeftSide = styled.div`
   width: 70%;
   background-image: url(${MainPoster});
