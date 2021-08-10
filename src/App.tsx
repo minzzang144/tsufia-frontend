@@ -1,7 +1,9 @@
 import React from 'react';
 
+import LogoutHome from '@pages/LogoutHome';
+
 function App() {
-  return <span>Hello World!</span>;
+  return <LogoutHome />;
 }
 
 export default App;

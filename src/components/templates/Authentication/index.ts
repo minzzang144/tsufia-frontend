@@ -1,4 +1,4 @@
 export interface AuthenticationProps {
-  leftSide: JSX.Element;
-  rightSide: JSX.Element;
+  leftSide?: JSX.Element;
+  rightSide?: JSX.Element;
 }
