@@ -9,4 +9,5 @@ export const Button: React.FC<I.ButtonProps> = ({ children, ...rest }) => (
 
 Button.defaultProps = {
   colorProp: I.ColorProp.Black,
+  paddingProp: ['0'],
 };
