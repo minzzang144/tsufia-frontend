@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import MainPoster from '@assets/main-poster.jpg';
+import SubPoster from '@assets/sub-poster.jpg';
 
 export const Wrapper = styled.div`
   display: flex;
@@ -28,5 +29,13 @@ export const LeftSide = styled.div`
 `;
 
 export const RightSide = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 30%;
+  min-width: 450px;
+  background-image: url(${SubPoster});
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
 `;
