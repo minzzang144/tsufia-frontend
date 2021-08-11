@@ -1,5 +1,4 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
 
 import * as S from '@organisms/Login/style';
 
@@ -8,14 +7,13 @@ import { Input } from '@atoms/Input/Input';
 import { useFormContext } from '@pages/LogoutHome/LogoutHomeContainer';
 
 export const Login: React.FC = () => {
-  const { register, handleSubmit } = useForm();
-  const { onLoginValid } = useFormContext();
+  const { loginRegister, loginHandleSubmit, onLoginValid } = useFormContext();
 
   return (
     <S.Wrapper>
-      <Form onSubmit={handleSubmit(onLoginValid)}>
+      <Form onSubmit={loginHandleSubmit(onLoginValid)}>
         <Input
-          register={register('email', {
+          register={loginRegister('email', {
             required: true,
             pattern: {
               value:
@@ -25,7 +23,7 @@ export const Login: React.FC = () => {
           })}
           type="email"
         />
-        <Input register={register('password', { required: true })} type="password" />
+        <Input register={loginRegister('password', { required: true })} type="password" />
         <Input type="submit" />
       </Form>
     </S.Wrapper>

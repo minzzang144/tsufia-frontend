@@ -1,13 +1,16 @@
 import React, { createContext, useContext } from 'react';
 
-import { useForm } from 'react-hook-form';
+import { useForm, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form';
 
 import { LoginFormInput } from '@atoms/Input';
 import { LogoutHomePresenter } from '@pages/LogoutHome/LogoutHomePresenter';
 
 export interface IFormContext {
+  loginRegister: UseFormRegister<LoginFormInput>;
+  loginHandleSubmit: UseFormHandleSubmit<LoginFormInput>;
   onLoginValid: () => void;
 }
+
 const FormContext = createContext<IFormContext | undefined>(undefined);
 export const useFormContext = () => {
   const context = useContext(FormContext);
@@ -16,14 +19,21 @@ export const useFormContext = () => {
 };
 
 export const LogoutHomeContainer = () => {
-  const { getValues: loginGetValues } = useForm<LoginFormInput>();
+  const {
+    register: loginRegister,
+    handleSubmit: loginHandleSubmit,
+    getValues: loginGetValues,
+  } = useForm<LoginFormInput>();
 
   const value = {
+    loginRegister,
+    loginHandleSubmit,
     onLoginValid,
   };
 
   function onLoginValid() {
-    console.log(loginGetValues());
+    const x = loginGetValues();
+    console.log(x);
   }
 
   return (
