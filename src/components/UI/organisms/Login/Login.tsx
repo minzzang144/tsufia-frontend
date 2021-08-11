@@ -4,16 +4,16 @@ import * as S from '@organisms/Login/style';
 
 import { Form } from '@atoms/Form/Form';
 import { Input } from '@atoms/Input/Input';
-import { useFormContext } from '@pages/LogoutHome/LogoutHomeContainer';
+import { useLoginFormContext } from '@pages/LogoutHome/LogoutHomeContainer';
 
 export const Login: React.FC = () => {
-  const { loginRegister, loginHandleSubmit, onLoginValid } = useFormContext();
+  const { register, handleSubmit, onValid } = useLoginFormContext();
 
   return (
     <S.Wrapper>
-      <Form onSubmit={loginHandleSubmit(onLoginValid)}>
+      <Form onSubmit={handleSubmit(onValid)}>
         <Input
-          register={loginRegister('email', {
+          register={register('email', {
             required: true,
             pattern: {
               value:
@@ -23,7 +23,7 @@ export const Login: React.FC = () => {
           })}
           type="email"
         />
-        <Input register={loginRegister('password', { required: true })} type="password" />
+        <Input register={register('password', { required: true })} type="password" />
         <Input type="submit" />
       </Form>
     </S.Wrapper>

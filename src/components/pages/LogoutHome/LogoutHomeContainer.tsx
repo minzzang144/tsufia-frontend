@@ -6,14 +6,14 @@ import { LoginFormInput } from '@atoms/Input';
 import { LogoutHomePresenter } from '@pages/LogoutHome/LogoutHomePresenter';
 
 export interface IFormContext {
-  loginRegister: UseFormRegister<LoginFormInput>;
-  loginHandleSubmit: UseFormHandleSubmit<LoginFormInput>;
-  onLoginValid: () => void;
+  register: UseFormRegister<LoginFormInput>;
+  handleSubmit: UseFormHandleSubmit<LoginFormInput>;
+  onValid: () => void;
 }
 
-const FormContext = createContext<IFormContext | undefined>(undefined);
-export const useFormContext = () => {
-  const context = useContext(FormContext);
+const LoginFormContext = createContext<IFormContext | undefined>(undefined);
+export const useLoginFormContext = () => {
+  const context = useContext(LoginFormContext);
   if (!context) throw new Error('Form Context가 존재하지 않습니다');
   return context;
 };
@@ -25,10 +25,10 @@ export const LogoutHomeContainer = () => {
     getValues: loginGetValues,
   } = useForm<LoginFormInput>();
 
-  const value = {
-    loginRegister,
-    loginHandleSubmit,
-    onLoginValid,
+  const loginValue = {
+    register: loginRegister,
+    handleSubmit: loginHandleSubmit,
+    onValid: onLoginValid,
   };
 
   function onLoginValid() {
@@ -37,8 +37,8 @@ export const LogoutHomeContainer = () => {
   }
 
   return (
-    <FormContext.Provider value={value}>
+    <LoginFormContext.Provider value={loginValue}>
       <LogoutHomePresenter />
-    </FormContext.Provider>
+    </LoginFormContext.Provider>
   );
 };
