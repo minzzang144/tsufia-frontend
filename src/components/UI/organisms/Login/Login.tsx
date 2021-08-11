@@ -5,26 +5,39 @@ import * as S from '@organisms/Login/style';
 import { Form } from '@atoms/Form/Form';
 import { Input } from '@atoms/Input/Input';
 import { useLoginFormContext } from '@pages/LogoutHome/LogoutHomeContainer';
+import { Button } from '@atoms/Button/Button';
+
+import * as IButton from '@atoms/Button';
 
 export const Login: React.FC = () => {
-  const { register, handleSubmit, onValid } = useLoginFormContext();
+  const { handleSubmit, control, onValid, errors } = useLoginFormContext();
 
   return (
     <S.Wrapper>
       <Form onSubmit={handleSubmit(onValid)}>
         <Input
-          register={register('email', {
-            required: true,
-            pattern: {
-              value:
-                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-              message: '이메일 형식이 아닙니다',
-            },
-          })}
+          name="email"
+          control={control}
+          defaultValue=""
           type="email"
+          label="Email"
+          variant="outlined"
+          errors={!!errors.email}
+          helperText={errors.email ? errors.email.message : ''}
         />
-        <Input register={register('password', { required: true })} type="password" />
-        <Input type="submit" />
+        <Input
+          name="password"
+          control={control}
+          defaultValue=""
+          type="password"
+          label="Password"
+          variant="outlined"
+          errors={!!errors.password}
+          helperText={errors.password ? errors.password.message : ''}
+        />
+        <Button colorProp={IButton.ColorProp.Black} paddingProp={['1rem', '2rem']}>
+          Login
+        </Button>
       </Form>
     </S.Wrapper>
   );
