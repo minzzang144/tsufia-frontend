@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { createContext, useContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   Control,
   DeepMap,
@@ -13,9 +13,8 @@ import * as yup from 'yup';
 
 import { AuthAPI, axiosInstance } from '@api';
 import { LoginFormInput } from '@atoms/Input';
-import { RootState } from '@modules';
 import { LogoutHomePresenter } from '@pages/LogoutHome/LogoutHomePresenter';
-import { authUpdate } from '@modules/auth';
+import { errorUpdate, loadingUpdate, tokenUpdate } from '@modules/auth';
 
 // Form Context 인터페이스
 export interface IFormContext {
@@ -24,6 +23,7 @@ export interface IFormContext {
   control: Control<LoginFormInput>;
   onValid: () => void;
   errors: DeepMap<LoginFormInput, FieldError>;
+  isValid: boolean;
 }
 
 // Login Form Context 생성
@@ -41,14 +41,13 @@ const loginSchema = yup.object().shape({
 });
 
 export const LogoutHomeContainer: React.FC = () => {
-  const auth = useSelector((state: RootState) => state.authentication.token);
   const dispatch = useDispatch();
   const {
     register: loginRegister,
     handleSubmit: loginHandleSubmit,
     control: loginControl,
     getValues: loginGetValues,
-    formState: { errors: loginErrors },
+    formState: { errors: loginErrors, isValid: loginIsValid },
   } = useForm<LoginFormInput>({ mode: 'all', resolver: yupResolver(loginSchema) });
 
   const loginValue = {
@@ -57,6 +56,7 @@ export const LogoutHomeContainer: React.FC = () => {
     control: loginControl,
     onValid: onLoginValid,
     errors: loginErrors,
+    isValid: loginIsValid,
   };
 
   function onLoginValid() {
@@ -66,13 +66,14 @@ export const LogoutHomeContainer: React.FC = () => {
 
   async function onLogin(body: LoginFormInput) {
     try {
+      dispatch(loadingUpdate());
       const response = await AuthAPI.login(body);
       const { ok, error, accessToken } = response;
-      if (ok === false) console.log(error);
+      if (ok === false && error) dispatch(errorUpdate(error));
       if (ok === true && accessToken) {
-        dispatch(authUpdate(accessToken));
+        dispatch(tokenUpdate(accessToken));
         axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-        console.log(auth);
+        dispatch(loadingUpdate());
       }
     } catch (error) {
       console.log(error);
