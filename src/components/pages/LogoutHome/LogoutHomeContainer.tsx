@@ -73,10 +73,11 @@ export const LogoutHomeContainer: React.FC = () => {
       if (ok === true && accessToken) {
         dispatch(tokenUpdate(accessToken));
         axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-        dispatch(loadingUpdate());
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      dispatch(loadingUpdate());
     }
   }
 

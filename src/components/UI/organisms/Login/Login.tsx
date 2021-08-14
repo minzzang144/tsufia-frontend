@@ -1,16 +1,16 @@
 import React from 'react';
+import { shallowEqual, useSelector } from 'react-redux';
 
 import * as S from '@organisms/Login/style';
 
-import { Form } from '@atoms/Form/Form';
-import { Input } from '@atoms/Input/Input';
-import { useLoginFormContext } from '@pages/LogoutHome/LogoutHomeContainer';
-import { Button } from '@atoms/Button/Button';
-
 import * as IButton from '@atoms/Button';
+import { Button } from '@atoms/Button/Button';
+import { Form } from '@atoms/Form/Form';
 import { Heading } from '@atoms/Heading/Heading';
-import { shallowEqual, useSelector } from 'react-redux';
+import { Input } from '@atoms/Input/Input';
 import { RootState } from '@modules';
+import { useLoginFormContext } from '@pages/LogoutHome/LogoutHomeContainer';
+import { Alert } from '@atoms/Alert/Alert';
 
 export const Login: React.FC = () => {
   const { handleSubmit, control, onValid, errors, isValid } = useLoginFormContext();
@@ -54,8 +54,9 @@ export const Login: React.FC = () => {
           marginProp={['10%', '0', '0', '0']}
           paddingProp={['1rem', '2rem']}
         >
-          {loading ? 'Proceeding' : 'Continue'}
+          {loading === true ? 'Proceeding' : 'Continue'}
         </Button>
+        {error && <Alert severity="error">{error}</Alert>}
       </Form>
     </S.Wrapper>
   );
