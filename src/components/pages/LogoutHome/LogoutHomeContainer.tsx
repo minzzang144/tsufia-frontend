@@ -14,6 +14,7 @@ import { AuthAPI, axiosInstance } from '@api';
 import { LoginFormInput } from '@atoms/Input';
 import { LogoutHomePresenter } from '@pages/LogoutHome/LogoutHomePresenter';
 
+// Form Context 인터페이스
 export interface IFormContext {
   register: UseFormRegister<LoginFormInput>;
   handleSubmit: UseFormHandleSubmit<LoginFormInput>;
@@ -22,6 +23,7 @@ export interface IFormContext {
   errors: DeepMap<LoginFormInput, FieldError>;
 }
 
+// Login Form Context 생성
 const LoginFormContext = createContext<IFormContext | undefined>(undefined);
 export const useLoginFormContext = () => {
   const context = useContext(LoginFormContext);
