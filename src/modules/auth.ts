@@ -1,11 +1,11 @@
 const UPDATE = 'auth/UPDATE' as const;
 
-export const update = (token: string) => ({
+export const authUpdate = (token: string) => ({
   type: UPDATE,
   payload: token,
 });
 
-type AuthAction = ReturnType<typeof update>;
+type AuthAction = ReturnType<typeof authUpdate>;
 
 type AuthState = {
   token: string | undefined;

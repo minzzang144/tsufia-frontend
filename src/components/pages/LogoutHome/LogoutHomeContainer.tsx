@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { createContext, useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Control,
   DeepMap,
@@ -12,7 +13,9 @@ import * as yup from 'yup';
 
 import { AuthAPI, axiosInstance } from '@api';
 import { LoginFormInput } from '@atoms/Input';
+import { RootState } from '@modules';
 import { LogoutHomePresenter } from '@pages/LogoutHome/LogoutHomePresenter';
+import { authUpdate } from '@modules/auth';
 
 // Form Context 인터페이스
 export interface IFormContext {
@@ -31,11 +34,15 @@ export const useLoginFormContext = () => {
   return context;
 };
 
+// Login Validate Schema
+const loginSchema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup.string().required(),
+});
+
 export const LogoutHomeContainer: React.FC = () => {
-  const loginSchema = yup.object().shape({
-    email: yup.string().email().required(),
-    password: yup.string().required(),
-  });
+  const auth = useSelector((state: RootState) => state.authentication.token);
+  const dispatch = useDispatch();
   const {
     register: loginRegister,
     handleSubmit: loginHandleSubmit,
@@ -63,8 +70,9 @@ export const LogoutHomeContainer: React.FC = () => {
       const { ok, error, accessToken } = response;
       if (ok === false) console.log(error);
       if (ok === true && accessToken) {
+        dispatch(authUpdate(accessToken));
         axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-        console.log(accessToken);
+        console.log(auth);
       }
     } catch (error) {
       console.log(error);

@@ -12,8 +12,8 @@
       "@api": ["src/api"],
       "@api/*": ["src/api/*"],
       "@assets": ["src/assets/*"],
-      "@modules/*": ["src/modules/*"],
       "@modules": ["src/modules"],
+      "@modules/*": ["src/modules/*"],
       "@theme": ["src/theme"],
       "@theme/*": ["src/theme/*"],
       "@/*": ["src/*"]
