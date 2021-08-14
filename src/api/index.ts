@@ -5,7 +5,7 @@ import { LoginFormInput } from '@atoms/Input';
 
 const SERVER_ADDRESS = 'http://localhost:4000/';
 
-const instance: AxiosInstance = axios.create({
+export const axiosInstance: AxiosInstance = axios.create({
   baseURL: `${SERVER_ADDRESS}`,
   withCredentials: true,
 });
@@ -13,12 +13,12 @@ const instance: AxiosInstance = axios.create({
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
-  get: (url: string) => instance.get(url).then(responseBody),
-  post: (url: string, body: any) => instance.post(url, body).then(responseBody),
-  put: (url: string, body: any) => instance.put(url, body).then(responseBody),
-  delete: (url: string) => instance.delete(url).then(responseBody),
+  get: (url: string) => axiosInstance.get(url).then(responseBody),
+  post: (url: string, body: any) => axiosInstance.post(url, body).then(responseBody),
+  put: (url: string, body: any) => axiosInstance.put(url, body).then(responseBody),
+  delete: (url: string) => axiosInstance.delete(url).then(responseBody),
 };
 
-export const Login = {
+export const AuthAPI = {
   login: (body: LoginFormInput): Promise<LoginResponse> => requests.post('auth/login', body),
 };

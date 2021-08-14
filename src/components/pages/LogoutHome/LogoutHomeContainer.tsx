@@ -10,6 +10,7 @@ import {
 } from 'react-hook-form';
 import * as yup from 'yup';
 
+import { AuthAPI, axiosInstance } from '@api';
 import { LoginFormInput } from '@atoms/Input';
 import { LogoutHomePresenter } from '@pages/LogoutHome/LogoutHomePresenter';
 
@@ -28,7 +29,7 @@ export const useLoginFormContext = () => {
   return context;
 };
 
-export const LogoutHomeContainer = () => {
+export const LogoutHomeContainer: React.FC = () => {
   const loginSchema = yup.object().shape({
     email: yup.string().email().required(),
     password: yup.string().required(),
@@ -50,8 +51,22 @@ export const LogoutHomeContainer = () => {
   };
 
   function onLoginValid() {
-    const x = loginGetValues();
-    console.log(x);
+    const values = loginGetValues();
+    onLogin(values);
+  }
+
+  async function onLogin(body: LoginFormInput) {
+    try {
+      const response = await AuthAPI.login(body);
+      const { ok, error, accessToken } = response;
+      if (ok === false) console.log(error);
+      if (ok === true && accessToken) {
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        console.log(accessToken);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
