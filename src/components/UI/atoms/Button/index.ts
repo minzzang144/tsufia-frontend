@@ -5,5 +5,6 @@ export enum ColorProp {
 
 export interface ButtonProps {
   colorProp?: ColorProp;
+  marginProp?: string[];
   paddingProp?: string[];
 }

@@ -39,7 +39,11 @@ export const Login: React.FC = () => {
           errors={!!errors.password}
           helperText={errors.password ? errors.password.message : ''}
         />
-        <Button colorProp={IButton.ColorProp.Black} paddingProp={['1rem', '2rem']}>
+        <Button
+          colorProp={IButton.ColorProp.Black}
+          marginProp={['10%', '0', '0', '0']}
+          paddingProp={['1rem', '2rem']}
+        >
           Continue
         </Button>
       </Form>

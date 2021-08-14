@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import * as I from '.';
 
 type ColorPick = Pick<I.ButtonProps, 'colorProp'>;
+type MarginPick = Pick<I.ButtonProps, 'marginProp'>;
 type PaddingPick = Pick<I.ButtonProps, 'paddingProp'>;
 
 const sizeStyles = css<ColorPick>`
@@ -19,6 +20,37 @@ const sizeStyles = css<ColorPick>`
       border: 2px solid ${({ theme }) => theme.color.dark};
       color: ${({ theme }) => theme.color.dark};
       background-color: ${({ theme }) => theme.color.light};
+    `}
+`;
+
+const marginStyles = css<MarginPick>`
+  ${({ marginProp }) =>
+    marginProp &&
+    marginProp.length === 1 &&
+    css`
+      margin: 0;
+      margin: ${marginProp[0]};
+    `}
+  ${({ marginProp }) =>
+    marginProp &&
+    marginProp.length === 2 &&
+    css`
+      margin: 0;
+      margin: ${marginProp[0]} ${marginProp[1]};
+    `}
+  ${({ marginProp }) =>
+    marginProp &&
+    marginProp.length === 3 &&
+    css`
+      margin: 0;
+      margin: ${marginProp[0]} ${marginProp[1]} ${marginProp[2]};
+    `}
+  ${({ marginProp }) =>
+    marginProp &&
+    marginProp.length === 4 &&
+    css`
+      margin: 0;
+      margin: ${marginProp[0]} ${marginProp[1]} ${marginProp[2]} ${marginProp[3]};
     `}
 `;
 
@@ -61,6 +93,7 @@ export const Wrapper = styled.button`
   /* Size Styles */
   ${sizeStyles}
 
-  /* Padding Styles */
+  /* Margin & Padding Styles */
+  ${marginStyles}
   ${paddingStyles}
 `;

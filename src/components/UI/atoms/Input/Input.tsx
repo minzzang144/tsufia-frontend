@@ -21,6 +21,7 @@ export const Input: React.FC<I.InputProps> = ({
       defaultValue={defaultValue}
       render={({ field }) => (
         <S.Wrapper
+          margin="normal"
           {...field}
           type={type}
           label={label}
