@@ -8,6 +8,7 @@ export const Button: React.FC<I.ButtonProps> = ({ children, ...rest }) => (
 );
 
 Button.defaultProps = {
+  isValid: true,
   colorProp: I.ColorProp.Black,
   marginProp: ['0'],
   paddingProp: ['0'],

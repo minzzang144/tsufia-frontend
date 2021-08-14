@@ -9,9 +9,18 @@ import { Button } from '@atoms/Button/Button';
 
 import * as IButton from '@atoms/Button';
 import { Heading } from '@atoms/Heading/Heading';
+import { shallowEqual, useSelector } from 'react-redux';
+import { RootState } from '@modules';
 
 export const Login: React.FC = () => {
-  const { handleSubmit, control, onValid, errors } = useLoginFormContext();
+  const { handleSubmit, control, onValid, errors, isValid } = useLoginFormContext();
+  const { loading, error } = useSelector(
+    (state: RootState) => ({
+      loading: state.authentication.loading,
+      error: state.authentication.error,
+    }),
+    shallowEqual,
+  );
 
   return (
     <S.Wrapper>
@@ -40,11 +49,12 @@ export const Login: React.FC = () => {
           helperText={errors.password ? errors.password.message : ''}
         />
         <Button
+          isValid={isValid}
           colorProp={IButton.ColorProp.Black}
           marginProp={['10%', '0', '0', '0']}
           paddingProp={['1rem', '2rem']}
         >
-          Continue
+          {loading ? 'Proceeding' : 'Continue'}
         </Button>
       </Form>
     </S.Wrapper>

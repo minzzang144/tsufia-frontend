@@ -2,9 +2,18 @@ import styled, { css } from 'styled-components';
 
 import * as I from '.';
 
+type IsValidPick = Pick<I.ButtonProps, 'isValid'>;
 type ColorPick = Pick<I.ButtonProps, 'colorProp'>;
 type MarginPick = Pick<I.ButtonProps, 'marginProp'>;
 type PaddingPick = Pick<I.ButtonProps, 'paddingProp'>;
+
+const isValidStyles = css<IsValidPick>`
+  ${({ isValid }) =>
+    isValid === false &&
+    css`
+      opacity: 0.8;
+    `}
+`;
 
 const sizeStyles = css<ColorPick>`
   ${({ colorProp }) =>
@@ -89,6 +98,9 @@ export const Wrapper = styled.button`
   display: inline-flex;
   outline: none;
   cursor: pointer;
+
+  /* IsValid Styles */
+  ${isValidStyles}
 
   /* Size Styles */
   ${sizeStyles}

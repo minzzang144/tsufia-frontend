@@ -4,6 +4,7 @@ export enum ColorProp {
 }
 
 export interface ButtonProps {
+  isValid?: boolean;
   colorProp?: ColorProp;
   marginProp?: string[];
   paddingProp?: string[];
