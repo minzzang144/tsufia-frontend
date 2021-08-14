@@ -1,8 +1,8 @@
-import { TextField } from '@material-ui/core';
 import React from 'react';
 import { Controller } from 'react-hook-form';
 
 import * as I from '.';
+import * as S from '@atoms/Input/style';
 
 export const Input: React.FC<I.InputProps> = ({
   name,
@@ -20,14 +20,13 @@ export const Input: React.FC<I.InputProps> = ({
       control={control}
       defaultValue={defaultValue}
       render={({ field }) => (
-        <TextField
+        <S.Wrapper
           {...field}
           type={type}
           label={label}
           variant={variant}
-          error={!!errors.email}
+          error={errors}
           helperText={helperText}
-          color={undefined}
         />
       )}
     />

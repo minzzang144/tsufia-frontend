@@ -8,6 +8,7 @@ import { useLoginFormContext } from '@pages/LogoutHome/LogoutHomeContainer';
 import { Button } from '@atoms/Button/Button';
 
 import * as IButton from '@atoms/Button';
+import { Heading } from '@atoms/Heading/Heading';
 
 export const Login: React.FC = () => {
   const { handleSubmit, control, onValid, errors } = useLoginFormContext();
@@ -15,6 +16,9 @@ export const Login: React.FC = () => {
   return (
     <S.Wrapper>
       <Form onSubmit={handleSubmit(onValid)}>
+        <Heading levelProp={2} marginProp={['0', '0', '10%']}>
+          Log In
+        </Heading>
         <Input
           name="email"
           control={control}
@@ -36,7 +40,7 @@ export const Login: React.FC = () => {
           helperText={errors.password ? errors.password.message : ''}
         />
         <Button colorProp={IButton.ColorProp.Black} paddingProp={['1rem', '2rem']}>
-          Login
+          Continue
         </Button>
       </Form>
     </S.Wrapper>
