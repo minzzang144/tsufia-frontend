@@ -2,7 +2,6 @@ import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import * as S from '@organisms/SignUp/style';
-import * as IButton from '@atoms/Button';
 
 import { Alert } from '@atoms/Alert/Alert';
 import { Button } from '@atoms/Button/Button';
@@ -80,7 +79,7 @@ export const SignUp: React.FC = () => {
         />
         <Button
           isValid={isValid}
-          colorProp={IButton.ColorProp.Black}
+          colorProp="black"
           marginProp={['10%', '0', '0', '0']}
           paddingProp={['1rem', '2rem']}
         >

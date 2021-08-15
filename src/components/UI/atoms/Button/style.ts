@@ -17,14 +17,14 @@ const isValidStyles = css<IsValidPick>`
 
 const sizeStyles = css<ColorPick>`
   ${({ colorProp }) =>
-    colorProp === I.ColorProp.Black &&
+    colorProp === 'black' &&
     css`
       border: 2px solid ${({ theme }) => theme.color.light};
       color: ${({ theme }) => theme.color.light};
       background-color: transparent;
     `}
   ${({ colorProp }) =>
-    colorProp === I.ColorProp.White &&
+    colorProp === 'white' &&
     css`
       border: 2px solid ${({ theme }) => theme.color.dark};
       color: ${({ theme }) => theme.color.dark};

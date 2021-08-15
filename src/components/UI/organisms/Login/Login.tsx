@@ -3,7 +3,6 @@ import { shallowEqual, useSelector } from 'react-redux';
 
 import * as S from '@organisms/Login/style';
 
-import * as IButton from '@atoms/Button';
 import { Button } from '@atoms/Button/Button';
 import { Form } from '@atoms/Form/Form';
 import { Heading } from '@atoms/Heading/Heading';
@@ -50,7 +49,7 @@ export const Login: React.FC = () => {
         />
         <Button
           isValid={isValid}
-          colorProp={IButton.ColorProp.Black}
+          colorProp="black"
           marginProp={['10%', '0', '0', '0']}
           paddingProp={['1rem', '2rem']}
         >

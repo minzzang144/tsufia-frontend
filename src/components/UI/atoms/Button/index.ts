@@ -1,7 +1,4 @@
-export enum ColorProp {
-  Black,
-  White,
-}
+type ColorProp = 'black' | 'white';
 
 export interface ButtonProps {
   isValid?: boolean;

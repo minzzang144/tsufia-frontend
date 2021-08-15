@@ -5,7 +5,6 @@ import { Heading } from '@atoms/Heading/Heading';
 import { Paragraph } from '@atoms/Paragraph/Paragraph';
 import { ButtonList } from '@molecules/ButtonList/ButtonList';
 
-import * as IButton from '@atoms/Button/index';
 import * as S from '@organisms/Introduction/style';
 
 export const Introduction = () => (
@@ -18,7 +17,7 @@ export const Introduction = () => (
       진행하시고 Tsufia에 처음 방문하신 분들은 아래의 게임소개와 설명 버튼을 참고하시기 바랍니다.
     </Paragraph>
     <ButtonList gapProp={['10px']}>
-      <Button paddingProp={['1rem', '2rem']} colorProp={IButton.ColorProp.White}>
+      <Button paddingProp={['1rem', '2rem']} colorProp="white">
         게임 소개
       </Button>
       <Button paddingProp={['1rem', '2rem']}>게임 설명</Button>
