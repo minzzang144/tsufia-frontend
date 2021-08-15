@@ -6,3 +6,7 @@ export interface CommonResponse {
 export interface LoginResponse extends CommonResponse {
   accessToken?: string;
 }
+
+export interface SilentRefreshResponse extends CommonResponse {
+  accessToken?: string;
+}

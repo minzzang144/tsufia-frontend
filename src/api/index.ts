@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
-import { LoginResponse } from '@api-types';
+import { LoginResponse, SilentRefreshResponse } from '@api-types';
 import { LoginFormInput } from '@atoms/Input';
 
 const SERVER_ADDRESS = 'http://localhost:4000/';
@@ -13,12 +13,25 @@ export const axiosInstance: AxiosInstance = axios.create({
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
-  get: (url: string) => axiosInstance.get(url).then(responseBody),
-  post: (url: string, body: any) => axiosInstance.post(url, body).then(responseBody),
-  put: (url: string, body: any) => axiosInstance.put(url, body).then(responseBody),
-  delete: (url: string) => axiosInstance.delete(url).then(responseBody),
+  get: async (url: string) => await axiosInstance.get(url).then(responseBody),
+  post: async (url: string, body?: any) => {
+    if (body) {
+      return await axiosInstance.post(url, body).then(responseBody);
+    } else {
+      return await axiosInstance.post(url).then(responseBody);
+    }
+  },
+  put: async (url: string, body: any) => {
+    if (body) {
+      return await axiosInstance.put(url, body).then(responseBody);
+    } else {
+      return await axiosInstance.put(url).then(responseBody);
+    }
+  },
+  delete: async (url: string) => await axiosInstance.delete(url).then(responseBody),
 };
 
 export const AuthAPI = {
   login: (body: LoginFormInput): Promise<LoginResponse> => requests.post('auth/login', body),
+  silentRefresh: (): Promise<SilentRefreshResponse> => requests.post('auth/silent-refresh'),
 };
