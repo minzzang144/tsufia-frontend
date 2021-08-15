@@ -5,9 +5,9 @@ import { useHistory } from 'react-router';
 import { AuthAPI, axiosInstance } from '@api';
 import { LoginResponse, SilentRefreshResponse } from '@api-types';
 import { LoginFormInput } from '@atoms/Input';
-import { RootState } from '@modules';
-import { errorUpdate, loadingUpdate, tokenUpdate } from '@modules/auth';
 import LogoutHome from '@pages/LogoutHome';
+import { updateError, updateLoading, updateToken } from '@auth/actions';
+import { RootState } from '@modules';
 
 function App() {
   const accessToken = useSelector((state: RootState) => state.authentication.token);
@@ -17,22 +17,22 @@ function App() {
   /* Login 진행 시 실행되는 함수 */
   async function onLogin(body: LoginFormInput) {
     try {
-      dispatch(loadingUpdate());
+      dispatch(updateLoading());
       const response = await AuthAPI.login(body);
       const { ok, error } = response;
-      if (ok === false && error) dispatch(errorUpdate(error));
+      if (ok === false && error) dispatch(updateError(error));
       if (ok === true) onLoginSuccess(response);
     } catch (error) {
       console.log(error);
     } finally {
-      dispatch(loadingUpdate());
+      dispatch(updateLoading());
     }
   }
 
   /* 토큰 재발급 함수 */
   async function onSilentRefresh() {
     try {
-      dispatch(loadingUpdate());
+      dispatch(updateLoading());
       const response = await AuthAPI.silentRefresh();
       const { ok, error } = response;
       if (ok === false && error) {
@@ -42,7 +42,7 @@ function App() {
     } catch (error) {
       console.log(error);
     } finally {
-      dispatch(loadingUpdate());
+      dispatch(updateLoading());
     }
   }
 
@@ -51,7 +51,7 @@ function App() {
     try {
       const { accessToken } = response;
       if (accessToken) {
-        dispatch(tokenUpdate(accessToken));
+        dispatch(updateToken(accessToken));
         axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
         setTimeout(onSilentRefresh, Number(process.env.REACT_APP_EXPIRES_IN));
       }

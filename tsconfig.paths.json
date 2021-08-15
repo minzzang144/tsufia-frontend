@@ -12,8 +12,9 @@
       "@api": ["src/api"],
       "@api/*": ["src/api/*"],
       "@assets": ["src/assets/*"],
+      "@auth": ["src/modules/auth"],
+      "@auth/*": ["src/modules/auth/*"],
       "@modules": ["src/modules"],
-      "@modules/*": ["src/modules/*"],
       "@theme": ["src/theme"],
       "@theme/*": ["src/theme/*"],
       "@/*": ["src/*"]
