@@ -54,7 +54,7 @@ export const Login: React.FC = () => {
           marginProp={['10%', '0', '0', '0']}
           paddingProp={['1rem', '2rem']}
         >
-          {loading === true ? 'Proceeding' : 'Continue'}
+          {isValid && loading === true ? 'Proceeding' : 'Continue'}
         </Button>
         {error && <Alert severity="error">{error}</Alert>}
       </Form>
