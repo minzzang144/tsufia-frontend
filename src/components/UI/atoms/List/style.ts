@@ -7,12 +7,12 @@ type PaddingPick = Pick<I.ListProps, 'paddingProp'>;
 
 const colorStyles = css<ColorPick>`
   ${({ colorProp }) =>
-    colorProp === I.ColorProp.Black &&
+    colorProp === 'white' &&
     css`
       color: ${({ theme }) => theme.color.dark};
     `}
   ${({ colorProp }) =>
-    colorProp === I.ColorProp.Black &&
+    colorProp === 'black' &&
     css`
       color: ${({ theme }) => theme.color.light};
     `}
