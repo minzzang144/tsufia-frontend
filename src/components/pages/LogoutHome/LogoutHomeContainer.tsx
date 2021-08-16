@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { createContext, useContext } from 'react';
+import { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 import {
   Control,
   DeepMap,
@@ -16,7 +17,7 @@ import { LoginFormInput, SignUpFormInput } from '@atoms/Input';
 import { LogoutHomePresenter } from '@pages/LogoutHome/LogoutHomePresenter';
 
 // Login Form Context 인터페이스
-export interface ILoginFormContext {
+export interface ILoginContext {
   register: UseFormRegister<LoginFormInput>;
   handleSubmit: UseFormHandleSubmit<LoginFormInput>;
   control: Control<LoginFormInput>;
@@ -25,10 +26,12 @@ export interface ILoginFormContext {
   isValid: boolean;
   onSpanClick: (e: React.MouseEvent<HTMLSpanElement>) => void;
   toggle: boolean;
+  responseSuccessGoogle: (response: GoogleLoginResponse | GoogleLoginResponseOffline) => void;
+  responseErrorGoogle: (error: any) => void;
 }
 
 // Sign Up Form Context 인터페이스
-export interface ISignUpFormContext {
+export interface ISignUpContext {
   register: UseFormRegister<SignUpFormInput>;
   handleSubmit: UseFormHandleSubmit<SignUpFormInput>;
   control: Control<SignUpFormInput>;
@@ -40,7 +43,7 @@ export interface ISignUpFormContext {
 }
 
 // Login Form Context 생성
-const LoginFormContext = createContext<ILoginFormContext | undefined>(undefined);
+const LoginFormContext = createContext<ILoginContext | undefined>(undefined);
 export const useLoginFormContext = () => {
   const context = useContext(LoginFormContext);
   if (!context) throw new Error('Form Context가 존재하지 않습니다');
@@ -54,7 +57,7 @@ const loginSchema = yup.object().shape({
 });
 
 // Sign Up Form Context 생성
-const SignUpFormContext = createContext<ISignUpFormContext | undefined>(undefined);
+const SignUpFormContext = createContext<ISignUpContext | undefined>(undefined);
 export const useSignUpFormContext = () => {
   const context = useContext(SignUpFormContext);
   if (!context) throw new Error('Form Context가 존재하지 않습니다');
@@ -72,6 +75,7 @@ const signUpSchema = yup.object().shape({
 
 export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
   onLogin,
+  onGoogleLogin,
   onSignUp,
   toggle,
   setToggle,
@@ -115,14 +119,19 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
     onSpanClick,
   };
 
-  function onLoginValid() {
+  const SocialLoginVlue = {
+    responseSuccessGoogle,
+    responseErrorGoogle,
+  };
+
+  async function onLoginValid() {
     const values = loginGetValues();
-    onLogin(values);
+    await onLogin(values);
   }
 
-  function onSingUpValid() {
+  async function onSingUpValid() {
     const values = signUpGetValues();
-    onSignUp(values);
+    await onSignUp(values);
   }
 
   function onSpanClick(e: React.MouseEvent<HTMLSpanElement>) {
@@ -130,8 +139,23 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
     setToggle(!toggle);
   }
 
+  async function responseSuccessGoogle(response: any) {
+    const { profileObj } = response;
+    const values = {
+      email: profileObj.email,
+      firstName: profileObj.familyName,
+      lastName: profileObj.givenName,
+      photo: profileObj.imageUrl,
+    };
+    await onGoogleLogin(values);
+  }
+
+  function responseErrorGoogle(error: any) {
+    console.log(error);
+  }
+
   return (
-    <LoginFormContext.Provider value={{ ...loginValue, ...toggleValue }}>
+    <LoginFormContext.Provider value={{ ...loginValue, ...toggleValue, ...SocialLoginVlue }}>
       <SignUpFormContext.Provider value={{ ...signUpValue, ...toggleValue }}>
         <LogoutHomePresenter />
       </SignUpFormContext.Provider>

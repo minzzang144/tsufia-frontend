@@ -1,4 +1,5 @@
 import React from 'react';
+import GoogleLogin from 'react-google-login';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import * as S from '@organisms/SignUp/style';
@@ -10,9 +11,10 @@ import { Heading } from '@atoms/Heading/Heading';
 import { Input } from '@atoms/Input/Input';
 import { Span } from '@atoms/Span/Span';
 import { RootState } from '@modules';
-import { useSignUpFormContext } from '@pages/LogoutHome/LogoutHomeContainer';
+import { useLoginFormContext, useSignUpFormContext } from '@pages/LogoutHome/LogoutHomeContainer';
 
 export const SignUp: React.FC = () => {
+  const { responseSuccessGoogle, responseErrorGoogle } = useLoginFormContext();
   const { handleSubmit, control, onValid, errors, isValid, onSpanClick } = useSignUpFormContext();
   const { loading, error } = useSelector(
     (state: RootState) => ({
@@ -96,6 +98,13 @@ export const SignUp: React.FC = () => {
           }
         </Span>
       </Form>
+      <GoogleLogin
+        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID!}
+        buttonText="Login"
+        onSuccess={responseSuccessGoogle}
+        onFailure={responseErrorGoogle}
+        cookiePolicy={'single_host_origin'}
+      />
     </S.Wrapper>
   );
 };

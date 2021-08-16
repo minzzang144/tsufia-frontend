@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import { AuthAPI, axiosInstance } from '@api';
-import { LoginResponse, SilentRefreshResponse } from '@api-types';
+import { GoogleLoginRequest, LoginResponse, SilentRefreshResponse } from '@api-types';
 import { LoginFormInput, SignUpFormInput } from '@atoms/Input';
 import LogoutHome from '@pages/LogoutHome';
 import { updateError, updateLoading, updateToken } from '@auth/actions';
@@ -42,7 +42,22 @@ function App() {
       if (ok === false && error) dispatch(updateError(error));
       if (ok === true) onLoginSuccess(response);
     } catch (error) {
-      console.log(error);
+      throw new Error(error);
+    } finally {
+      dispatch(updateLoading());
+    }
+  }
+
+  /* Login 진행 시 실행되는 함수 */
+  async function onGoogleLogin(body: GoogleLoginRequest) {
+    try {
+      dispatch(updateLoading());
+      const response = await AuthAPI.googleLogin(body);
+      const { ok, error } = response;
+      if (ok === false && error) dispatch(updateError(error));
+      if (ok === true) onLoginSuccess(response);
+    } catch (error) {
+      throw new Error(error);
     } finally {
       dispatch(updateLoading());
     }
@@ -59,7 +74,7 @@ function App() {
       }
       if (ok === true) onLoginSuccess(response);
     } catch (error) {
-      console.log(error);
+      throw new Error(error);
     } finally {
       dispatch(updateLoading());
     }
@@ -75,7 +90,7 @@ function App() {
         setTimeout(onSilentRefresh, Number(process.env.REACT_APP_EXPIRES_IN));
       }
     } catch (error) {
-      console.log(error);
+      throw new Error(error);
     }
   }
 
@@ -89,7 +104,13 @@ function App() {
       {accessToken ? (
         'You are Logged In'
       ) : (
-        <LogoutHome onLogin={onLogin} onSignUp={onSignUp} toggle={toggle} setToggle={setToggle} />
+        <LogoutHome
+          onLogin={onLogin}
+          onGoogleLogin={onGoogleLogin}
+          onSignUp={onSignUp}
+          toggle={toggle}
+          setToggle={setToggle}
+        />
       )}
     </React.Fragment>
   );

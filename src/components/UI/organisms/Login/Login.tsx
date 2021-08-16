@@ -1,4 +1,5 @@
 import React from 'react';
+import GoogleLogin from 'react-google-login';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import * as S from '@organisms/Login/style';
@@ -13,7 +14,16 @@ import { RootState } from '@modules';
 import { useLoginFormContext } from '@pages/LogoutHome/LogoutHomeContainer';
 
 export const Login: React.FC = () => {
-  const { handleSubmit, control, onValid, errors, isValid, onSpanClick } = useLoginFormContext();
+  const {
+    handleSubmit,
+    control,
+    onValid,
+    errors,
+    isValid,
+    onSpanClick,
+    responseSuccessGoogle,
+    responseErrorGoogle,
+  } = useLoginFormContext();
   const { loading, error } = useSelector(
     (state: RootState) => ({
       loading: state.authentication.loading,
@@ -66,6 +76,13 @@ export const Login: React.FC = () => {
           }
         </Span>
       </Form>
+      <GoogleLogin
+        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID!}
+        buttonText="Login"
+        onSuccess={responseSuccessGoogle}
+        onFailure={responseErrorGoogle}
+        cookiePolicy={'single_host_origin'}
+      />
     </S.Wrapper>
   );
 };
