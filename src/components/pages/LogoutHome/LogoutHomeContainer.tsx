@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import {
   Control,
   DeepMap,
@@ -23,6 +23,8 @@ export interface ILoginFormContext {
   onValid: () => void;
   errors: DeepMap<LoginFormInput, FieldError>;
   isValid: boolean;
+  onSpanClick: (e: React.MouseEvent<HTMLSpanElement>) => void;
+  toggle: boolean;
 }
 
 // Sign Up Form Context 인터페이스
@@ -33,6 +35,8 @@ export interface ISignUpFormContext {
   onValid: () => void;
   errors: DeepMap<SignUpFormInput, FieldError>;
   isValid: boolean;
+  onSpanClick: (e: React.MouseEvent<HTMLSpanElement>) => void;
+  toggle: boolean;
 }
 
 // Login Form Context 생성
@@ -67,6 +71,8 @@ const signUpSchema = yup.object().shape({
 });
 
 export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({ onLogin }) => {
+  const [toggle, setToggle] = useState<boolean>(false);
+
   const {
     register: loginRegister,
     handleSubmit: loginHandleSubmit,
@@ -101,6 +107,11 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({ onLogin }) =>
     isValid: signUpIsValid,
   };
 
+  const toggleValue = {
+    toggle,
+    onSpanClick,
+  };
+
   function onLoginValid() {
     const values = loginGetValues();
     onLogin(values);
@@ -111,9 +122,14 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({ onLogin }) =>
     console.log(values);
   }
 
+  function onSpanClick(e: React.MouseEvent<HTMLSpanElement>) {
+    e.preventDefault();
+    setToggle(!toggle);
+  }
+
   return (
-    <LoginFormContext.Provider value={loginValue}>
-      <SignUpFormContext.Provider value={signUpValue}>
+    <LoginFormContext.Provider value={{ ...loginValue, ...toggleValue }}>
+      <SignUpFormContext.Provider value={{ ...signUpValue, ...toggleValue }}>
         <LogoutHomePresenter />
       </SignUpFormContext.Provider>
     </LoginFormContext.Provider>
