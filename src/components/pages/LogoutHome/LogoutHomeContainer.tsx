@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext } from 'react';
 import {
   Control,
   DeepMap,
@@ -70,9 +70,12 @@ const signUpSchema = yup.object().shape({
   checkPassword: yup.string().required(),
 });
 
-export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({ onLogin }) => {
-  const [toggle, setToggle] = useState<boolean>(false);
-
+export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
+  onLogin,
+  onSignUp,
+  toggle,
+  setToggle,
+}) => {
   const {
     register: loginRegister,
     handleSubmit: loginHandleSubmit,
@@ -119,7 +122,7 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({ onLogin }) =>
 
   function onSingUpValid() {
     const values = signUpGetValues();
-    console.log(values);
+    onSignUp(values);
   }
 
   function onSpanClick(e: React.MouseEvent<HTMLSpanElement>) {

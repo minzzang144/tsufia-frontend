@@ -1,18 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import { AuthAPI, axiosInstance } from '@api';
 import { LoginResponse, SilentRefreshResponse } from '@api-types';
-import { LoginFormInput } from '@atoms/Input';
+import { LoginFormInput, SignUpFormInput } from '@atoms/Input';
 import LogoutHome from '@pages/LogoutHome';
 import { updateError, updateLoading, updateToken } from '@auth/actions';
 import { RootState } from '@modules';
 
 function App() {
+  const [toggle, setToggle] = useState<boolean>(false);
   const accessToken = useSelector((state: RootState) => state.authentication.token);
   const dispatch = useDispatch();
   const history = useHistory();
+
+  /* Sign Up 진행 시 실행되는 함수 */
+  async function onSignUp(body: SignUpFormInput) {
+    try {
+      dispatch(updateLoading());
+      const response = await AuthAPI.signUp(body);
+      const { ok, error } = response;
+      if (ok === false && error) dispatch(updateError(error));
+      if (ok === true) {
+        window.alert('회원가입을 성공했습니다.');
+        setToggle(!toggle);
+      }
+    } catch (error) {
+      throw new Error(error);
+    } finally {
+      dispatch(updateLoading());
+    }
+  }
 
   /* Login 진행 시 실행되는 함수 */
   async function onLogin(body: LoginFormInput) {
@@ -67,7 +86,11 @@ function App() {
 
   return (
     <React.Fragment>
-      {accessToken ? 'You are Logged In' : <LogoutHome onLogin={onLogin} />}
+      {accessToken ? (
+        'You are Logged In'
+      ) : (
+        <LogoutHome onLogin={onLogin} onSignUp={onSignUp} toggle={toggle} setToggle={setToggle} />
+      )}
     </React.Fragment>
   );
 }
