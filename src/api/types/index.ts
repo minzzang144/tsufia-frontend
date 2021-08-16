@@ -13,3 +13,14 @@ export interface SilentRefreshResponse extends CommonResponse {
 }
 
 export interface SignUpResponse extends CommonResponse {}
+
+export interface GoogleLoginRequest {
+  email: string;
+  firstName: string;
+  lastName: string;
+  photo: string;
+}
+
+export interface GoogleLoginResponse extends CommonResponse {
+  accessToken?: string;
+}
