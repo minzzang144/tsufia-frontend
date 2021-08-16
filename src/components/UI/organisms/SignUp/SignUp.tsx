@@ -8,11 +8,12 @@ import { Button } from '@atoms/Button/Button';
 import { Form } from '@atoms/Form/Form';
 import { Heading } from '@atoms/Heading/Heading';
 import { Input } from '@atoms/Input/Input';
+import { Span } from '@atoms/Span/Span';
 import { RootState } from '@modules';
 import { useSignUpFormContext } from '@pages/LogoutHome/LogoutHomeContainer';
 
 export const SignUp: React.FC = () => {
-  const { handleSubmit, control, onValid, errors, isValid } = useSignUpFormContext();
+  const { handleSubmit, control, onValid, errors, isValid, onSpanClick } = useSignUpFormContext();
   const { loading, error } = useSelector(
     (state: RootState) => ({
       loading: state.authentication.loading,
@@ -68,24 +69,32 @@ export const SignUp: React.FC = () => {
           helperText={errors.password ? errors.password.message : ''}
         />
         <Input
-          name="passwordCheck"
+          name="checkPassword"
           control={control}
           defaultValue=""
           type="password"
           label="Password Check"
           variant="outlined"
-          errors={!!errors.passwordcheck}
-          helperText={errors.passwordcheck ? errors.passwordcheck.message : ''}
+          errors={!!errors.checkPassword}
+          helperText={errors.checkPassword ? errors.checkPassword.message : ''}
         />
         <Button
           isValid={isValid}
           colorProp="black"
-          marginProp={['10%', '0', '0', '0']}
+          marginProp={['5%', '0', '0', '0']}
           paddingProp={['1rem', '2rem']}
         >
           {isValid && loading === true ? 'Proceeding' : 'Continue'}
         </Button>
         {error && <Alert severity="error">{error}</Alert>}
+        <Span marginProp={error ? ['0'] : ['3%', '0', '0', '0']}>
+          이미 회원이신가요?{' '}
+          {
+            <Span onClick={onSpanClick} highlightProp={true}>
+              로그인
+            </Span>
+          }
+        </Span>
       </Form>
     </S.Wrapper>
   );

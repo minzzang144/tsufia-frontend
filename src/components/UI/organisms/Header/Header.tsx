@@ -14,7 +14,7 @@ export const Header = () => (
       <List colorProp="black" paddingProp={['2rem', '1.5rem']}>
         게임 설명
       </List>
-      <List colorProp="black" paddingProp={['2rem', '1.5rem']}>
+      <List colorProp="black" paddingProp={['2rem', '3rem', '2rem', '1.5rem']}>
         연락하기
       </List>
     </UnorderedList>

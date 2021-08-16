@@ -15,7 +15,7 @@ const isValidStyles = css<IsValidPick>`
     `}
 `;
 
-const sizeStyles = css<ColorPick>`
+const colorStyles = css<ColorPick>`
   ${({ colorProp }) =>
     colorProp === 'black' &&
     css`
@@ -103,7 +103,7 @@ export const Wrapper = styled.button`
   ${isValidStyles}
 
   /* Size Styles */
-  ${sizeStyles}
+  ${colorStyles}
 
   /* Margin & Padding Styles */
   ${marginStyles}

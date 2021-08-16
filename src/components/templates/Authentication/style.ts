@@ -14,7 +14,7 @@ export const Header = styled.div`
   justify-content: flex-end;
   position: absolute;
   top: 0;
-  right: 0;
+  right: 30%;
 `;
 
 export const LeftSide = styled.div`

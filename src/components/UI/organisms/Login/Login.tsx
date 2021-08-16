@@ -3,16 +3,17 @@ import { shallowEqual, useSelector } from 'react-redux';
 
 import * as S from '@organisms/Login/style';
 
+import { Alert } from '@atoms/Alert/Alert';
 import { Button } from '@atoms/Button/Button';
 import { Form } from '@atoms/Form/Form';
 import { Heading } from '@atoms/Heading/Heading';
 import { Input } from '@atoms/Input/Input';
+import { Span } from '@atoms/Span/Span';
 import { RootState } from '@modules';
 import { useLoginFormContext } from '@pages/LogoutHome/LogoutHomeContainer';
-import { Alert } from '@atoms/Alert/Alert';
 
 export const Login: React.FC = () => {
-  const { handleSubmit, control, onValid, errors, isValid } = useLoginFormContext();
+  const { handleSubmit, control, onValid, errors, isValid, onSpanClick } = useLoginFormContext();
   const { loading, error } = useSelector(
     (state: RootState) => ({
       loading: state.authentication.loading,
@@ -50,12 +51,20 @@ export const Login: React.FC = () => {
         <Button
           isValid={isValid}
           colorProp="black"
-          marginProp={['10%', '0', '0', '0']}
+          marginProp={['5%', '0', '0', '0']}
           paddingProp={['1rem', '2rem']}
         >
           {isValid && loading === true ? 'Proceeding' : 'Continue'}
         </Button>
         {error && <Alert severity="error">{error}</Alert>}
+        <Span marginProp={error ? ['0'] : ['3%', '0', '0', '0']}>
+          아직 회원이 아니신가요?{' '}
+          {
+            <Span onClick={onSpanClick} highlightProp={true}>
+              회원가입
+            </Span>
+          }
+        </Span>
       </Form>
     </S.Wrapper>
   );

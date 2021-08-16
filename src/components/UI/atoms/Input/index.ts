@@ -19,5 +19,5 @@ export interface SignUpFormInput {
   firstName: string;
   lastName: string;
   password: string;
-  passwordcheck: string;
+  checkPassword: string;
 }
