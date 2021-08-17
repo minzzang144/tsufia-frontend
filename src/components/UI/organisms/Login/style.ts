@@ -7,3 +7,7 @@ export const Wrapper = styled.div`
   align-items: center;
   width: 100%;
 `;
+
+export const SocialPart = styled.div`
+  display: flex;
+`;
