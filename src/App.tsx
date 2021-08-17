@@ -12,6 +12,8 @@ import {
 import { LoginFormInput, SignUpFormInput } from '@atoms/Input';
 import { updateError, updateLoading, updateToken } from '@auth/actions';
 import { RootState } from '@modules';
+import { LoginRouter } from '@routers/LoginRouter';
+import { LogoutRouter } from '@routers/LogoutRouter';
 
 function App() {
   const [toggle, setToggle] = useState<boolean>(false);
