@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { Controller } from 'react-hook-form';
 
@@ -5,6 +6,7 @@ import * as I from '.';
 import * as S from '@atoms/Input/style';
 
 export const Input: React.FC<I.InputProps> = ({
+  children,
   name,
   control,
   defaultValue,
@@ -13,6 +15,7 @@ export const Input: React.FC<I.InputProps> = ({
   variant,
   errors,
   helperText,
+  ...rest
 }) => {
   return (
     <Controller
@@ -28,6 +31,7 @@ export const Input: React.FC<I.InputProps> = ({
           variant={variant}
           error={errors}
           helperText={helperText}
+          {...rest}
         />
       )}
     />

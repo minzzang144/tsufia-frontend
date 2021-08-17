@@ -7,6 +7,8 @@ export interface InputProps {
   variant: any;
   errors?: any;
   helperText?: any;
+  marginprop?: string[];
+  widthprop?: string;
 }
 
 export interface LoginFormInput {
