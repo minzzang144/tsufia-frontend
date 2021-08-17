@@ -15,6 +15,8 @@ import * as I from '.';
 
 import { LoginFormInput, SignUpFormInput } from '@atoms/Input';
 import { LogoutHomePresenter } from '@pages/LogoutHome/LogoutHomePresenter';
+import { useDispatch } from 'react-redux';
+import { updateError } from '@auth';
 
 // Login Form Context 인터페이스
 export interface ILoginContext {
@@ -83,12 +85,14 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
   toggle,
   setToggle,
 }) => {
+  const dispatch = useDispatch();
   const {
     register: loginRegister,
     handleSubmit: loginHandleSubmit,
     control: loginControl,
     getValues: loginGetValues,
     formState: { errors: loginErrors, isValid: loginIsValid },
+    reset: loginReset,
   } = useForm<LoginFormInput>({ mode: 'all', resolver: yupResolver(loginSchema) });
 
   const {
@@ -97,6 +101,7 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
     control: signUpControl,
     getValues: signUpGetValues,
     formState: { errors: signUpErrors, isValid: signUpIsValid },
+    reset: signUpReset,
   } = useForm<SignUpFormInput>({ mode: 'all', resolver: yupResolver(signUpSchema) });
 
   const loginValue = {
@@ -122,7 +127,7 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
     onSpanClick,
   };
 
-  const SocialLoginVlue = {
+  const SocialLoginValue = {
     responseSuccessGoogle,
     responseErrorGoogle,
     responseSuccessKakao,
@@ -132,14 +137,17 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
   async function onLoginValid() {
     const values = loginGetValues();
     await onLogin(values);
+    loginReset({ email: '', password: '' });
   }
 
   async function onSingUpValid() {
     const values = signUpGetValues();
     await onSignUp(values);
+    signUpReset({ email: '', firstName: '', lastName: '', password: '', checkPassword: '' });
   }
 
   function onSpanClick(e: React.MouseEvent<HTMLSpanElement>) {
+    dispatch(updateError(undefined));
     e.preventDefault();
     setToggle(!toggle);
   }
@@ -176,7 +184,7 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
   }
 
   return (
-    <LoginFormContext.Provider value={{ ...loginValue, ...toggleValue, ...SocialLoginVlue }}>
+    <LoginFormContext.Provider value={{ ...loginValue, ...toggleValue, ...SocialLoginValue }}>
       <SignUpFormContext.Provider value={{ ...signUpValue, ...toggleValue }}>
         <LogoutHomePresenter />
       </SignUpFormContext.Provider>
