@@ -10,7 +10,6 @@ import {
   SilentRefreshResponse,
 } from '@api-types';
 import { LoginFormInput, SignUpFormInput } from '@atoms/Input';
-import LogoutHome from '@pages/LogoutHome';
 import { updateError, updateLoading, updateToken } from '@auth/actions';
 import { RootState } from '@modules';
 
@@ -122,9 +121,9 @@ function App() {
   return (
     <React.Fragment>
       {accessToken ? (
-        'You are Logged In'
+        <LoginRouter />
       ) : (
-        <LogoutHome
+        <LogoutRouter
           onLogin={onLogin}
           onGoogleLogin={onGoogleLogin}
           onKakaoLogin={onKakaoLogin}

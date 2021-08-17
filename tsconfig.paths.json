@@ -15,6 +15,7 @@
       "@auth": ["src/modules/auth"],
       "@auth/*": ["src/modules/auth/*"],
       "@modules": ["src/modules"],
+      "@routers/*": ["src/routers/*"],
       "@theme": ["src/theme"],
       "@theme/*": ["src/theme/*"],
       "@/*": ["src/*"]
