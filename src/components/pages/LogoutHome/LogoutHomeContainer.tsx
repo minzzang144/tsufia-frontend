@@ -28,6 +28,8 @@ export interface ILoginContext {
   toggle: boolean;
   responseSuccessGoogle: (response: GoogleLoginResponse | GoogleLoginResponseOffline) => void;
   responseErrorGoogle: (error: any) => void;
+  responseSuccessKakao: (response: any) => void;
+  responseErrorKakao: (error: any) => void;
 }
 
 // Sign Up Form Context 인터페이스
@@ -76,6 +78,7 @@ const signUpSchema = yup.object().shape({
 export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
   onLogin,
   onGoogleLogin,
+  onKakaoLogin,
   onSignUp,
   toggle,
   setToggle,
@@ -122,6 +125,8 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
   const SocialLoginVlue = {
     responseSuccessGoogle,
     responseErrorGoogle,
+    responseSuccessKakao,
+    responseErrorKakao,
   };
 
   async function onLoginValid() {
@@ -151,6 +156,22 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
   }
 
   function responseErrorGoogle(error: any) {
+    console.log(error);
+  }
+
+  async function responseSuccessKakao(response: any) {
+    const {
+      profile: { kakao_account },
+    } = response;
+    const values = {
+      email: kakao_account.email,
+      nickname: kakao_account.profile.nickname,
+      photo: kakao_account.profile.thumbnail_image_url,
+    };
+    onKakaoLogin(values);
+  }
+
+  function responseErrorKakao(error: any) {
     console.log(error);
   }
 

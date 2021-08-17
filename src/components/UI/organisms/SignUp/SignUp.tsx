@@ -1,5 +1,6 @@
 import React from 'react';
 import GoogleLogin from 'react-google-login';
+import KakaoLogin from 'react-kakao-login';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import * as S from '@organisms/SignUp/style';
@@ -14,7 +15,8 @@ import { RootState } from '@modules';
 import { useLoginFormContext, useSignUpFormContext } from '@pages/LogoutHome/LogoutHomeContainer';
 
 export const SignUp: React.FC = () => {
-  const { responseSuccessGoogle, responseErrorGoogle } = useLoginFormContext();
+  const { responseSuccessGoogle, responseErrorGoogle, responseSuccessKakao, responseErrorKakao } =
+    useLoginFormContext();
   const { handleSubmit, control, onValid, errors, isValid, onSpanClick } = useSignUpFormContext();
   const { loading, error } = useSelector(
     (state: RootState) => ({
@@ -104,6 +106,11 @@ export const SignUp: React.FC = () => {
         onSuccess={responseSuccessGoogle}
         onFailure={responseErrorGoogle}
         cookiePolicy={'single_host_origin'}
+      />
+      <KakaoLogin
+        token={process.env.REACT_APP_KAKAO_CLIENT_ID!}
+        onSuccess={responseSuccessKakao}
+        onFail={responseErrorKakao}
       />
     </S.Wrapper>
   );
