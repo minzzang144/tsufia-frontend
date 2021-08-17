@@ -3,6 +3,8 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import {
   GoogleLoginRequest,
   GoogleLoginResponse,
+  KakaoLoginRequest,
+  KakaoLoginResponse,
   LoginResponse,
   SignUpResponse,
   SilentRefreshResponse,
@@ -43,4 +45,6 @@ export const AuthAPI = {
   signUp: (body: SignUpFormInput): Promise<SignUpResponse> => requests.post('users/sign-up', body),
   googleLogin: (body: GoogleLoginRequest): Promise<GoogleLoginResponse> =>
     requests.post('google', body),
+  kakaoLogin: (body: KakaoLoginRequest): Promise<KakaoLoginResponse> =>
+    requests.post('kakao', body),
 };

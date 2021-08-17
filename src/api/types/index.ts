@@ -4,16 +4,20 @@ export interface CommonResponse {
   error?: string;
 }
 
+/* Login */
 export interface LoginResponse extends CommonResponse {
   accessToken?: string;
 }
 
+/* Silent Refresh */
 export interface SilentRefreshResponse extends CommonResponse {
   accessToken?: string;
 }
 
+/* Sign Up */
 export interface SignUpResponse extends CommonResponse {}
 
+/* Google Login */
 export interface GoogleLoginRequest {
   email: string;
   firstName: string;
@@ -22,5 +26,16 @@ export interface GoogleLoginRequest {
 }
 
 export interface GoogleLoginResponse extends CommonResponse {
+  accessToken?: string;
+}
+
+/* Kakao Login */
+export interface KakaoLoginRequest {
+  email: string;
+  nickname: string;
+  photo: string;
+}
+
+export interface KakaoLoginResponse extends CommonResponse {
   accessToken?: string;
 }
