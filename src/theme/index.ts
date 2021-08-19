@@ -7,6 +7,7 @@ const theme: DefaultTheme = {
   },
   color: {
     dark: '#000000',
+    darkGray: 'rgba(0, 0, 0, 0.9)',
     light: '#FFFFFF',
     red: '#FF0000',
     yellow: '#FFEB00',

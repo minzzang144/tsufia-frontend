@@ -11,7 +11,7 @@ export const Room: React.FC = () => {
     {
       id: 1,
       title: '테스트 방',
-      currentHeadCount: 1,
+      currentHeadCount: 2,
       totalHeadCOunt: 4,
       status: '대기중',
       roomId: 1,
@@ -23,6 +23,58 @@ export const Room: React.FC = () => {
         {
           id: 2,
           name: '테스트유저2',
+        },
+      ],
+    },
+    {
+      id: 2,
+      title: '테스트 방',
+      currentHeadCount: 2,
+      totalHeadCOunt: 6,
+      status: '대기중',
+      roomId: 1,
+      userList: [
+        {
+          id: 1,
+          name: '테스트유저1',
+        },
+        {
+          id: 2,
+          name: '테스트유저2',
+        },
+        {
+          id: 3,
+          name: '테스트유저3',
+        },
+        {
+          id: 4,
+          name: '테스트유저4',
+        },
+      ],
+    },
+    {
+      id: 3,
+      title: '테스트 방',
+      currentHeadCount: 2,
+      totalHeadCOunt: 6,
+      status: '대기중',
+      roomId: 1,
+      userList: [
+        {
+          id: 1,
+          name: '테스트유저1',
+        },
+        {
+          id: 2,
+          name: '테스트유저2',
+        },
+        {
+          id: 3,
+          name: '테스트유저3',
+        },
+        {
+          id: 4,
+          name: '테스트유저4',
         },
       ],
     },
@@ -43,7 +95,7 @@ export const Room: React.FC = () => {
           </Span>
           <UnorderedList>
             {room.userList.map((user) => (
-              <List key={user.id} paddingProp={['1rem', '2rem']}>
+              <List key={user.id} paddingProp={['1rem', '2rem']} colorProp="black">
                 {user.name}
               </List>
             ))}
