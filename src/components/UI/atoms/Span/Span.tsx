@@ -16,6 +16,7 @@ export const Span: React.FC<I.SpanProps> = ({ children, onClick, ...rest }) => (
 );
 
 Span.defaultProps = {
+  levelProp: 6,
   marginProp: ['0'],
   colorProp: 'white',
   highlightProp: false,

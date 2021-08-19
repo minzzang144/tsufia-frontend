@@ -2,9 +2,18 @@ import styled, { css } from 'styled-components';
 
 import * as I from '.';
 
+type LevelPick = Pick<I.SpanProps, 'levelProp'>;
 type MarginPick = Pick<I.SpanProps, 'marginProp'>;
 type ColorPick = Pick<I.SpanProps, 'colorProp'>;
 type HighlightPick = Pick<I.SpanProps, 'highlightProp'>;
+
+const levelStyles = css<LevelPick>`
+  ${({ levelProp }) =>
+    levelProp &&
+    css`
+      font-size: ${`${0.75 + 0.25 * (6 / levelProp)}rem`};
+    `}
+`;
 
 const marginStyles = css<MarginPick>`
   display: inline-block;
@@ -66,8 +75,10 @@ const highlightStyles = css<HighlightPick>`
 `;
 
 export const Wrapper = styled.span`
-  font-size: 1rem;
   line-height: 2em;
+
+  /* Level Styles */
+  ${levelStyles}
 
   /* Margin Styles */
   ${marginStyles}
