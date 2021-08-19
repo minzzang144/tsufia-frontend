@@ -1,1 +1,3 @@
-export {};
+export interface HeaderProps {
+  isLoggedIn: boolean;
+}

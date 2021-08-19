@@ -13,6 +13,10 @@ export const LogoutHomePresenter: React.FC = () => {
   const toggleRightSide = toggle ? <SignUp /> : <Login />;
 
   return (
-    <Authentication header={<Header />} leftSide={<Introduction />} rightSide={toggleRightSide} />
+    <Authentication
+      header={<Header isLoggedIn={false} />}
+      leftSide={<Introduction />}
+      rightSide={toggleRightSide}
+    />
   );
 };
