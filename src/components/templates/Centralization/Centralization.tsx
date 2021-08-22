@@ -6,6 +6,7 @@ import * as S from '@templates/Centralization/style';
 export const Centralization: React.FC<I.CentralizationProps> = ({ header, center }) => (
   <S.Wrapper>
     <S.Header>{header}</S.Header>
+    <S.Background />
     <S.Center>{center}</S.Center>
   </S.Wrapper>
 );
