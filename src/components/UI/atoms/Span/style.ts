@@ -3,6 +3,8 @@ import styled, { css } from 'styled-components';
 import * as I from '.';
 
 type LevelPick = Pick<I.SpanProps, 'levelProp'>;
+type DisplayPick = Pick<I.SpanProps, 'displayProp'>;
+type AlignSelfPick = Pick<I.SpanProps, 'alignSelfProp'>;
 type MarginPick = Pick<I.SpanProps, 'marginProp'>;
 type ColorPick = Pick<I.SpanProps, 'colorProp'>;
 type HighlightPick = Pick<I.SpanProps, 'highlightProp'>;
@@ -13,6 +15,44 @@ const levelStyles = css<LevelPick>`
     css`
       font-size: ${`${0.75 + 0.25 * (6 / levelProp)}rem`};
     `}
+`;
+
+const displayStyles = css<DisplayPick>`
+  ${({ displayProp }) => {
+    switch (displayProp) {
+      case 'inline':
+        return css`
+          display: inline;
+        `;
+      case 'inline-block':
+        return css`
+          display: inline-block;
+        `;
+      default:
+        break;
+    }
+  }}
+`;
+
+const alignSelfStyles = css<AlignSelfPick>`
+  ${({ alignSelfProp }) => {
+    switch (alignSelfProp) {
+      case 'flex-start':
+        return css`
+          align-self: flex-start;
+        `;
+      case 'center':
+        return css`
+          align-self: center;
+        `;
+      case 'flex-end':
+        return css`
+          align-self: flex-end;
+        `;
+      default:
+        break;
+    }
+  }}
 `;
 
 const marginStyles = css<MarginPick>`
@@ -79,6 +119,10 @@ export const Wrapper = styled.span`
 
   /* Level Styles */
   ${levelStyles}
+
+  /* Display Styles */
+  ${displayStyles}
+  ${alignSelfStyles}
 
   /* Margin Styles */
   ${marginStyles}

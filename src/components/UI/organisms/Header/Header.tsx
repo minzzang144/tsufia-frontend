@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 
 import * as I from '.';
@@ -9,8 +10,8 @@ import { UnorderedList } from '@molecules/UnorderedList/UnorderedList';
 import { Img } from '@atoms/Img/Img';
 import { Heading } from '@atoms/Heading/Heading';
 
-export const Header: React.FC<I.HeaderProps> = ({ isLoggedIn }) => (
-  <S.Wrapper>
+export const Header: React.FC<I.HeaderProps> = ({ children, isLoggedIn, ...rest }) => (
+  <S.Wrapper {...rest}>
     <>
       {isLoggedIn === false && (
         <UnorderedList>
@@ -46,3 +47,7 @@ export const Header: React.FC<I.HeaderProps> = ({ isLoggedIn }) => (
     </>
   </S.Wrapper>
 );
+
+Header.defaultProps = {
+  colorProp: 'transparent',
+};

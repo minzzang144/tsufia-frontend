@@ -1,8 +1,31 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+import * as I from '.';
+
+type ColorPick = Pick<I.HeaderProps, 'colorProp'>;
+
+const colorStyles = css<ColorPick>`
+  ${({ colorProp }) => {
+    switch (colorProp) {
+      case 'black':
+        return css`
+          background-color: ${({ theme }) => theme.color.dark};
+        `;
+      case 'transparent':
+        return css`
+          background-color: transparent;
+        `;
+      default:
+        break;
+    }
+  }}
+`;
 
 export const Wrapper = styled.div`
   width: 100%;
-  background-color: ${({ theme }) => theme.color.dark};
+
+  /* Color Styles */
+  ${colorStyles}
 `;
 
 export const SpaceBetween = styled.div`
@@ -11,6 +34,7 @@ export const SpaceBetween = styled.div`
   align-items: center;
   width: 70%;
   margin: 0 auto;
+  background-color: ${({ theme }) => theme.color.dark};
 `;
 
 export const Logo = styled.div`
