@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 import {
+  GetRoomsResponse,
   GoogleLoginRequest,
   GoogleLoginResponse,
   KakaoLoginRequest,
@@ -47,4 +48,8 @@ export const AuthAPI = {
     requests.post('google', body),
   kakaoLogin: (body: KakaoLoginRequest): Promise<KakaoLoginResponse> =>
     requests.post('kakao', body),
+};
+
+export const RoomAPI = {
+  getRooms: (): Promise<GetRoomsResponse> => requests.get('rooms'),
 };

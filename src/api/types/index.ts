@@ -1,23 +1,26 @@
+import { Room } from '@rooms';
+
 /* eslint-disable @typescript-eslint/no-empty-interface */
 export interface CommonResponse {
   ok: boolean;
   error?: string;
 }
 
-/* Login */
+/* Auth API */
+// Login
 export interface LoginResponse extends CommonResponse {
   accessToken?: string;
 }
 
-/* Silent Refresh */
+// Silent Refresh
 export interface SilentRefreshResponse extends CommonResponse {
   accessToken?: string;
 }
 
-/* Sign Up */
+// Sign Up
 export interface SignUpResponse extends CommonResponse {}
 
-/* Google Login */
+// Google Login
 export interface GoogleLoginRequest {
   email: string;
   firstName: string;
@@ -29,7 +32,7 @@ export interface GoogleLoginResponse extends CommonResponse {
   accessToken?: string;
 }
 
-/* Kakao Login */
+// Kakao Login
 export interface KakaoLoginRequest {
   email: string;
   nickname: string;
@@ -38,4 +41,11 @@ export interface KakaoLoginRequest {
 
 export interface KakaoLoginResponse extends CommonResponse {
   accessToken?: string;
+}
+
+/* Room API */
+
+// Get Rooms
+export interface GetRoomsResponse extends CommonResponse {
+  rooms?: Room[];
 }
