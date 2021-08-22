@@ -6,11 +6,16 @@ import * as S from '@organisms/Header/style';
 
 import SiteLogo from '@assets/site-logo.png';
 import { List } from '@atoms/List/List';
-import { UnorderedList } from '@molecules/UnorderedList/UnorderedList';
 import { Img } from '@atoms/Img/Img';
 import { Heading } from '@atoms/Heading/Heading';
+import { UnorderedList } from '@molecules/UnorderedList/UnorderedList';
 
-export const Header: React.FC<I.HeaderProps> = ({ children, isLoggedIn, ...rest }) => (
+export const Header: React.FC<I.HeaderProps> = ({
+  children,
+  isLoggedIn,
+  onToggleModal,
+  ...rest
+}) => (
   <S.Wrapper {...rest}>
     <>
       {isLoggedIn === false && (
@@ -35,10 +40,13 @@ export const Header: React.FC<I.HeaderProps> = ({ children, isLoggedIn, ...rest 
             </Heading>
           </S.Logo>
           <UnorderedList>
+            <List onClick={onToggleModal} colorProp="black" paddingProp={['2rem', '1.5rem']}>
+              방 만들기
+            </List>
             <List colorProp="black" paddingProp={['2rem', '1.5rem']}>
               프로필
             </List>
-            <List colorProp="black" paddingProp={['2rem', '3rem', '2rem', '1.5rem']}>
+            <List colorProp="black" paddingProp={['2rem', '1.5rem']}>
               로그아웃
             </List>
           </UnorderedList>

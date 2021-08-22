@@ -12,6 +12,7 @@ import * as yup from 'yup';
 
 import socket from '@/socket';
 import { LoginHomePresenter } from '@pages/LoginHome/LoginHomePresenter';
+import { useState } from 'react';
 
 // Create Room Context Interface
 interface ICreateRoomFormContext {
@@ -21,6 +22,8 @@ interface ICreateRoomFormContext {
   onValid: () => void;
   errors: DeepMap<CreateRoomFormInput, FieldError>;
   isValid: boolean;
+  toggleModal: boolean;
+  onToggleModal: () => void;
 }
 
 // Create Room Form Input Interface
@@ -45,6 +48,7 @@ export const useCreateRoomFormContext = () => {
 };
 
 export const LoginHomeContainer: React.FC = () => {
+  const [toggleModal, setToggleModal] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -61,11 +65,17 @@ export const LoginHomeContainer: React.FC = () => {
     onValid,
     errors,
     isValid,
+    toggleModal,
+    onToggleModal,
   };
 
   function onValid() {
     console.log(getValues());
     reset({ title: '', totalHeadCount: '4' });
+  }
+
+  function onToggleModal() {
+    setToggleModal(!toggleModal);
   }
 
   useEffect(() => {

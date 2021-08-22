@@ -12,12 +12,13 @@ import { useCreateRoomFormContext } from '@pages/LoginHome/LoginHomeContainer';
 import { Controller } from 'react-hook-form';
 
 export const FormModal: React.FC = () => {
-  const { handleSubmit, control, onValid, errors, isValid } = useCreateRoomFormContext();
+  const { handleSubmit, control, onValid, errors, isValid, toggleModal, onToggleModal } =
+    useCreateRoomFormContext();
 
   return (
-    <S.Wrapper>
+    <S.Wrapper toggleModal={toggleModal}>
       <S.FormContainer>
-        <S.CancelIconed />
+        <S.CancelIconed onClick={() => onToggleModal()} />
         <Form onSubmit={handleSubmit(onValid)}>
           <Heading levelProp={2} marginProp={['10%', '0']}>
             방 만들기

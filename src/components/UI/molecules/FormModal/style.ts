@@ -1,8 +1,8 @@
 import { FormControl, withStyles } from '@material-ui/core';
 import CancelIcon from '@material-ui/icons/Cancel';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<{ toggleModal: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -13,7 +13,14 @@ export const Wrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
+  transform: translateY(-100%);
+  ${({ toggleModal }) =>
+    toggleModal === true &&
+    css`
+      transform: translateY(0);
+    `}
+  transition: transform 0.3s ease-in-out;
 `;
 
 export const CancelIconed = withStyles({
