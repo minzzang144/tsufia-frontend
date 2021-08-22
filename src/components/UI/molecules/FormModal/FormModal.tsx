@@ -1,3 +1,4 @@
+import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@material-ui/core';
 import React from 'react';
 
 import * as S from '@molecules/FormModal/style';
@@ -8,7 +9,6 @@ import { Heading } from '@atoms/Heading/Heading';
 import { Input } from '@atoms/Input/Input';
 import { Alert } from '@atoms/Alert/Alert';
 import { useCreateRoomFormContext } from '@pages/LoginHome/LoginHomeContainer';
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@material-ui/core';
 import { Controller } from 'react-hook-form';
 
 export const FormModal: React.FC = () => {
@@ -17,8 +17,9 @@ export const FormModal: React.FC = () => {
   return (
     <S.Wrapper>
       <S.FormContainer>
-        <Form onSubmit={handleSubmit(onValid, (er) => console.log(er))}>
-          <Heading levelProp={2} marginProp={['0', '0', '10%']}>
+        <S.CancelIconed />
+        <Form onSubmit={handleSubmit(onValid)}>
+          <Heading levelProp={2} marginProp={['10%', '0']}>
             방 만들기
           </Heading>
           <Input
@@ -28,10 +29,11 @@ export const FormModal: React.FC = () => {
             type="title"
             label="방 제목"
             variant="outlined"
+            marginprop={['0', '0', '1.5rem', '0']}
             errors={!!errors.title}
             helperText={errors.title ? errors.title.message : ''}
           />
-          <FormControl component="fieldset">
+          <S.FormControled>
             <FormLabel component="legend">총 인원수</FormLabel>
             <Controller
               name="totalHeadCount"
@@ -50,11 +52,11 @@ export const FormModal: React.FC = () => {
                 </RadioGroup>
               )}
             />
-          </FormControl>
+          </S.FormControled>
           <Button
             isValid={isValid}
             colorProp="black"
-            marginProp={['5%', '0', '0', '0']}
+            marginProp={['3%', '0', '5%', '0']}
             paddingProp={['1rem', '2rem']}
           >
             {/* {isValid && loading === true ? 'Proceeding' : 'Continue'} */}
