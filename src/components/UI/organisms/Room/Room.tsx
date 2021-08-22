@@ -5,6 +5,7 @@ import * as S from '@organisms/Room/style';
 import { List } from '@atoms/List/List';
 import { Span } from '@atoms/Span/Span';
 import { UnorderedList } from '@molecules/UnorderedList/UnorderedList';
+import { FormModal } from '@molecules/FormModal/FormModal';
 
 export const Room: React.FC = () => {
   const rooms = [
@@ -82,6 +83,7 @@ export const Room: React.FC = () => {
 
   return (
     <S.Wrapper>
+      <FormModal />
       {rooms.map((room) => (
         <S.RoomContainer key={room.id}>
           <Span levelProp={2} marginProp={['1rem', '0', '0', '0']}>
