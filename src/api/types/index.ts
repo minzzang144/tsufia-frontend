@@ -44,8 +44,17 @@ export interface KakaoLoginResponse extends CommonResponse {
 }
 
 /* Room API */
-
 // Get Rooms
 export interface GetRoomsResponse extends CommonResponse {
   rooms?: Room[];
+}
+
+export interface CreateRoomRequest {
+  title: string;
+  totalHeadCount: number;
+}
+
+// Create Room
+export interface CreateRoomResponse extends CommonResponse {
+  room?: Room;
 }
