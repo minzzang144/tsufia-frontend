@@ -1,8 +1,8 @@
 import { ActionType } from 'typesafe-actions';
 
-import * as Rooms from '@rooms/actions';
+import * as RA from '@room/actions';
 
-export type RoomsAction = ActionType<typeof Rooms>;
+export type RoomAction = ActionType<typeof RA>;
 
 enum Status {
   대기중,
@@ -30,8 +30,8 @@ export type Room = {
   userList: User[];
 };
 
-export type RoomsState = {
+export type RoomState = {
   loading: boolean;
   error?: string;
-  data?: Room[];
+  data?: Room;
 };
