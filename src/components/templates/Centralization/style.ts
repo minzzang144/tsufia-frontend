@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import MainPoster from '@assets/room-container.jpg';
 
@@ -15,18 +15,31 @@ export const Header = styled.div`
   width: 100%;
 `;
 
-export const Background = styled.div`
+export const Background = styled.div<{ isBackground: boolean }>`
   position: fixed;
   top: 5rem;
   left: 0;
   right: 0;
-  background-image: url(${MainPoster});
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
   width: 100%;
   height: 100vh;
   z-index: -1;
+  ${({ isBackground }) => {
+    switch (isBackground) {
+      case true:
+        return css`
+          background-image: url(${MainPoster});
+          background-repeat: no-repeat;
+          background-position: center center;
+          background-size: cover;
+        `;
+      case false:
+        return css`
+          background-color: ${({ theme }) => theme.color.darkGray};
+        `;
+      default:
+        break;
+    }
+  }}
 `;
 
 export const Center = styled.div`

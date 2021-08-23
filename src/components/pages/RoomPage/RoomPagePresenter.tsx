@@ -7,6 +7,7 @@ export const RoomPagePresenter: React.FC = () => {
     <Centralization
       header={<Header isLoggedIn={true} where="UPDATE" colorProp="black" />}
       center={<div></div>}
+      isBackground={false}
     />
   );
 };
