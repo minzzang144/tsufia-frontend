@@ -1,4 +1,4 @@
-import { GET_ROOMS, UPDATE_ROOMS_ERROR, UPDATE_ROOMS_LOADING } from '@rooms/actions';
+import { ADD_ROOM, GET_ROOMS, UPDATE_ROOMS_ERROR, UPDATE_ROOMS_LOADING } from '@rooms/actions';
 import { RoomsAction, RoomsState } from '@rooms/types';
 import { createReducer } from 'typesafe-actions';
 
@@ -20,6 +20,10 @@ const rooms = createReducer<RoomsState, RoomsAction>(initialState, {
   [GET_ROOMS]: (state, action) => ({
     ...state,
     data: action.payload,
+  }),
+  [ADD_ROOM]: (state, action) => ({
+    ...state,
+    data: state.data?.concat(action.payload),
   }),
 });
 
