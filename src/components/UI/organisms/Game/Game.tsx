@@ -10,7 +10,7 @@ export const Game: React.FC = () => {
 
   return (
     <S.Wrapper>
-      <FormModal roomFormContext={updateRoomFormContext} />
+      <FormModal roomFormContext={updateRoomFormContext} title="방 수정하기" />
     </S.Wrapper>
   );
 };

@@ -18,7 +18,7 @@ import { addRoom, getRooms, updateRoomsError, updateRoomsLoading } from '@rooms'
 import { useHistory } from 'react-router-dom';
 
 // Create Room Context Interface
-interface ICreateRoomFormContext {
+export interface ICreateRoomFormContext {
   register: UseFormRegister<CreateRoomFormInput>;
   handleSubmit: UseFormHandleSubmit<CreateRoomFormInput>;
   control: Control<CreateRoomFormInput>;
@@ -35,13 +35,13 @@ interface CreateRoomFormInput {
   totalHeadCount: string;
 }
 
-// Login Validate Schema
+// Create Room Validate Schema
 const createRoomSchema = yup.object().shape({
   title: yup.string().required(),
   totalHeadCount: yup.string().required(),
 });
 
-// Login Form Context 생성
+// Create Form Context 생성
 const CreateRoomFormContext = createContext<ICreateRoomFormContext | undefined>(undefined);
 
 export const useCreateRoomFormContext = () => {

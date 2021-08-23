@@ -3,6 +3,7 @@ import React from 'react';
 import { Controller } from 'react-hook-form';
 import { shallowEqual, useSelector } from 'react-redux';
 
+import * as I from '.';
 import * as S from '@molecules/FormModal/style';
 
 import { Button } from '@atoms/Button/Button';
@@ -10,12 +11,11 @@ import { Form } from '@atoms/Form/Form';
 import { Heading } from '@atoms/Heading/Heading';
 import { Input } from '@atoms/Input/Input';
 import { Alert } from '@atoms/Alert/Alert';
-import { useCreateRoomFormContext } from '@pages/LoginHome/LoginHomeContainer';
 import { RootState } from '@modules';
 
-export const FormModal: React.FC = () => {
+export const FormModal: React.FC<I.FormModalProps> = ({ roomFormContext, title }) => {
   const { handleSubmit, control, onValid, errors, isValid, toggleModal, onToggleModal } =
-    useCreateRoomFormContext();
+    roomFormContext;
   const { loading, error } = useSelector(
     (state: RootState) => ({
       loading: state.rooms.loading,
@@ -30,7 +30,7 @@ export const FormModal: React.FC = () => {
         <S.CancelIconed onClick={() => onToggleModal()} />
         <Form onSubmit={handleSubmit(onValid)}>
           <Heading levelProp={2} marginProp={['10%', '0']}>
-            방 만들기
+            {title}
           </Heading>
           <Input
             name="title"
