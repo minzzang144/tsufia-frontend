@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   Control,
   DeepMap,
@@ -11,8 +12,9 @@ import {
 import * as yup from 'yup';
 
 import socket from '@/socket';
+import { RoomAPI } from '@api';
 import { LoginHomePresenter } from '@pages/LoginHome/LoginHomePresenter';
-import { useState } from 'react';
+import { getRooms, updateRoomsError, updateRoomsLoading } from '@rooms';
 
 // Create Room Context Interface
 interface ICreateRoomFormContext {
@@ -57,6 +59,7 @@ export const LoginHomeContainer: React.FC = () => {
     formState: { errors, isValid },
     reset,
   } = useForm<CreateRoomFormInput>({ mode: 'all', resolver: yupResolver(createRoomSchema) });
+  const dispatch = useDispatch();
 
   const value = {
     register,
@@ -78,8 +81,27 @@ export const LoginHomeContainer: React.FC = () => {
     setToggleModal(!toggleModal);
   }
 
+  const getRoomsProcess = async () => {
+    try {
+      dispatch(updateRoomsLoading());
+      const response = await RoomAPI.getRooms();
+      if (response.ok === false && response.error) dispatch(updateRoomsError(response.error));
+      if (response.ok === true) socket.emit('rooms:get:server', response.rooms);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      dispatch(updateRoomsLoading());
+    }
+  };
+
   useEffect(() => {
-    socket.emit('rooms:test:server', 'rooms');
+    getRoomsProcess();
+  }, []);
+
+  useEffect(() => {
+    socket.on('rooms:get:client', (data) => {
+      dispatch(getRooms(data));
+    });
   }, []);
 
   return (

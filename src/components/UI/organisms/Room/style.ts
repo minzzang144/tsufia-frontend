@@ -16,4 +16,5 @@ export const RoomContainer = styled.div`
   border: 2px solid ${({ theme }) => theme.color.light};
   border-radius: 4px;
   width: 49%;
+  height: 45%;
 `;

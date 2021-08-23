@@ -51,7 +51,6 @@ const paddingStyles = css<PaddingPick>`
 
 export const Wrapper = styled.li`
   list-style: none;
-  cursor: pointer;
 
   /* Padding Styles */
   ${paddingStyles}
