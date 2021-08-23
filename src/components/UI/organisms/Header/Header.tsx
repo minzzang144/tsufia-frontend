@@ -13,6 +13,7 @@ import { UnorderedList } from '@molecules/UnorderedList/UnorderedList';
 export const Header: React.FC<I.HeaderProps> = ({
   children,
   isLoggedIn,
+  where,
   onToggleModal,
   ...rest
 }) => (
@@ -41,7 +42,8 @@ export const Header: React.FC<I.HeaderProps> = ({
           </S.Logo>
           <UnorderedList>
             <List onClick={onToggleModal} colorProp="black" paddingProp={['2rem', '1.5rem']}>
-              방 만들기
+              {where === 'CREATE' && '방 만들기'}
+              {where === 'UPDATE' && '방 수정하기'}
             </List>
             <List colorProp="black" paddingProp={['2rem', '1.5rem']}>
               프로필

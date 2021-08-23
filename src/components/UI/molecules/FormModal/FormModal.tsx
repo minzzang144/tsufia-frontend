@@ -1,5 +1,7 @@
 import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@material-ui/core';
 import React from 'react';
+import { Controller } from 'react-hook-form';
+import { shallowEqual, useSelector } from 'react-redux';
 
 import * as S from '@molecules/FormModal/style';
 
@@ -9,11 +11,18 @@ import { Heading } from '@atoms/Heading/Heading';
 import { Input } from '@atoms/Input/Input';
 import { Alert } from '@atoms/Alert/Alert';
 import { useCreateRoomFormContext } from '@pages/LoginHome/LoginHomeContainer';
-import { Controller } from 'react-hook-form';
+import { RootState } from '@modules';
 
 export const FormModal: React.FC = () => {
   const { handleSubmit, control, onValid, errors, isValid, toggleModal, onToggleModal } =
     useCreateRoomFormContext();
+  const { loading, error } = useSelector(
+    (state: RootState) => ({
+      loading: state.rooms.loading,
+      error: state.rooms.error,
+    }),
+    shallowEqual,
+  );
 
   return (
     <S.Wrapper toggleModal={toggleModal}>
@@ -60,10 +69,9 @@ export const FormModal: React.FC = () => {
             marginProp={['3%', '0', '5%', '0']}
             paddingProp={['1rem', '2rem']}
           >
-            {/* {isValid && loading === true ? 'Proceeding' : 'Continue'} */}
-            Continue
+            {isValid && loading === true ? 'Proceeding' : 'Continue'}
           </Button>
-          {/* {error && <Alert severity="error">{error}</Alert>} */}
+          {error && <Alert severity="error">{error}</Alert>}
         </Form>
       </S.FormContainer>
     </S.Wrapper>
