@@ -14,7 +14,8 @@ import * as yup from 'yup';
 import socket from '@/socket';
 import { RoomAPI } from '@api';
 import { LoginHomePresenter } from '@pages/LoginHome/LoginHomePresenter';
-import { getRooms, updateRoomsError, updateRoomsLoading } from '@rooms';
+import { addRoom, getRooms, updateRoomsError, updateRoomsLoading } from '@rooms';
+import { useHistory } from 'react-router-dom';
 
 // Create Room Context Interface
 interface ICreateRoomFormContext {
@@ -60,6 +61,7 @@ export const LoginHomeContainer: React.FC = () => {
     reset,
   } = useForm<CreateRoomFormInput>({ mode: 'all', resolver: yupResolver(createRoomSchema) });
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const value = {
     register,
@@ -72,15 +74,29 @@ export const LoginHomeContainer: React.FC = () => {
     onToggleModal,
   };
 
-  function onValid() {
-    console.log(getValues());
-    reset({ title: '', totalHeadCount: '4' });
+  // Create Room Form 값들이 유효하면 방을 생성한다
+  async function onValid() {
+    try {
+      const { title, totalHeadCount } = getValues();
+      const response = await RoomAPI.createRoom({ title, totalHeadCount: +totalHeadCount });
+      const { ok, error, room } = response;
+      if (ok === false && error) dispatch(updateRoomsError(error));
+      reset({ title: '', totalHeadCount: '4' });
+      if (ok === true && room) {
+        socket.emit('rooms:create:server', room);
+        history.push(`/rooms/${room.id}`);
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
+  // Create Form Modal Toggling
   function onToggleModal() {
     setToggleModal(!toggleModal);
   }
 
+  // 모든 방의 정보를 가져오기
   const getRoomsProcess = async () => {
     try {
       dispatch(updateRoomsLoading());
@@ -101,6 +117,9 @@ export const LoginHomeContainer: React.FC = () => {
   useEffect(() => {
     socket.on('rooms:get:client', (data) => {
       dispatch(getRooms(data));
+    });
+    socket.on('rooms:create:client', (data) => {
+      dispatch(addRoom(data));
     });
   }, []);
 

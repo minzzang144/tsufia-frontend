@@ -8,7 +8,9 @@ export const LoginHomePresenter: React.FC = () => {
   const { onToggleModal } = useCreateRoomFormContext();
   return (
     <Centralization
-      header={<Header isLoggedIn={true} onToggleModal={onToggleModal} colorProp="black" />}
+      header={
+        <Header isLoggedIn={true} where="CREATE" onToggleModal={onToggleModal} colorProp="black" />
+      }
       center={<Room />}
     />
   );
