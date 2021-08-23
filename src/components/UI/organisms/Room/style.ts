@@ -1,4 +1,12 @@
 import styled from 'styled-components';
+import ReactLoading from 'react-loading';
+
+export const Loader = styled(ReactLoading)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
 
 export const Wrapper = styled.div`
   display: flex;
@@ -17,4 +25,13 @@ export const RoomContainer = styled.div`
   border-radius: 4px;
   width: 49%;
   height: 45%;
+`;
+
+export const ErrorPart = styled.span`
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
 `;
