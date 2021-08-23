@@ -8,8 +8,10 @@ import { Span } from '@atoms/Span/Span';
 import { UnorderedList } from '@molecules/UnorderedList/UnorderedList';
 import { FormModal } from '@molecules/FormModal/FormModal';
 import { RootState } from '@modules';
+import { useCreateRoomFormContext } from '@pages/LoginHome/LoginHomeContainer';
 
 export const Room: React.FC = () => {
+  const createRoomFormContext = useCreateRoomFormContext();
   const { loading, error, rooms } = useSelector(
     (state: RootState) => ({
       loading: state.rooms.loading,
@@ -21,7 +23,7 @@ export const Room: React.FC = () => {
 
   return (
     <S.Wrapper>
-      <FormModal />
+      <FormModal roomFormContext={createRoomFormContext} />
       {loading === true && <S.Loader type="balls" color="white" width="5%" height="5%" />}
       {loading === false && rooms && !error ? (
         rooms?.map((room) => (
