@@ -54,6 +54,15 @@ export interface CreateRoomRequest {
   totalHeadCount: number;
 }
 
+// Get Room
+export interface GetRoomRequest {
+  roomId: string;
+}
+
+export interface GetRoomResponse extends CommonResponse {
+  room?: Room;
+}
+
 // Create Room
 export interface CreateRoomResponse extends CommonResponse {
   room?: Room;

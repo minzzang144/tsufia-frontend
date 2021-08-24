@@ -3,6 +3,8 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import {
   CreateRoomRequest,
   CreateRoomResponse,
+  GetRoomRequest,
+  GetRoomResponse,
   GetRoomsResponse,
   GoogleLoginRequest,
   GoogleLoginResponse,
@@ -54,6 +56,7 @@ export const AuthAPI = {
 
 export const RoomAPI = {
   getRooms: (): Promise<GetRoomsResponse> => requests.get('rooms'),
+  getRoom: (body: GetRoomRequest): Promise<GetRoomResponse> => requests.get(`rooms/${body.roomId}`),
   createRoom: (body: CreateRoomRequest): Promise<CreateRoomResponse> =>
     requests.post('rooms/create', body),
 };
