@@ -10,7 +10,7 @@ import {
   SilentRefreshResponse,
 } from '@api-types';
 import { LoginFormInput, SignUpFormInput } from '@atoms/Input';
-import { updateError, updateLoading, updateToken } from '@auth/actions';
+import { getUser, updateError, updateLoading, updateToken } from '@auth/actions';
 import { RootState } from '@modules';
 import { LoginRouter } from '@routers/LoginRouter';
 import { LogoutRouter } from '@routers/LogoutRouter';
@@ -108,7 +108,22 @@ function App() {
       if (accessToken) {
         dispatch(updateToken(accessToken));
         axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        getUserInformation();
         setTimeout(onSilentRefresh, Number(process.env.REACT_APP_EXPIRES_IN));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // 유저 정보를 가져오는 함수
+  async function getUserInformation() {
+    try {
+      const response = await AuthAPI.getUser();
+      const { ok, error, user } = response;
+      if (ok === false && error) dispatch(updateError(error));
+      if (ok === true && user) {
+        dispatch(getUser(user));
       }
     } catch (error) {
       console.log(error);
