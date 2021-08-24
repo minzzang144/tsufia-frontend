@@ -1,4 +1,4 @@
-import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@material-ui/core';
+import { FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup } from '@material-ui/core';
 import React from 'react';
 import { Controller } from 'react-hook-form';
 import { shallowEqual, useSelector } from 'react-redux';
@@ -13,7 +13,12 @@ import { Input } from '@atoms/Input/Input';
 import { Alert } from '@atoms/Alert/Alert';
 import { RootState } from '@modules';
 
-export const FormModal: React.FC<I.FormModalProps> = ({ roomFormContext, title }) => {
+export const FormModal: React.FC<I.FormModalProps> = ({
+  roomFormContext,
+  title,
+  defaultValue,
+  disabled,
+}) => {
   const { handleSubmit, control, onValid, errors, isValid, toggleModal, onToggleModal } =
     roomFormContext;
   const { loading, error } = useSelector(
@@ -35,7 +40,7 @@ export const FormModal: React.FC<I.FormModalProps> = ({ roomFormContext, title }
           <Input
             name="title"
             control={control}
-            defaultValue=""
+            defaultValue={defaultValue}
             type="title"
             label="방 제목"
             variant="outlined"
@@ -48,7 +53,7 @@ export const FormModal: React.FC<I.FormModalProps> = ({ roomFormContext, title }
             <Controller
               name="totalHeadCount"
               control={control}
-              defaultValue="4"
+              defaultValue=""
               render={({ field: { onBlur, onChange, value } }) => (
                 <RadioGroup
                   aria-label="totalHeadCount"
@@ -56,13 +61,29 @@ export const FormModal: React.FC<I.FormModalProps> = ({ roomFormContext, title }
                   onBlur={onBlur}
                   onChange={(e) => onChange(e)}
                 >
-                  <FormControlLabel value="4" control={<Radio />} label="4명" />
-                  <FormControlLabel value="6" control={<Radio />} label="6명" />
-                  <FormControlLabel value="8" control={<Radio />} label="8명" />
+                  <FormControlLabel
+                    value="4"
+                    disabled={disabled === '4' ? true : false}
+                    control={<Radio />}
+                    label="4명"
+                  />
+                  <FormControlLabel
+                    value="6"
+                    disabled={disabled === '6' ? true : false}
+                    control={<Radio />}
+                    label="6명"
+                  />
+                  <FormControlLabel
+                    value="8"
+                    disabled={disabled === '6' ? true : false}
+                    control={<Radio />}
+                    label="8명"
+                  />
                 </RadioGroup>
               )}
             />
           </S.FormControled>
+          <FormHelperText>{errors.totalHeadCount && errors.totalHeadCount.message}</FormHelperText>
           <Button
             isValid={isValid}
             colorProp="black"

@@ -23,7 +23,12 @@ export const Room: React.FC = () => {
 
   return (
     <S.Wrapper>
-      <FormModal roomFormContext={createRoomFormContext} title="방 만들기" />
+      <FormModal
+        roomFormContext={createRoomFormContext}
+        title="방 만들기"
+        defaultValue=""
+        disabled=""
+      />
       {loading === true && <S.Loader type="balls" color="white" width="5%" height="5%" />}
       {loading === false && rooms && !error ? (
         rooms?.map((room) => (

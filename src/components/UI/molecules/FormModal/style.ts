@@ -58,6 +58,15 @@ const CommonStyles = withStyles({
     '& .MuiRadio-colorSecondary.Mui-checked': {
       color: '#f50057',
     },
+    '& .Mui-disabled': {
+      opacity: '0.7',
+    },
+    '& .MuiTypography-root.Mui-disabled': {
+      color: 'white',
+    },
+    '& + .MuiFormHelperText-root': {
+      color: 'red',
+    },
   },
 })(FormControl);
 
