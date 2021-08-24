@@ -3,6 +3,7 @@ import { createReducer } from 'typesafe-actions';
 
 import {
   ADD_ROOM,
+  ENTER_ROOM,
   GET_ROOMS,
   UPDATE_ROOMS,
   UPDATE_ROOMS_ERROR,
@@ -34,6 +35,13 @@ const rooms = createReducer<RoomsState, RoomsAction>(initialState, {
     data: state.data?.concat(action.payload),
   }),
   [UPDATE_ROOMS]: (state, action) =>
+    produce(state, (draft) => {
+      const index = state.data?.findIndex((value) => value.id === action.payload.id);
+      if (index !== undefined && index !== -1) {
+        draft.data?.splice(index, 1, action.payload);
+      }
+    }),
+  [ENTER_ROOM]: (state, action) =>
     produce(state, (draft) => {
       const index = state.data?.findIndex((value) => value.id === action.payload.id);
       if (index !== undefined && index !== -1) {

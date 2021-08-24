@@ -1,6 +1,14 @@
-import { GET_ROOM, UPDATE_ROOM, UPDATE_ROOM_ERROR, UPDATE_ROOM_LOADING } from '@room/actions';
-import { RoomAction, RoomState } from '@room/types';
+import produce from 'immer';
 import { createReducer } from 'typesafe-actions';
+
+import {
+  ENTER_ROOM,
+  GET_ROOM,
+  UPDATE_ROOM,
+  UPDATE_ROOM_ERROR,
+  UPDATE_ROOM_LOADING,
+} from '@room/actions';
+import { RoomAction, RoomState } from '@room/types';
 
 const initialState = {
   loading: false,
@@ -25,6 +33,10 @@ const room = createReducer<RoomState, RoomAction>(initialState, {
     ...state,
     data: action.payload,
   }),
+  [ENTER_ROOM]: (state, action) =>
+    produce(state, (draft) => {
+      draft.data = action.payload;
+    }),
 });
 
 export default room;
