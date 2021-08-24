@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 
@@ -9,7 +9,9 @@ import * as I from '.';
 
 import { RoomAPI } from '@api';
 import { RoomPagePresenter } from '@pages/RoomPage/RoomPagePresenter';
-import { getRoom, updateRoomError, updateRoomLoading } from '@room';
+import { getRoom, updateRoom, updateRoomError, updateRoomLoading } from '@room';
+import socket from '@/socket';
+import { RootState } from '@modules';
 
 // Update Room Validate Schema
 const updateRoomSchema = yup.object().shape({
@@ -38,6 +40,14 @@ export const RoomPageContainer: React.FC = () => {
   } = useForm<I.UpdateRoomFormInput>({ mode: 'all', resolver: yupResolver(updateRoomSchema) });
   const dispatch = useDispatch();
   const params = useParams<{ id: string }>();
+  const { room: storeRoom } = useSelector(
+    (state: RootState) => ({
+      loading: state.room.loading,
+      error: state.room.error,
+      room: state.room.data,
+    }),
+    shallowEqual,
+  );
 
   const value = {
     register,
@@ -50,14 +60,35 @@ export const RoomPageContainer: React.FC = () => {
     onToggleModal,
   };
 
-  function onValid() {
-    console.log(getValues());
-    reset({ title: '', totalHeadCount: '' });
+  // Update Room Form이 유효한 경우 실행되는 함수
+  async function onValid() {
+    try {
+      const { title, totalHeadCount } = getValues();
+      const response = await RoomAPI.updateRoom({ title, totalHeadCount: +totalHeadCount });
+      const { ok, error, room } = response;
+      if (ok === false && error) dispatch(updateRoomError(error));
+      if (ok === true && room) {
+        socket.emit('rooms:update:server', room);
+        setToggleModal(!toggleModal);
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   function onToggleModal() {
     setToggleModal(!toggleModal);
   }
+
+  useEffect(() => {
+    // 클라이언트가 속한 방에서 모든 소켓이 Redux Store의 Room을 업데이트 한다
+    socket.on('rooms:update:client', (data) => {
+      dispatch(updateRoom(data));
+      if (storeRoom) {
+        reset({ title: storeRoom.title, totalHeadCount: String(storeRoom.totalHeadCount) });
+      }
+    });
+  }, []);
 
   async function getRoomProcess() {
     try {

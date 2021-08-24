@@ -14,7 +14,7 @@ import * as yup from 'yup';
 import socket from '@/socket';
 import { RoomAPI } from '@api';
 import { LoginHomePresenter } from '@pages/LoginHome/LoginHomePresenter';
-import { addRoom, getRooms, updateRoomsError, updateRoomsLoading } from '@rooms';
+import { addRoom, getRooms, updateRooms, updateRoomsError, updateRoomsLoading } from '@rooms';
 import { useHistory } from 'react-router-dom';
 
 // Create Room Context Interface
@@ -104,7 +104,7 @@ export const LoginHomeContainer: React.FC = () => {
       if (response.ok === false && response.error) dispatch(updateRoomsError(response.error));
       if (response.ok === true) socket.emit('rooms:get:server', response.rooms);
     } catch (error) {
-      console.log(error);
+      throw new Error(error);
     } finally {
       dispatch(updateRoomsLoading());
     }
@@ -120,6 +120,9 @@ export const LoginHomeContainer: React.FC = () => {
     });
     socket.on('rooms:create:client', (data) => {
       dispatch(addRoom(data));
+    });
+    socket.on('rooms:update:client', (data) => {
+      dispatch(updateRooms(data));
     });
   }, []);
 
