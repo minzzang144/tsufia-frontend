@@ -4,6 +4,8 @@ import { createReducer } from 'typesafe-actions';
 import {
   ENTER_ROOM,
   GET_ROOM,
+  LEAVE_ROOM,
+  REMOVE_ROOM,
   UPDATE_ROOM,
   UPDATE_ROOM_ERROR,
   UPDATE_ROOM_LOADING,
@@ -37,6 +39,14 @@ const room = createReducer<RoomState, RoomAction>(initialState, {
     produce(state, (draft) => {
       draft.data = action.payload;
     }),
+  [LEAVE_ROOM]: (state, action) =>
+    produce(state, (draft) => {
+      draft.data = action.payload;
+    }),
+  [REMOVE_ROOM]: (state) => ({
+    ...state,
+    data: undefined,
+  }),
 });
 
 export default room;
