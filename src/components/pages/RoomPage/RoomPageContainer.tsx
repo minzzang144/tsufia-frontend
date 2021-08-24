@@ -9,7 +9,7 @@ import * as I from '.';
 
 import { RoomAPI } from '@api';
 import { RoomPagePresenter } from '@pages/RoomPage/RoomPagePresenter';
-import { getRoom, updateRoom, updateRoomError, updateRoomLoading } from '@room';
+import { enterRoom, getRoom, updateRoom, updateRoomError, updateRoomLoading } from '@room';
 import socket from '@/socket';
 import { RootState } from '@modules';
 
@@ -80,16 +80,6 @@ export const RoomPageContainer: React.FC = () => {
     setToggleModal(!toggleModal);
   }
 
-  useEffect(() => {
-    // 클라이언트가 속한 방에서 모든 소켓이 Redux Store의 Room을 업데이트 한다
-    socket.on('rooms:update:client', (data) => {
-      dispatch(updateRoom(data));
-      if (storeRoom) {
-        reset({ title: storeRoom.title, totalHeadCount: String(storeRoom.totalHeadCount) });
-      }
-    });
-  }, []);
-
   async function getRoomProcess() {
     try {
       dispatch(updateRoomLoading());
@@ -105,8 +95,38 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
+  async function enterRoomProcess() {
+    try {
+      const { id } = params;
+      const response = await RoomAPI.enterRoom({ roomId: id });
+      const { ok, error, room } = response;
+      if (ok === false && error) dispatch(updateRoomError(error));
+      if (ok === true && room) {
+        socket.emit('rooms:enter:server', room);
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
   useEffect(() => {
     getRoomProcess();
+    enterRoomProcess();
+  }, []);
+
+  useEffect(() => {
+    // 클라이언트가 속한 방에서 모든 소켓이 Redux Store의 Room을 업데이트 한다
+    socket.on('rooms:update:client', (data) => {
+      dispatch(updateRoom(data));
+      if (storeRoom) {
+        reset({ title: storeRoom.title, totalHeadCount: String(storeRoom.totalHeadCount) });
+      }
+    });
+
+    // 누군가 방에 입장한 경우 room.userList에 새로운 유저를 추가한다
+    socket.on('rooms:enter:each-client', (data) => {
+      dispatch(enterRoom(data));
+    });
   }, []);
 
   return (

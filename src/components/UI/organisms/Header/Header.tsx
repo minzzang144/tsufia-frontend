@@ -26,7 +26,6 @@ export const Header: React.FC<I.HeaderProps> = ({
     shallowEqual,
   );
   const [isHost, setIsHost] = useState<boolean>(false);
-  console.log(room);
 
   const getHost = useCallback(() => {
     if (room && currentUser) {
