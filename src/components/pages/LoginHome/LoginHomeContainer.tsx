@@ -18,6 +18,8 @@ import {
   addRooms,
   enterRooms,
   getRooms,
+  leaveRooms,
+  removeRooms,
   updateRooms,
   updateRoomsError,
   updateRoomsLoading,
@@ -137,6 +139,14 @@ export const LoginHomeContainer: React.FC = () => {
     // 실시간으로 방에 입장하는 유저를 추가하기
     socket.on('rooms:enter:client', (data) => {
       dispatch(enterRooms(data));
+    });
+    // 실시간으로 방을 나가는 유저를 제거하기
+    socket.on('rooms:leave:client', (data) => {
+      dispatch(leaveRooms(data));
+    });
+    // 실시간으로 삭제되는 방의 정보를 가져오기
+    socket.on('rooms:remove:client', (data) => {
+      dispatch(removeRooms(data));
     });
   }, []);
 
