@@ -1,12 +1,14 @@
+import produce from 'immer';
 import { createReducer } from 'typesafe-actions';
 
-import { UPDATE_ERROR, UPDATE_LOADING, UPDATE_TOKEN } from '@auth/actions';
+import { GET_USER, UPDATE_ERROR, UPDATE_LOADING, UPDATE_TOKEN } from '@auth/actions';
 import { AuthAction, AuthState } from '@auth/types';
 
 const initialState = {
   loading: false,
   error: undefined,
   token: undefined,
+  user: undefined,
 };
 
 const authentication = createReducer<AuthState, AuthAction>(initialState, {
@@ -22,6 +24,10 @@ const authentication = createReducer<AuthState, AuthAction>(initialState, {
     ...state,
     token: action.payload,
   }),
+  [GET_USER]: (state, action) =>
+    produce(state, (draft) => {
+      draft.user = action.payload;
+    }),
 });
 
 export default authentication;
