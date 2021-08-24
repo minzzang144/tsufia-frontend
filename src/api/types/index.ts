@@ -1,3 +1,4 @@
+import { User } from '@auth';
 import { Room } from '@rooms';
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
@@ -41,6 +42,10 @@ export interface KakaoLoginRequest {
 
 export interface KakaoLoginResponse extends CommonResponse {
   accessToken?: string;
+}
+
+export interface GetUserResponse extends CommonResponse {
+  user?: User;
 }
 
 /* Room API */

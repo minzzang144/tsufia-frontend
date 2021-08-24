@@ -6,6 +6,7 @@ import {
   GetRoomRequest,
   GetRoomResponse,
   GetRoomsResponse,
+  GetUserResponse,
   GoogleLoginRequest,
   GoogleLoginResponse,
   KakaoLoginRequest,
@@ -61,6 +62,7 @@ export const AuthAPI = {
     requests.post('google', body),
   kakaoLogin: (body: KakaoLoginRequest): Promise<KakaoLoginResponse> =>
     requests.post('kakao', body),
+  getUser: (): Promise<GetUserResponse> => requests.get('users/profile'),
 };
 
 export const RoomAPI = {
