@@ -82,3 +82,12 @@ export interface UpdateRoomRequest {
 export interface UpdateRoomResponse extends CommonResponse {
   room?: Room;
 }
+
+// Enter Room
+export interface EnterRoomRequest {
+  roomId: string;
+}
+
+export interface EnterRoomResponse extends CommonResponse {
+  room?: Room;
+}
