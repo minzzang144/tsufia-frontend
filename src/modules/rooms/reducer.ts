@@ -1,6 +1,14 @@
-import { ADD_ROOM, GET_ROOMS, UPDATE_ROOMS_ERROR, UPDATE_ROOMS_LOADING } from '@rooms/actions';
-import { RoomsAction, RoomsState } from '@rooms/types';
+import produce from 'immer';
 import { createReducer } from 'typesafe-actions';
+
+import {
+  ADD_ROOM,
+  GET_ROOMS,
+  UPDATE_ROOMS,
+  UPDATE_ROOMS_ERROR,
+  UPDATE_ROOMS_LOADING,
+} from '@rooms/actions';
+import { RoomsAction, RoomsState } from '@rooms/types';
 
 const initialState = {
   loading: false,
@@ -25,6 +33,13 @@ const rooms = createReducer<RoomsState, RoomsAction>(initialState, {
     ...state,
     data: state.data?.concat(action.payload),
   }),
+  [UPDATE_ROOMS]: (state, action) =>
+    produce(state, (draft) => {
+      const index = state.data?.findIndex((value) => value.id === action.payload.id);
+      if (index !== undefined && index !== -1) {
+        draft.data?.splice(index, 1, action.payload);
+      }
+    }),
 });
 
 export default rooms;
