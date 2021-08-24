@@ -15,8 +15,8 @@ import socket from '@/socket';
 import { RoomAPI } from '@api';
 import { LoginHomePresenter } from '@pages/LoginHome/LoginHomePresenter';
 import {
-  addRoom,
-  enterRoom,
+  addRooms,
+  enterRooms,
   getRooms,
   updateRooms,
   updateRoomsError,
@@ -128,7 +128,7 @@ export const LoginHomeContainer: React.FC = () => {
     });
     // 실시간으로 생성되는 방의 정보를 가져오기
     socket.on('rooms:create:client', (data) => {
-      dispatch(addRoom(data));
+      dispatch(addRooms(data));
     });
     // 실시간으로 수정되는 방의 정보를 가져오기
     socket.on('rooms:update:client', (data) => {
@@ -136,7 +136,7 @@ export const LoginHomeContainer: React.FC = () => {
     });
     // 실시간으로 방에 입장하는 유저를 추가하기
     socket.on('rooms:enter:client', (data) => {
-      dispatch(enterRoom(data));
+      dispatch(enterRooms(data));
     });
   }, []);
 

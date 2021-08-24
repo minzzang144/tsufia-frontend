@@ -2,8 +2,8 @@ import produce from 'immer';
 import { createReducer } from 'typesafe-actions';
 
 import {
-  ADD_ROOM,
-  ENTER_ROOM,
+  ADD_ROOMS,
+  ENTER_ROOMS,
   GET_ROOMS,
   UPDATE_ROOMS,
   UPDATE_ROOMS_ERROR,
@@ -30,7 +30,7 @@ const rooms = createReducer<RoomsState, RoomsAction>(initialState, {
     ...state,
     data: action.payload,
   }),
-  [ADD_ROOM]: (state, action) => ({
+  [ADD_ROOMS]: (state, action) => ({
     ...state,
     data: state.data?.concat(action.payload),
   }),
@@ -41,7 +41,7 @@ const rooms = createReducer<RoomsState, RoomsAction>(initialState, {
         draft.data?.splice(index, 1, action.payload);
       }
     }),
-  [ENTER_ROOM]: (state, action) =>
+  [ENTER_ROOMS]: (state, action) =>
     produce(state, (draft) => {
       const index = state.data?.findIndex((value) => value.id === action.payload.id);
       if (index !== undefined && index !== -1) {
