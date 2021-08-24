@@ -21,8 +21,7 @@ export const Game: React.FC = () => {
           <FormModal
             roomFormContext={updateRoomFormContext}
             title="방 수정하기"
-            defaultValue={room.title}
-            disabled={String(room.totalHeadCount)}
+            defaultValue={{ input: room.title, radio: String(room.totalHeadCount) }}
           />
         </S.Wrapper>
       ) : null}

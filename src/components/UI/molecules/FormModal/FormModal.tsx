@@ -13,12 +13,7 @@ import { Input } from '@atoms/Input/Input';
 import { Alert } from '@atoms/Alert/Alert';
 import { RootState } from '@modules';
 
-export const FormModal: React.FC<I.FormModalProps> = ({
-  roomFormContext,
-  title,
-  defaultValue,
-  disabled,
-}) => {
+export const FormModal: React.FC<I.FormModalProps> = ({ roomFormContext, title, defaultValue }) => {
   const { handleSubmit, control, onValid, errors, isValid, toggleModal, onToggleModal } =
     roomFormContext;
   const { loading, error } = useSelector(
@@ -40,7 +35,7 @@ export const FormModal: React.FC<I.FormModalProps> = ({
           <Input
             name="title"
             control={control}
-            defaultValue={defaultValue}
+            defaultValue={defaultValue.input}
             type="title"
             label="방 제목"
             variant="outlined"
@@ -53,7 +48,7 @@ export const FormModal: React.FC<I.FormModalProps> = ({
             <Controller
               name="totalHeadCount"
               control={control}
-              defaultValue=""
+              defaultValue={defaultValue.radio}
               render={({ field: { onBlur, onChange, value } }) => (
                 <RadioGroup
                   aria-label="totalHeadCount"
@@ -61,24 +56,9 @@ export const FormModal: React.FC<I.FormModalProps> = ({
                   onBlur={onBlur}
                   onChange={(e) => onChange(e)}
                 >
-                  <FormControlLabel
-                    value="4"
-                    disabled={disabled === '4' ? true : false}
-                    control={<Radio />}
-                    label="4명"
-                  />
-                  <FormControlLabel
-                    value="6"
-                    disabled={disabled === '6' ? true : false}
-                    control={<Radio />}
-                    label="6명"
-                  />
-                  <FormControlLabel
-                    value="8"
-                    disabled={disabled === '6' ? true : false}
-                    control={<Radio />}
-                    label="8명"
-                  />
+                  <FormControlLabel value="4" control={<Radio />} label="4명" />
+                  <FormControlLabel value="6" control={<Radio />} label="6명" />
+                  <FormControlLabel value="8" control={<Radio />} label="8명" />
                 </RadioGroup>
               )}
             />
