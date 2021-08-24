@@ -13,6 +13,8 @@ import {
   LoginResponse,
   SignUpResponse,
   SilentRefreshResponse,
+  UpdateRoomRequest,
+  UpdateRoomResponse,
 } from '@api-types';
 import { LoginFormInput, SignUpFormInput } from '@atoms/Input';
 
@@ -41,6 +43,13 @@ const requests = {
       return await axiosInstance.put(url).then(responseBody);
     }
   },
+  patch: async (url: string, body: any) => {
+    if (body) {
+      return await axiosInstance.patch(url, body).then(responseBody);
+    } else {
+      return await axiosInstance.patch(url).then(responseBody);
+    }
+  },
   delete: async (url: string) => await axiosInstance.delete(url).then(responseBody),
 };
 
@@ -59,4 +68,6 @@ export const RoomAPI = {
   getRoom: (body: GetRoomRequest): Promise<GetRoomResponse> => requests.get(`rooms/${body.roomId}`),
   createRoom: (body: CreateRoomRequest): Promise<CreateRoomResponse> =>
     requests.post('rooms/create', body),
+  updateRoom: (body: UpdateRoomRequest): Promise<UpdateRoomResponse> =>
+    requests.patch('rooms/update', body),
 };

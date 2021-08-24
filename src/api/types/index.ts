@@ -67,3 +67,13 @@ export interface GetRoomResponse extends CommonResponse {
 export interface CreateRoomResponse extends CommonResponse {
   room?: Room;
 }
+
+// Update Room
+export interface UpdateRoomRequest {
+  title: string;
+  totalHeadCount: number;
+}
+
+export interface UpdateRoomResponse extends CommonResponse {
+  room?: Room;
+}
