@@ -91,3 +91,17 @@ export interface EnterRoomRequest {
 export interface EnterRoomResponse extends CommonResponse {
   room?: Room;
 }
+
+// Leave Room
+export interface LeaveRoomRequest {
+  roomId: string;
+}
+
+export interface LeaveRoomResponse extends CommonResponse {
+  room?: Room;
+}
+
+// Remove Room
+export interface RemoveRoomResponse extends CommonResponse {
+  roomId: number;
+}

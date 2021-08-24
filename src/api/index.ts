@@ -13,7 +13,10 @@ import {
   GoogleLoginResponse,
   KakaoLoginRequest,
   KakaoLoginResponse,
+  LeaveRoomRequest,
+  LeaveRoomResponse,
   LoginResponse,
+  RemoveRoomResponse,
   SignUpResponse,
   SilentRefreshResponse,
   UpdateRoomRequest,
@@ -76,4 +79,7 @@ export const RoomAPI = {
     requests.patch('rooms/update', body),
   enterRoom: (body: EnterRoomRequest): Promise<EnterRoomResponse> =>
     requests.patch(`api/rooms/${body.roomId}/enter`),
+  leaveRoom: (body: LeaveRoomRequest): Promise<LeaveRoomResponse> =>
+    requests.patch(`api/rooms/${body.roomId}/leave`),
+  removeRoom: (): Promise<RemoveRoomResponse> => requests.delete(`rooms/delete`),
 };
