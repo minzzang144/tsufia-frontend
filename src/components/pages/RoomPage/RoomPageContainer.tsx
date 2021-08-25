@@ -2,14 +2,22 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Prompt, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 
 import * as I from '.';
 
 import { RoomAPI } from '@api';
 import { RoomPagePresenter } from '@pages/RoomPage/RoomPagePresenter';
-import { enterRoom, getRoom, updateRoom, updateRoomError, updateRoomLoading } from '@room';
+import {
+  enterRoom,
+  getRoom,
+  leaveRoom,
+  removeRoom,
+  updateRoom,
+  updateRoomError,
+  updateRoomLoading,
+} from '@room';
 import socket from '@/socket';
 import { RootState } from '@modules';
 
@@ -80,6 +88,7 @@ export const RoomPageContainer: React.FC = () => {
     setToggleModal(!toggleModal);
   }
 
+  // 사용자가 방에 처음 입장했을 때 방의 정보를 가져오는 이벤트
   async function getRoomProcess() {
     try {
       dispatch(updateRoomLoading());
@@ -95,6 +104,7 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
+  // 다른 사용자가 방에 입장했을 때 방의 정보를 업데이트 하는 이벤트
   async function enterRoomProcess() {
     try {
       const { id } = params;
@@ -109,9 +119,52 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
+  async function leaveRoomProcess() {
+    try {
+      const { id } = params;
+      const response = await RoomAPI.leaveRoom({ roomId: id });
+      const { ok, error, room } = response;
+      if (ok === false && error) dispatch(updateRoomError(error));
+      if (ok === true && room) {
+        socket.emit('rooms:leave:server', room);
+      }
+      console.log('leaveRoomProcess-inner');
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async function removeRoomProcess() {
+    try {
+      const response = await RoomAPI.removeRoom();
+      const { ok, error, roomId } = response;
+      if (ok === false && error) dispatch(updateRoomError(error));
+      if (ok === true && roomId) {
+        socket.emit('rooms:remove:server', roomId);
+      }
+      console.log('removeRoomProcess-inner');
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  function handleBeforeUnload(e: BeforeUnloadEvent) {
+    e.preventDefault();
+    if (e) {
+      e.returnValue = '게임을 나가시겠습니까? 게임중에는 다시 입장할 수 없습니다.';
+    }
+    return '게임을 나가시겠습니까? 게임중에는 다시 입장할 수 없습니다.';
+  }
+
   useEffect(() => {
     getRoomProcess();
     enterRoomProcess();
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      leaveRoomProcess();
+      removeRoomProcess();
+    };
   }, []);
 
   useEffect(() => {
@@ -127,10 +180,21 @@ export const RoomPageContainer: React.FC = () => {
     socket.on('rooms:enter:each-client', (data) => {
       dispatch(enterRoom(data));
     });
+
+    // 누군가 방에서 퇴장한 경우 room.userList에서 유저를 삭제한다
+    socket.on('rooms:leave:each-client', (data) => {
+      dispatch(leaveRoom(data));
+    });
+
+    // 방의 마지막 멤버가 퇴장한 경우 해당 room을 삭제한다
+    socket.on('rooms:remove:each-client', () => {
+      dispatch(removeRoom());
+    });
   }, []);
 
   return (
     <UpdateRoomFormContext.Provider value={value}>
+      <Prompt message="게임을 나가시겠습니까? 게임중에는 다시 입장할 수 없습니다." />
       <RoomPagePresenter />
     </UpdateRoomFormContext.Provider>
   );
