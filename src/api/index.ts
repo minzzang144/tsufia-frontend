@@ -3,6 +3,8 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import {
   CreateRoomRequest,
   CreateRoomResponse,
+  EnterRoomRequest,
+  EnterRoomResponse,
   GetRoomRequest,
   GetRoomResponse,
   GetRoomsResponse,
@@ -37,14 +39,14 @@ const requests = {
       return await axiosInstance.post(url).then(responseBody);
     }
   },
-  put: async (url: string, body: any) => {
+  put: async (url: string, body?: any) => {
     if (body) {
       return await axiosInstance.put(url, body).then(responseBody);
     } else {
       return await axiosInstance.put(url).then(responseBody);
     }
   },
-  patch: async (url: string, body: any) => {
+  patch: async (url: string, body?: any) => {
     if (body) {
       return await axiosInstance.patch(url, body).then(responseBody);
     } else {
@@ -72,4 +74,6 @@ export const RoomAPI = {
     requests.post('rooms/create', body),
   updateRoom: (body: UpdateRoomRequest): Promise<UpdateRoomResponse> =>
     requests.patch('rooms/update', body),
+  enterRoom: (body: EnterRoomRequest): Promise<EnterRoomResponse> =>
+    requests.patch(`api/rooms/${body.roomId}/enter`),
 };
