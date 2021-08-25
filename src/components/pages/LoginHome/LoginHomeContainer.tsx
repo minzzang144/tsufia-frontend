@@ -14,7 +14,14 @@ import * as yup from 'yup';
 import socket from '@/socket';
 import { RoomAPI } from '@api';
 import { LoginHomePresenter } from '@pages/LoginHome/LoginHomePresenter';
-import { addRoom, getRooms, updateRooms, updateRoomsError, updateRoomsLoading } from '@rooms';
+import {
+  addRoom,
+  enterRoom,
+  getRooms,
+  updateRooms,
+  updateRoomsError,
+  updateRoomsLoading,
+} from '@rooms';
 import { useHistory } from 'react-router-dom';
 
 // Create Room Context Interface
@@ -115,14 +122,21 @@ export const LoginHomeContainer: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    // 실시간으로 모든 방의 정보를 가져오기
     socket.on('rooms:get:client', (data) => {
       dispatch(getRooms(data));
     });
+    // 실시간으로 생성되는 방의 정보를 가져오기
     socket.on('rooms:create:client', (data) => {
       dispatch(addRoom(data));
     });
+    // 실시간으로 수정되는 방의 정보를 가져오기
     socket.on('rooms:update:client', (data) => {
       dispatch(updateRooms(data));
+    });
+    // 실시간으로 방에 입장하는 유저를 추가하기
+    socket.on('rooms:enter:client', (data) => {
+      dispatch(enterRoom(data));
     });
   }, []);
 
