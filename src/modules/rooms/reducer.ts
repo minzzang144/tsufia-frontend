@@ -5,6 +5,8 @@ import {
   ADD_ROOMS,
   ENTER_ROOMS,
   GET_ROOMS,
+  LEAVE_ROOMS,
+  REMOVE_ROOMS,
   UPDATE_ROOMS,
   UPDATE_ROOMS_ERROR,
   UPDATE_ROOMS_LOADING,
@@ -46,6 +48,20 @@ const rooms = createReducer<RoomsState, RoomsAction>(initialState, {
       const index = state.data?.findIndex((value) => value.id === action.payload.id);
       if (index !== undefined && index !== -1) {
         draft.data?.splice(index, 1, action.payload);
+      }
+    }),
+  [LEAVE_ROOMS]: (state, action) =>
+    produce(state, (draft) => {
+      const index = state.data?.findIndex((value) => value.id === action.payload.id);
+      if (index !== undefined && index !== -1) {
+        draft.data?.splice(index, 1, action.payload);
+      }
+    }),
+  [REMOVE_ROOMS]: (state, action) =>
+    produce(state, (draft) => {
+      const index = state.data?.findIndex((value) => value.id === action.payload);
+      if (index !== undefined && index !== -1) {
+        draft.data?.splice(index, 1);
       }
     }),
 });
