@@ -7,6 +7,7 @@ import {
   GET_ROOMS,
   LEAVE_ROOMS,
   REMOVE_ROOMS,
+  RESET_ROOMS,
   UPDATE_ROOMS,
   UPDATE_ROOMS_ERROR,
   UPDATE_ROOMS_LOADING,
@@ -64,6 +65,10 @@ const rooms = createReducer<RoomsState, RoomsAction>(initialState, {
         draft.data?.splice(index, 1);
       }
     }),
+  [RESET_ROOMS]: (state) => ({
+    ...state,
+    data: undefined,
+  }),
 });
 
 export default rooms;
