@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useCallback, useState } from 'react';
-import { shallowEqual, useSelector } from 'react-redux';
+import React from 'react';
 
 import * as I from '.';
 import * as S from '@organisms/Header/style';
@@ -9,7 +8,7 @@ import SiteLogo from '@assets/site-logo.png';
 import { List } from '@atoms/List/List';
 import { Img } from '@atoms/Img/Img';
 import { Heading } from '@atoms/Heading/Heading';
-import { UnorderedList } from '@molecules/UnorderedList/UnorderedList';
+import { UnorderedList } from '@atoms/UnorderedList/UnorderedList';
 import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
 
 export const Header: React.FC<I.HeaderProps> = ({

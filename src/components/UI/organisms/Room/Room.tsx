@@ -5,7 +5,7 @@ import * as S from '@organisms/Room/style';
 
 import { List } from '@atoms/List/List';
 import { Span } from '@atoms/Span/Span';
-import { UnorderedList } from '@molecules/UnorderedList/UnorderedList';
+import { UnorderedList } from '@atoms/UnorderedList/UnorderedList';
 import { FormModal } from '@molecules/FormModal/FormModal';
 import { RootState } from '@modules';
 import { useCreateRoomFormContext } from '@pages/LoginHome/LoginHomeContainer';
