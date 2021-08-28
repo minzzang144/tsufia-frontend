@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import {
   Control,
   DeepMap,
@@ -9,6 +8,8 @@ import {
   UseFormHandleSubmit,
   UseFormRegister,
 } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
 
 import socket from '@/socket';
@@ -24,7 +25,7 @@ import {
   updateRoomsError,
   updateRoomsLoading,
 } from '@rooms';
-import { useHistory } from 'react-router-dom';
+import { RootState } from '@modules';
 
 // Create Room Context Interface
 export interface ICreateRoomFormContext {
@@ -69,6 +70,7 @@ export const LoginHomeContainer: React.FC = () => {
     formState: { errors, isValid },
     reset,
   } = useForm<CreateRoomFormInput>({ mode: 'all', resolver: yupResolver(createRoomSchema) });
+  const rooms = useSelector((state: RootState) => state.rooms.data);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -107,11 +109,14 @@ export const LoginHomeContainer: React.FC = () => {
 
   // 모든 방의 정보를 가져오기
   const getRoomsProcess = async () => {
+    if (rooms && rooms.length === 1) return;
     try {
       dispatch(updateRoomsLoading());
       const response = await RoomAPI.getRooms();
       if (response.ok === false && response.error) dispatch(updateRoomsError(response.error));
-      if (response.ok === true) socket.emit('rooms:get:server', response.rooms);
+      if (response.ok === true && response.rooms) {
+        dispatch(getRooms(response.rooms));
+      }
     } catch (error) {
       throw new Error(error);
     } finally {
@@ -119,35 +124,45 @@ export const LoginHomeContainer: React.FC = () => {
     }
   };
 
+  const addRoomCallback = (data: any) => {
+    dispatch(addRooms(data));
+  };
+  const updateRoomCallback = (data: any) => {
+    dispatch(updateRooms(data));
+  };
+  const enterRoomCallback = (data: any) => {
+    dispatch(enterRooms(data));
+  };
+  const leaveRoomCallback = (data: any) => {
+    dispatch(leaveRooms(data));
+  };
+  const removeRoomCallback = (data: any) => {
+    dispatch(removeRooms(data));
+  };
+
   useEffect(() => {
     getRoomsProcess();
+    socket.emit('rooms:join:server');
   }, []);
 
   useEffect(() => {
-    // 실시간으로 모든 방의 정보를 가져오기
-    socket.on('rooms:get:client', (data) => {
-      dispatch(getRooms(data));
-    });
     // 실시간으로 생성되는 방의 정보를 가져오기
-    socket.on('rooms:create:client', (data) => {
-      dispatch(addRooms(data));
-    });
+    socket.on('rooms:create:client', addRoomCallback);
     // 실시간으로 수정되는 방의 정보를 가져오기
-    socket.on('rooms:update:client', (data) => {
-      dispatch(updateRooms(data));
-    });
+    socket.on('rooms:update:client', updateRoomCallback);
     // 실시간으로 방에 입장하는 유저를 추가하기
-    socket.on('rooms:enter:client', (data) => {
-      dispatch(enterRooms(data));
-    });
+    socket.on('rooms:enter:client', enterRoomCallback);
     // 실시간으로 방을 나가는 유저를 제거하기
-    socket.on('rooms:leave:client', (data) => {
-      dispatch(leaveRooms(data));
-    });
+    socket.on('rooms:leave:client', leaveRoomCallback);
     // 실시간으로 삭제되는 방의 정보를 가져오기
-    socket.on('rooms:remove:client', (data) => {
-      dispatch(removeRooms(data));
-    });
+    socket.on('rooms:remove:client', removeRoomCallback);
+    return () => {
+      socket.off('rooms:create:client', addRoomCallback);
+      socket.off('rooms:update:client', updateRoomCallback);
+      socket.off('rooms:enter:client', enterRoomCallback);
+      socket.off('rooms:leave:client', leaveRoomCallback);
+      socket.off('rooms:remove:client', removeRoomCallback);
+    };
   }, []);
 
   return (

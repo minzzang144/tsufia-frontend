@@ -20,6 +20,7 @@ import {
 } from '@room';
 import socket from '@/socket';
 import { RootState } from '@modules';
+import { resetRooms } from '@rooms';
 
 // Update Room Validate Schema
 const updateRoomSchema = yup.object().shape({
@@ -96,7 +97,10 @@ export const RoomPageContainer: React.FC = () => {
       const response = await RoomAPI.getRoom({ roomId: id });
       const { ok, error, room } = response;
       if (ok === false && error) dispatch(updateRoomError(error));
-      if (ok === true && room) dispatch(getRoom(room));
+      if (ok === true && room) {
+        dispatch(resetRooms());
+        dispatch(getRoom(room));
+      }
     } catch (error) {
       throw new Error(error);
     } finally {
@@ -112,6 +116,7 @@ export const RoomPageContainer: React.FC = () => {
       const { ok, error, room } = response;
       if (ok === false && error) dispatch(updateRoomError(error));
       if (ok === true && room) {
+        dispatch(resetRooms());
         socket.emit('rooms:enter:server', room);
       }
     } catch (error) {
@@ -119,6 +124,7 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
+  // 다른 사용자가 방에서 퇴장했을 때 방의 정보를 업데이트 하는 이벤트
   async function leaveRoomProcess() {
     try {
       const { id } = params;
@@ -126,26 +132,46 @@ export const RoomPageContainer: React.FC = () => {
       const { ok, error, room } = response;
       if (ok === false && error) dispatch(updateRoomError(error));
       if (ok === true && room) {
+        dispatch(removeRoom());
         socket.emit('rooms:leave:server', room);
       }
-      console.log('leaveRoomProcess-inner');
     } catch (error) {
       throw new Error(error);
     }
   }
 
+  // 방의 마지막 멤버가 방에서 퇴장했을 때 방을 삭제하는 이벤트
   async function removeRoomProcess() {
     try {
       const response = await RoomAPI.removeRoom();
       const { ok, error, roomId } = response;
       if (ok === false && error) dispatch(updateRoomError(error));
       if (ok === true && roomId) {
+        dispatch(removeRoom());
         socket.emit('rooms:remove:server', roomId);
       }
-      console.log('removeRoomProcess-inner');
     } catch (error) {
       throw new Error(error);
     }
+  }
+
+  function updateRoomCallback(data: any) {
+    dispatch(updateRoom(data));
+    if (storeRoom) {
+      reset({ title: storeRoom.title, totalHeadCount: String(storeRoom.totalHeadCount) });
+    }
+  }
+
+  function enterRoomCallback(data: any) {
+    dispatch(enterRoom(data));
+  }
+
+  function leaveRoomCallback(data: any) {
+    dispatch(leaveRoom(data));
+  }
+
+  function removeRoomCallback() {
+    dispatch(removeRoom());
   }
 
   function handleBeforeUnload(e: BeforeUnloadEvent) {
@@ -169,27 +195,20 @@ export const RoomPageContainer: React.FC = () => {
 
   useEffect(() => {
     // 클라이언트가 속한 방에서 모든 소켓이 Redux Store의 Room을 업데이트 한다
-    socket.on('rooms:update:client', (data) => {
-      dispatch(updateRoom(data));
-      if (storeRoom) {
-        reset({ title: storeRoom.title, totalHeadCount: String(storeRoom.totalHeadCount) });
-      }
-    });
-
+    socket.on('rooms:update:each-client', updateRoomCallback);
     // 누군가 방에 입장한 경우 room.userList에 새로운 유저를 추가한다
-    socket.on('rooms:enter:each-client', (data) => {
-      dispatch(enterRoom(data));
-    });
-
+    socket.on('rooms:enter:each-client', enterRoomCallback);
     // 누군가 방에서 퇴장한 경우 room.userList에서 유저를 삭제한다
-    socket.on('rooms:leave:each-client', (data) => {
-      dispatch(leaveRoom(data));
-    });
-
+    socket.on('rooms:leave:each-client', leaveRoomCallback);
     // 방의 마지막 멤버가 퇴장한 경우 해당 room을 삭제한다
-    socket.on('rooms:remove:each-client', () => {
-      dispatch(removeRoom());
-    });
+    socket.on('rooms:remove:each-client', removeRoomCallback);
+
+    return () => {
+      socket.off('rooms:update:each-client', updateRoomCallback);
+      socket.off('rooms:enter:each-client', enterRoomCallback);
+      socket.off('rooms:leave:each-client', leaveRoomCallback);
+      socket.off('rooms:remove:each-client', removeRoomCallback);
+    };
   }, []);
 
   return (
