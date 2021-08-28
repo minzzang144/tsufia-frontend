@@ -199,8 +199,12 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 윈도우 창이 종료될 때 실행되는 이벤트
   function handleUnload() {
-    leaveRoomProcess();
-    removeRoomProcess();
+    if (window.performance) {
+      if (performance.navigation.type !== 1) {
+        leaveRoomProcess();
+        removeRoomProcess();
+      }
+    }
   }
 
   // [Header] Header 메뉴의 방 수정하기 버튼 클릭 시 발생하는 이벤트
