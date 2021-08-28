@@ -6,3 +6,8 @@ import * as S from '@atoms/Form/style';
 export const Form: React.FC<I.FormProps> = ({ children, ...rest }) => {
   return <S.Wrapper {...rest}>{children}</S.Wrapper>;
 };
+
+Form.defaultProps = {
+  flexDirectionProp: 'column',
+  widthProp: '100%',
+};

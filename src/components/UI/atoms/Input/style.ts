@@ -6,6 +6,7 @@ import * as I from '.';
 
 type MarginPick = Pick<I.InputProps, 'marginprop'>;
 type WidthPick = Pick<I.InputProps, 'widthprop'>;
+type FlexPick = Pick<I.InputProps, 'flexProp'>;
 
 const CommonStyles = withStyles({
   root: {
@@ -64,6 +65,27 @@ const marginStyles = css<MarginPick>`
   }}
 `;
 
+const flexStyles = css<FlexPick>`
+  ${({ flexProp }) => {
+    switch (flexProp?.length) {
+      case 1:
+        return css`
+          flex: ${flexProp[0]} !important;
+        `;
+      case 2:
+        return css`
+          flex: ${flexProp[0]} ${flexProp[1]} !important;
+        `;
+      case 3:
+        return css`
+          flex: ${flexProp[0]} ${flexProp[1]} ${flexProp[2]} !important;
+        `;
+      default:
+        break;
+    }
+  }}
+`;
+
 const widthStyles = css<WidthPick>`
   ${({ widthprop }) =>
     widthprop &&
@@ -73,6 +95,9 @@ const widthStyles = css<WidthPick>`
 `;
 
 export const Wrapper = styled(CommonStyles)`
+  /* Flex Styles */
+  ${flexStyles}
+
   /* Margin Styles */
   ${marginStyles}
 
