@@ -29,8 +29,17 @@ const updateRoomSchema = yup.object().shape({
   totalHeadCount: yup.string().required(),
 });
 
+// Update Room Validate Schema
+const chatFormSchema = yup.object().shape({
+  content: yup.string().required(),
+});
+
 // Update Form Context 생성
 const UpdateRoomFormContext = createContext<I.IUpdateRoomFormContext | undefined>(undefined);
+// Room Page Context 생성
+const RoomPageContext = createContext<I.IRoomPageContext | undefined>(undefined);
+// Chat Form Context 생성
+const ChatFormContext = createContext<I.IChatFormContext | undefined>(undefined);
 
 export const useUpdateRoomFormContext = () => {
   const context = useContext(UpdateRoomFormContext);
@@ -38,12 +47,15 @@ export const useUpdateRoomFormContext = () => {
   return context;
 };
 
-// Room Page Context 생성
-const RoomPageContext = createContext<I.IRoomPageContext | undefined>(undefined);
-
 export const useRoomPageContext = () => {
   const context = useContext(RoomPageContext);
   if (!context) throw new Error('Room Page Context가 존재하지 않습니다');
+  return context;
+};
+
+export const useChatFormContext = () => {
+  const context = useContext(ChatFormContext);
+  if (!context) throw new Error('Chat Form Context가 존재하지 않습니다');
   return context;
 };
 
@@ -58,8 +70,14 @@ export const RoomPageContainer: React.FC = () => {
     formState: { errors, isValid },
     reset,
   } = useForm<I.UpdateRoomFormInput>({ mode: 'all', resolver: yupResolver(updateRoomSchema) });
-  const dispatch = useDispatch();
-  const params = useParams<{ id: string }>();
+  const {
+    register: chatRegister,
+    handleSubmit: chatHandleSubmit,
+    control: chatControl,
+    getValues: chatGetValues,
+    formState: { errors: chatErrors, isValid: chatIsValid },
+    reset: chatReset,
+  } = useForm<I.ChatFormInput>({ mode: 'all', resolver: yupResolver(chatFormSchema) });
   const { currentUser, room: storeRoom } = useSelector(
     (state: RootState) => ({
       currentUser: state.authentication.user,
@@ -69,32 +87,11 @@ export const RoomPageContainer: React.FC = () => {
     }),
     shallowEqual,
   );
+  const dispatch = useDispatch();
   const history = useHistory();
+  const params = useParams<{ id: string }>();
 
-  // Update Room Form이 유효한 경우 실행되는 함수
-  async function onValid() {
-    try {
-      const { title, totalHeadCount } = getValues();
-      const response = await RoomAPI.updateRoom({ title, totalHeadCount: +totalHeadCount });
-      const { ok, error, room } = response;
-      if (ok === false && error) dispatch(updateRoomError(error));
-      if (ok === true && room) {
-        socket.emit('rooms:update:server', room);
-        setToggleModal(!toggleModal);
-      }
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
-
-  function onToggleModal() {
-    setToggleModal(!toggleModal);
-  }
-
-  function onLeaveRoomListClick() {
-    history.push('/');
-  }
-
+  // [Private] 방에 입장한 후 유저의 정보를 가져오는 함수
   const getSelfUserInRoom = useCallback(() => {
     if (storeRoom && currentUser) {
       const self = storeRoom.userList.find((user) => user.id === currentUser.id);
@@ -102,7 +99,7 @@ export const RoomPageContainer: React.FC = () => {
     }
   }, [storeRoom?.userList, currentUser]);
 
-  // 사용자가 방에 처음 입장했을 때 방의 정보를 가져오는 이벤트
+  // [Private] 사용자가 방에 처음 입장했을 때 방의 정보를 가져오는 API 함수
   async function getRoomProcess() {
     try {
       dispatch(updateRoomLoading());
@@ -121,7 +118,7 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
-  // 다른 사용자가 방에 입장했을 때 방의 정보를 업데이트 하는 이벤트
+  // [Private] 다른 사용자가 방에 입장했을 때 방의 정보를 업데이트 하는 API 함수
   async function enterRoomProcess() {
     try {
       const { id } = params;
@@ -137,7 +134,7 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
-  // 다른 사용자가 방에서 퇴장했을 때 방의 정보를 업데이트 하는 이벤트
+  // [Private] 다른 사용자가 방에서 퇴장했을 때 방의 정보를 업데이트 하는 API 함수
   async function leaveRoomProcess() {
     try {
       const { id } = params;
@@ -153,7 +150,7 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
-  // 방의 마지막 멤버가 방에서 퇴장했을 때 방을 삭제하는 이벤트
+  // [Private] 방의 마지막 멤버가 방에서 퇴장했을 때 방을 삭제하는 API 함수
   async function removeRoomProcess() {
     try {
       const response = await RoomAPI.removeRoom();
@@ -168,6 +165,7 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
+  // [Private] 사용자가 방에 처음 입장했을 때 방의 정보를 가져오는 콜백 함수
   function updateRoomCallback(data: any) {
     dispatch(updateRoom(data));
     if (storeRoom) {
@@ -175,18 +173,22 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
+  // [Private] 다른 사용자가 방에 입장했을 때 방의 정보를 업데이트 하는 콜백 함수
   function enterRoomCallback(data: any) {
     dispatch(enterRoom(data));
   }
 
+  // [Private] 다른 사용자가 방에서 퇴장했을 때 방의 정보를 업데이트 하는 콜백 함수
   function leaveRoomCallback(data: any) {
     dispatch(leaveRoom(data));
   }
 
+  // [Private] 방의 마지막 멤버가 방에서 퇴장했을 때 방을 삭제하는 콜백 함수
   function removeRoomCallback() {
     dispatch(removeRoom());
   }
 
+  // [Private] 윈도우 창이 종료되기 전에 실행되는 이벤트
   function handleBeforeUnload(e: BeforeUnloadEvent) {
     e.preventDefault();
     if (e) {
@@ -195,9 +197,42 @@ export const RoomPageContainer: React.FC = () => {
     return '게임을 나가시겠습니까? 게임중에는 다시 입장할 수 없습니다.';
   }
 
+  // [Private] 윈도우 창이 종료될 때 실행되는 이벤트
   function handleUnload() {
     leaveRoomProcess();
     removeRoomProcess();
+  }
+
+  // [Header] Header 메뉴의 방 수정하기 버튼 클릭 시 발생하는 이벤트
+  function onToggleModal() {
+    setToggleModal(!toggleModal);
+  }
+
+  // [Header] Header 메뉴의 나가기 버튼 클릭 시 발생하는 이벤트
+  function onLeaveRoomListClick() {
+    history.push('/');
+  }
+
+  // [FormModal] Update Room Form이 유효한 경우 실행되는 함수
+  async function onValid() {
+    try {
+      const { title, totalHeadCount } = getValues();
+      const response = await RoomAPI.updateRoom({ title, totalHeadCount: +totalHeadCount });
+      const { ok, error, room } = response;
+      if (ok === false && error) dispatch(updateRoomError(error));
+      if (ok === true && room) {
+        socket.emit('rooms:update:server', room);
+        setToggleModal(!toggleModal);
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  // [ChatForm] Chat Form이 유효한 경우 실행되는 함수
+  async function onChatValid() {
+    console.log(chatGetValues());
+    chatReset({ content: '' });
   }
 
   const roomPageValue = {
@@ -214,6 +249,15 @@ export const RoomPageContainer: React.FC = () => {
     isValid,
     toggleModal,
     onToggleModal,
+  };
+
+  const chatFormValue = {
+    register: chatRegister,
+    handleSubmit: chatHandleSubmit,
+    control: chatControl,
+    onValid: onChatValid,
+    errors: chatErrors,
+    isValid: chatIsValid,
   };
 
   useEffect(() => {
@@ -254,8 +298,10 @@ export const RoomPageContainer: React.FC = () => {
   return (
     <RoomPageContext.Provider value={roomPageValue}>
       <UpdateRoomFormContext.Provider value={updateRoomFormValue}>
-        <Prompt message="게임을 나가시겠습니까? 게임중에는 다시 입장할 수 없습니다." />
-        <RoomPagePresenter />
+        <ChatFormContext.Provider value={chatFormValue}>
+          <Prompt message="게임을 나가시겠습니까? 게임중에는 다시 입장할 수 없습니다." />
+          <RoomPagePresenter />
+        </ChatFormContext.Provider>
       </UpdateRoomFormContext.Provider>
     </RoomPageContext.Provider>
   );

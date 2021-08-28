@@ -11,7 +11,7 @@ import { RoomPageContainer } from '@pages/RoomPage/RoomPageContainer';
 
 export default RoomPageContainer;
 
-// Create Room Context Interface
+// Update Room Context Interface
 export interface IUpdateRoomFormContext {
   register: UseFormRegister<UpdateRoomFormInput>;
   handleSubmit: UseFormHandleSubmit<UpdateRoomFormInput>;
@@ -23,10 +23,25 @@ export interface IUpdateRoomFormContext {
   onToggleModal: () => void;
 }
 
-// Create Room Form Input Interface
+// Update Room Form Input Interface
 export interface UpdateRoomFormInput {
   title: string;
   totalHeadCount: string;
+}
+
+// Chat Form Context Interface
+export interface IChatFormContext {
+  register: UseFormRegister<ChatFormInput>;
+  handleSubmit: UseFormHandleSubmit<ChatFormInput>;
+  control: Control<ChatFormInput>;
+  onValid: () => void;
+  errors: DeepMap<ChatFormInput, FieldError>;
+  isValid: boolean;
+}
+
+// Update Room Form Input Interface
+export interface ChatFormInput {
+  content: string;
 }
 
 // Room Page Context Interface
