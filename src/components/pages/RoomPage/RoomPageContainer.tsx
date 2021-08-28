@@ -31,7 +31,7 @@ const updateRoomSchema = yup.object().shape({
 
 // Update Room Validate Schema
 const chatFormSchema = yup.object().shape({
-  content: yup.string().required(),
+  content: yup.string().min(1),
 });
 
 // Update Form Context 생성

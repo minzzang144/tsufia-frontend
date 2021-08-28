@@ -4,8 +4,9 @@ import { shallowEqual, useSelector } from 'react-redux';
 import * as S from '@organisms/Game/style';
 
 import { FormModal } from '@molecules/FormModal/FormModal';
-import { useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
+import { ChatForm } from '@molecules/ChatForm/ChatForm';
 import { RootState } from '@modules';
+import { useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
 
 export const Game: React.FC = () => {
   const updateRoomFormContext = useUpdateRoomFormContext();
@@ -23,6 +24,7 @@ export const Game: React.FC = () => {
             title="방 수정하기"
             defaultValue={{ input: room.title, radio: String(room.totalHeadCount) }}
           />
+          <ChatForm />
         </S.Wrapper>
       ) : null}
     </React.Fragment>
