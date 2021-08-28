@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Prompt, useHistory, useParams } from 'react-router-dom';
@@ -7,8 +7,10 @@ import * as yup from 'yup';
 
 import * as I from '.';
 
+import socket from '@/socket';
 import { RoomAPI } from '@api';
-import { RoomPagePresenter } from '@pages/RoomPage/RoomPagePresenter';
+import { User } from '@auth';
+import { RootState } from '@modules';
 import {
   enterRoom,
   getRoom,
@@ -18,9 +20,8 @@ import {
   updateRoomError,
   updateRoomLoading,
 } from '@room';
-import socket from '@/socket';
-import { RootState } from '@modules';
 import { resetRooms } from '@rooms';
+import { RoomPagePresenter } from '@pages/RoomPage/RoomPagePresenter';
 
 // Update Room Validate Schema
 const updateRoomSchema = yup.object().shape({
@@ -48,6 +49,7 @@ export const useRoomPageContext = () => {
 
 export const RoomPageContainer: React.FC = () => {
   const [toggleModal, setToggleModal] = useState<boolean>(false);
+  const [selfUserInRoom, setSelfUserInRoom] = useState<User | undefined>();
   const {
     register,
     handleSubmit,
@@ -58,8 +60,9 @@ export const RoomPageContainer: React.FC = () => {
   } = useForm<I.UpdateRoomFormInput>({ mode: 'all', resolver: yupResolver(updateRoomSchema) });
   const dispatch = useDispatch();
   const params = useParams<{ id: string }>();
-  const { room: storeRoom } = useSelector(
+  const { currentUser, room: storeRoom } = useSelector(
     (state: RootState) => ({
+      currentUser: state.authentication.user,
       loading: state.room.loading,
       error: state.room.error,
       room: state.room.data,
@@ -91,6 +94,13 @@ export const RoomPageContainer: React.FC = () => {
   function onLeaveRoomListClick() {
     history.push('/');
   }
+
+  const getSelfUserInRoom = useCallback(() => {
+    if (storeRoom && currentUser) {
+      const self = storeRoom.userList.find((user) => user.id === currentUser.id);
+      if (self) setSelfUserInRoom(() => self);
+    }
+  }, [storeRoom?.userList, currentUser]);
 
   // 사용자가 방에 처음 입장했을 때 방의 정보를 가져오는 이벤트
   async function getRoomProcess() {
@@ -191,6 +201,7 @@ export const RoomPageContainer: React.FC = () => {
   }
 
   const roomPageValue = {
+    selfUserInRoom,
     onLeaveRoomListClick,
   };
 
@@ -204,6 +215,10 @@ export const RoomPageContainer: React.FC = () => {
     toggleModal,
     onToggleModal,
   };
+
+  useEffect(() => {
+    getSelfUserInRoom();
+  }, [storeRoom?.userList]);
 
   useEffect(() => {
     getRoomProcess();

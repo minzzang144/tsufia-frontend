@@ -9,9 +9,7 @@ import SiteLogo from '@assets/site-logo.png';
 import { List } from '@atoms/List/List';
 import { Img } from '@atoms/Img/Img';
 import { Heading } from '@atoms/Heading/Heading';
-import { User } from '@auth';
 import { UnorderedList } from '@molecules/UnorderedList/UnorderedList';
-import { RootState } from '@modules';
 import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
 
 export const Header: React.FC<I.HeaderProps> = ({
@@ -21,27 +19,15 @@ export const Header: React.FC<I.HeaderProps> = ({
   onToggleModal,
   ...rest
 }) => {
-  const { currentUser, room } = useSelector(
-    (state: RootState) => ({ currentUser: state.authentication.user, room: state.room.data }),
-    shallowEqual,
-  );
-  const [selfUserInRoom, setSelfUserInRoom] = useState<User | undefined>();
-  let onLeaveRoomListClick: (() => void) | undefined;
+  const roomPageContext: I.IRoomPageContext = {
+    selfUserInRoom: undefined,
+    onLeaveRoomListClick: undefined,
+  };
   if (where === 'UPDATE') {
-    const { onLeaveRoomListClick: onClick } = useRoomPageContext();
-    onLeaveRoomListClick = onClick;
+    const { selfUserInRoom, onLeaveRoomListClick } = useRoomPageContext();
+    roomPageContext.onLeaveRoomListClick = onLeaveRoomListClick;
+    roomPageContext.selfUserInRoom = selfUserInRoom;
   }
-
-  const getSelfUserInRoom = useCallback(() => {
-    if (room && currentUser) {
-      const self = room.userList.find((user) => user.id === currentUser.id);
-      if (self) setSelfUserInRoom(() => self);
-    }
-  }, [room?.userList, currentUser]);
-
-  useEffect(() => {
-    getSelfUserInRoom();
-  }, [room?.userList]);
 
   return (
     <S.Wrapper {...rest}>
@@ -81,19 +67,23 @@ export const Header: React.FC<I.HeaderProps> = ({
                   </List>
                 </>
               )}
-              {where === 'UPDATE' && selfUserInRoom && selfUserInRoom.host === true && (
-                <>
+              {where === 'UPDATE' &&
+                roomPageContext.selfUserInRoom &&
+                roomPageContext.selfUserInRoom.host === true && (
                   <List onClick={onToggleModal} colorProp="black" paddingProp={['2rem', '1.5rem']}>
                     방 수정하기
                   </List>
-                  <List
-                    onClick={() => onLeaveRoomListClick && onLeaveRoomListClick()}
-                    colorProp="black"
-                    paddingProp={['2rem', '1.5rem']}
-                  >
-                    나가기
-                  </List>
-                </>
+                )}
+              {where === 'UPDATE' && (
+                <List
+                  onClick={() =>
+                    roomPageContext.onLeaveRoomListClick && roomPageContext.onLeaveRoomListClick()
+                  }
+                  colorProp="black"
+                  paddingProp={['2rem', '1.5rem']}
+                >
+                  나가기
+                </List>
               )}
             </UnorderedList>
           </S.SpaceBetween>

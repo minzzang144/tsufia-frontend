@@ -1,4 +1,3 @@
-import { RoomPageContainer } from '@pages/RoomPage/RoomPageContainer';
 import {
   Control,
   DeepMap,
@@ -6,6 +5,9 @@ import {
   UseFormHandleSubmit,
   UseFormRegister,
 } from 'react-hook-form';
+
+import { User } from '@auth';
+import { RoomPageContainer } from '@pages/RoomPage/RoomPageContainer';
 
 export default RoomPageContainer;
 
@@ -29,5 +31,6 @@ export interface UpdateRoomFormInput {
 
 // Room Page Context Interface
 export interface IRoomPageContext {
+  selfUserInRoom: User | undefined;
   onLeaveRoomListClick: () => void;
 }
