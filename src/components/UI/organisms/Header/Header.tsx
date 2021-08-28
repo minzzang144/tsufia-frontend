@@ -65,21 +65,23 @@ export const Header: React.FC<I.HeaderProps> = ({
             </S.Logo>
             <UnorderedList>
               {where === 'CREATE' && (
-                <List onClick={onToggleModal} colorProp="black" paddingProp={['2rem', '1.5rem']}>
-                  방 반들기
-                </List>
+                <>
+                  <List onClick={onToggleModal} colorProp="black" paddingProp={['2rem', '1.5rem']}>
+                    방 반들기
+                  </List>
+                  <List colorProp="black" paddingProp={['2rem', '1.5rem']}>
+                    프로필
+                  </List>
+                  <List colorProp="black" paddingProp={['2rem', '1.5rem']}>
+                    로그아웃
+                  </List>
+                </>
               )}
               {where === 'UPDATE' && selfUserInRoom && selfUserInRoom.host === true && (
                 <List onClick={onToggleModal} colorProp="black" paddingProp={['2rem', '1.5rem']}>
                   방 수정하기
                 </List>
               )}
-              <List colorProp="black" paddingProp={['2rem', '1.5rem']}>
-                프로필
-              </List>
-              <List colorProp="black" paddingProp={['2rem', '1.5rem']}>
-                로그아웃
-              </List>
             </UnorderedList>
           </S.SpaceBetween>
         )}

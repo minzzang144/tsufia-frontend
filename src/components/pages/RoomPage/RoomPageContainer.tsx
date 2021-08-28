@@ -182,12 +182,19 @@ export const RoomPageContainer: React.FC = () => {
     return '게임을 나가시겠습니까? 게임중에는 다시 입장할 수 없습니다.';
   }
 
+  function handleUnload() {
+    leaveRoomProcess();
+    removeRoomProcess();
+  }
+
   useEffect(() => {
     getRoomProcess();
     enterRoomProcess();
     window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('unload', handleUnload);
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('unload', handleUnload);
       leaveRoomProcess();
       removeRoomProcess();
     };
