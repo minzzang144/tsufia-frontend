@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { Prompt, useParams } from 'react-router-dom';
+import { Prompt, useHistory, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 
 import * as I from '.';
@@ -33,7 +33,16 @@ const UpdateRoomFormContext = createContext<I.IUpdateRoomFormContext | undefined
 
 export const useUpdateRoomFormContext = () => {
   const context = useContext(UpdateRoomFormContext);
-  if (!context) throw new Error('Form Context가 존재하지 않습니다');
+  if (!context) throw new Error('Update Room Form Context가 존재하지 않습니다');
+  return context;
+};
+
+// Room Page Context 생성
+const RoomPageContext = createContext<I.IRoomPageContext | undefined>(undefined);
+
+export const useRoomPageContext = () => {
+  const context = useContext(RoomPageContext);
+  if (!context) throw new Error('Room Page Context가 존재하지 않습니다');
   return context;
 };
 
@@ -57,17 +66,7 @@ export const RoomPageContainer: React.FC = () => {
     }),
     shallowEqual,
   );
-
-  const value = {
-    register,
-    handleSubmit,
-    control,
-    onValid,
-    errors,
-    isValid,
-    toggleModal,
-    onToggleModal,
-  };
+  const history = useHistory();
 
   // Update Room Form이 유효한 경우 실행되는 함수
   async function onValid() {
@@ -87,6 +86,10 @@ export const RoomPageContainer: React.FC = () => {
 
   function onToggleModal() {
     setToggleModal(!toggleModal);
+  }
+
+  function onLeaveRoomListClick() {
+    history.push('/');
   }
 
   // 사용자가 방에 처음 입장했을 때 방의 정보를 가져오는 이벤트
@@ -187,6 +190,21 @@ export const RoomPageContainer: React.FC = () => {
     removeRoomProcess();
   }
 
+  const roomPageValue = {
+    onLeaveRoomListClick,
+  };
+
+  const updateRoomFormValue = {
+    register,
+    handleSubmit,
+    control,
+    onValid,
+    errors,
+    isValid,
+    toggleModal,
+    onToggleModal,
+  };
+
   useEffect(() => {
     getRoomProcess();
     enterRoomProcess();
@@ -219,9 +237,11 @@ export const RoomPageContainer: React.FC = () => {
   }, []);
 
   return (
-    <UpdateRoomFormContext.Provider value={value}>
-      <Prompt message="게임을 나가시겠습니까? 게임중에는 다시 입장할 수 없습니다." />
-      <RoomPagePresenter />
-    </UpdateRoomFormContext.Provider>
+    <RoomPageContext.Provider value={roomPageValue}>
+      <UpdateRoomFormContext.Provider value={updateRoomFormValue}>
+        <Prompt message="게임을 나가시겠습니까? 게임중에는 다시 입장할 수 없습니다." />
+        <RoomPagePresenter />
+      </UpdateRoomFormContext.Provider>
+    </RoomPageContext.Provider>
   );
 };

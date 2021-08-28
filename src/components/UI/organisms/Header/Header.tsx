@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import * as I from '.';
@@ -9,11 +9,10 @@ import SiteLogo from '@assets/site-logo.png';
 import { List } from '@atoms/List/List';
 import { Img } from '@atoms/Img/Img';
 import { Heading } from '@atoms/Heading/Heading';
+import { User } from '@auth';
 import { UnorderedList } from '@molecules/UnorderedList/UnorderedList';
 import { RootState } from '@modules';
-import { useCallback } from 'react';
-import { useState } from 'react';
-import { User } from '@auth';
+import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
 
 export const Header: React.FC<I.HeaderProps> = ({
   children,
@@ -27,6 +26,11 @@ export const Header: React.FC<I.HeaderProps> = ({
     shallowEqual,
   );
   const [selfUserInRoom, setSelfUserInRoom] = useState<User | undefined>();
+  let onLeaveRoomListClick: (() => void) | undefined;
+  if (where === 'UPDATE') {
+    const { onLeaveRoomListClick: onClick } = useRoomPageContext();
+    onLeaveRoomListClick = onClick;
+  }
 
   const getSelfUserInRoom = useCallback(() => {
     if (room && currentUser) {
@@ -78,9 +82,18 @@ export const Header: React.FC<I.HeaderProps> = ({
                 </>
               )}
               {where === 'UPDATE' && selfUserInRoom && selfUserInRoom.host === true && (
-                <List onClick={onToggleModal} colorProp="black" paddingProp={['2rem', '1.5rem']}>
-                  방 수정하기
-                </List>
+                <>
+                  <List onClick={onToggleModal} colorProp="black" paddingProp={['2rem', '1.5rem']}>
+                    방 수정하기
+                  </List>
+                  <List
+                    onClick={() => onLeaveRoomListClick && onLeaveRoomListClick()}
+                    colorProp="black"
+                    paddingProp={['2rem', '1.5rem']}
+                  >
+                    나가기
+                  </List>
+                </>
               )}
             </UnorderedList>
           </S.SpaceBetween>

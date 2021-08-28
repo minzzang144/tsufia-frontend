@@ -26,3 +26,8 @@ export interface UpdateRoomFormInput {
   title: string;
   totalHeadCount: string;
 }
+
+// Room Page Context Interface
+export interface IRoomPageContext {
+  onLeaveRoomListClick: () => void;
+}
