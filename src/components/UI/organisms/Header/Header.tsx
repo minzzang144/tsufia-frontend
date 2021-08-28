@@ -13,6 +13,7 @@ import { UnorderedList } from '@molecules/UnorderedList/UnorderedList';
 import { RootState } from '@modules';
 import { useCallback } from 'react';
 import { useState } from 'react';
+import { User } from '@auth';
 
 export const Header: React.FC<I.HeaderProps> = ({
   children,
@@ -25,18 +26,18 @@ export const Header: React.FC<I.HeaderProps> = ({
     (state: RootState) => ({ currentUser: state.authentication.user, room: state.room.data }),
     shallowEqual,
   );
-  const [isHost, setIsHost] = useState<boolean>(false);
+  const [selfUserInRoom, setSelfUserInRoom] = useState<User | undefined>();
 
-  const getHost = useCallback(() => {
+  const getSelfUserInRoom = useCallback(() => {
     if (room && currentUser) {
-      const host = room.userList.find((user) => user.id === currentUser.id);
-      if (host) setIsHost(true);
+      const self = room.userList.find((user) => user.id === currentUser.id);
+      if (self) setSelfUserInRoom(() => self);
     }
-  }, [room, currentUser]);
+  }, [room?.userList, currentUser]);
 
   useEffect(() => {
-    getHost();
-  }, [room, currentUser]);
+    getSelfUserInRoom();
+  }, [room?.userList]);
 
   return (
     <S.Wrapper {...rest}>
@@ -68,7 +69,7 @@ export const Header: React.FC<I.HeaderProps> = ({
                   방 반들기
                 </List>
               )}
-              {where === 'UPDATE' && isHost === true && (
+              {where === 'UPDATE' && selfUserInRoom && selfUserInRoom.host === true && (
                 <List onClick={onToggleModal} colorProp="black" paddingProp={['2rem', '1.5rem']}>
                   방 수정하기
                 </List>
