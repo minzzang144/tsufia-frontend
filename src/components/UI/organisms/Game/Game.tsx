@@ -7,6 +7,7 @@ import { FormModal } from '@molecules/FormModal/FormModal';
 import { ChatForm } from '@molecules/ChatForm/ChatForm';
 import { RootState } from '@modules';
 import { useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
+import { UserList } from '@molecules/UserList/UserList';
 
 export const Game: React.FC = () => {
   const updateRoomFormContext = useUpdateRoomFormContext();
@@ -24,6 +25,7 @@ export const Game: React.FC = () => {
             title="방 수정하기"
             defaultValue={{ input: room.title, radio: String(room.totalHeadCount) }}
           />
+          <UserList />
           <ChatForm />
         </S.Wrapper>
       ) : null}
