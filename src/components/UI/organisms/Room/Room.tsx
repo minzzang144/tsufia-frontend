@@ -42,7 +42,7 @@ export const Room: React.FC = () => {
             >
               {room.title}
             </Span>
-            <Span levelProp={4}>
+            <Span levelProp={3}>
               {room.currentHeadCount} / {room.totalHeadCount}
             </Span>
             <UnorderedList>

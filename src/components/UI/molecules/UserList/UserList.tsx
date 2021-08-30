@@ -37,7 +37,7 @@ export const UserList: React.FC = () => {
             flexDirection="row"
             justifyContentProp="space-evenly"
             alignItemsProp="center"
-            widthProp="80%"
+            widthProp="100%"
           >
             {room &&
               room.userList.map((user) => (

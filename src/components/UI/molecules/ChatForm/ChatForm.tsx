@@ -16,7 +16,7 @@ export const ChatForm: React.FC = () => {
         flexDirectionProp="row"
         alignItemsProp="center"
         justifyContentProp="center"
-        widthProp="80%"
+        widthProp="100%"
       >
         <Input
           name="content"

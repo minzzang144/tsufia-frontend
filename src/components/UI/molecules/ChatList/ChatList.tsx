@@ -32,6 +32,56 @@ export const ChatList: React.FC = () => {
           'https://lh3.googleusercontent.com/a/AATXAJxcU4N3yipGGfawh_17-Z3_uVVWJKtyvT4Aa4EU=s96-c',
       },
     },
+    {
+      id: 2,
+      content: '두번째 채팅입니다',
+      user: {
+        id: 9,
+        nickname: '이민찬',
+        photo:
+          'https://lh3.googleusercontent.com/a/AATXAJxcU4N3yipGGfawh_17-Z3_uVVWJKtyvT4Aa4EU=s96-c',
+      },
+    },
+    {
+      id: 2,
+      content: '두번째 채팅입니다',
+      user: {
+        id: 9,
+        nickname: '이민찬',
+        photo:
+          'https://lh3.googleusercontent.com/a/AATXAJxcU4N3yipGGfawh_17-Z3_uVVWJKtyvT4Aa4EU=s96-c',
+      },
+    },
+    {
+      id: 2,
+      content: '두번째 채팅입니다',
+      user: {
+        id: 9,
+        nickname: '이민찬',
+        photo:
+          'https://lh3.googleusercontent.com/a/AATXAJxcU4N3yipGGfawh_17-Z3_uVVWJKtyvT4Aa4EU=s96-c',
+      },
+    },
+    {
+      id: 2,
+      content: '두번째 채팅입니다',
+      user: {
+        id: 9,
+        nickname: '이민찬',
+        photo:
+          'https://lh3.googleusercontent.com/a/AATXAJxcU4N3yipGGfawh_17-Z3_uVVWJKtyvT4Aa4EU=s96-c',
+      },
+    },
+    {
+      id: 2,
+      content: '두번째 채팅입니다',
+      user: {
+        id: 9,
+        nickname: '이민찬',
+        photo:
+          'https://lh3.googleusercontent.com/a/AATXAJxcU4N3yipGGfawh_17-Z3_uVVWJKtyvT4Aa4EU=s96-c',
+      },
+    },
   ];
   const user = useSelector((state: RootState) => state.authentication.user);
 
@@ -47,7 +97,7 @@ export const ChatList: React.FC = () => {
 
   return (
     <S.Wrapper>
-      <UnorderedList flexDirection="column" alignItemsProp="flex-start" widthProp="80%">
+      <UnorderedList flexDirection="column" justifyContentProp="flex-start" widthProp="100%">
         {chats &&
           chats.map((chat) => (
             <List
@@ -55,6 +105,8 @@ export const ChatList: React.FC = () => {
               displayprop="flex"
               alignItemsprop="flex-start"
               alignSelfprop={user && user.id === chat.user.id ? 'flex-end' : 'flex-start'}
+              maxWidthprop="50%"
+              marginprop={['0', '0', '1rem', '0']}
               paddingProp={['1rem']}
               borderprop={{ 'line-width': '1px', 'line-style': 'solid', color: 'white' }}
               borderRadiusprop="4px"
