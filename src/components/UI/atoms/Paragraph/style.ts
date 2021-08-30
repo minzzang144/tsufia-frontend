@@ -73,6 +73,8 @@ const colorStyles = css<ColorPick>`
 
 export const Wrapper = styled.p`
   line-height: 1.5;
+  word-break: break-all;
+  white-space: normal;
 
   /* Margin Styles */
   ${marginStyles}

@@ -7,6 +7,8 @@ type FlexDirectionPick = Pick<I.ListProps, 'flexDirectionprop'>;
 type JustifyContentPick = Pick<I.ListProps, 'justifyContentprop'>;
 type AlignItemsPick = Pick<I.ListProps, 'alignItemsprop'>;
 type AlignSelfPick = Pick<I.ListProps, 'alignSelfprop'>;
+type MaxWidthPick = Pick<I.ListProps, 'maxWidthprop'>;
+type MarginPick = Pick<I.ListProps, 'marginprop'>;
 type PaddingPick = Pick<I.ListProps, 'paddingProp'>;
 type BorderPick = Pick<I.ListProps, 'borderprop'>;
 type BorderRadiusPick = Pick<I.ListProps, 'borderRadiusprop'>;
@@ -105,6 +107,43 @@ const alignSelfStyles = css<AlignSelfPick>`
   }}
 `;
 
+const widthStyles = css<MaxWidthPick>`
+  ${({ maxWidthprop }) =>
+    maxWidthprop &&
+    css`
+      max-width: ${maxWidthprop};
+    `}
+`;
+
+const marginStyles = css<MarginPick>`
+  ${({ marginprop }) => {
+    switch (marginprop?.length) {
+      case 1:
+        return css`
+          margin: 0;
+          margin: ${marginprop[0]} !important;
+        `;
+      case 2:
+        return css`
+          margin: 0;
+          margin: ${marginprop[0]} ${marginprop[1]} !important;
+        `;
+      case 3:
+        return css`
+          margin: 0;
+          margin: ${marginprop[0]} ${marginprop[1]} ${marginprop[2]} !important;
+        `;
+      case 4:
+        return css`
+          margin: 0;
+          margin: ${marginprop[0]} ${marginprop[1]} ${marginprop[2]} ${marginprop[3]} !important;
+        `;
+      default:
+        break;
+    }
+  }}
+`;
+
 const paddingStyles = css<PaddingPick>`
   ${({ paddingProp }) =>
     paddingProp &&
@@ -175,7 +214,11 @@ export const Wrapper = styled.li`
   ${alignItemsStyles}
   ${alignSelfStyles}
 
-  /* Padding Border Styles */
+  /* Width Styles */
+  ${widthStyles}
+
+  /* Margin Padding Border Styles */
+  ${marginStyles}
   ${paddingStyles}
   ${borderStyles}
   ${borderRadiusStyles}

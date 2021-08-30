@@ -80,8 +80,6 @@ const widthStyles = css<WidthPick>`
 
 export const Wrapper = styled.ul`
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
 
   /* Flex Direction Styles */
   ${flexDirectionStyles}
