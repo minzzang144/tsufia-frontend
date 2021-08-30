@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import * as I from '.';
 
 import socket from '@/socket';
-import { RoomAPI } from '@api';
+import { ChatAPI, RoomAPI } from '@api';
 import { User } from '@auth';
 import { RootState } from '@modules';
 import {
@@ -22,6 +22,7 @@ import {
 } from '@room';
 import { resetRooms } from '@rooms';
 import { RoomPagePresenter } from '@pages/RoomPage/RoomPagePresenter';
+import { getChats, updateChatsError, updateChatsLoading } from '@chats';
 
 // Update Room Validate Schema
 const updateRoomSchema = yup.object().shape({
@@ -115,6 +116,7 @@ export const RoomPageContainer: React.FC = () => {
       throw new Error(error);
     } finally {
       dispatch(updateRoomLoading());
+      getChatsProcess();
     }
   }
 
@@ -162,6 +164,23 @@ export const RoomPageContainer: React.FC = () => {
       }
     } catch (error) {
       throw new Error(error);
+    }
+  }
+
+  // [Private] 방에 입장했을 때 채팅 내역을 불러오는 API 함수
+  async function getChatsProcess() {
+    try {
+      dispatch(updateChatsLoading());
+      const response = await ChatAPI.getChats();
+      const { ok, error, chats } = response;
+      if (ok === false && error) dispatch(updateChatsError(error));
+      if (ok === true && chats) {
+        dispatch(getChats(chats));
+      }
+    } catch (error) {
+      throw new Error(error);
+    } finally {
+      dispatch(updateChatsLoading());
     }
   }
 
