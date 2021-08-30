@@ -11,5 +11,6 @@ export interface SpanProps {
   levelProp?: LevelProp;
   marginProp?: string[];
   colorProp?: ColorProp;
+  lineHeightprop?: string;
   highlightProp?: boolean;
 }

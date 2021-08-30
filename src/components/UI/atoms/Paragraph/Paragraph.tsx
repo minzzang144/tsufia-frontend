@@ -8,6 +8,7 @@ export const Paragraph: React.FC<I.ParagraphProps> = ({ children, ...rest }) => 
 );
 
 Paragraph.defaultProps = {
+  marginprop: ['1rem', '0'],
   fontSizeProp: I.FontSizeProp.Medium,
   colorProp: I.ColorProp.White,
 };

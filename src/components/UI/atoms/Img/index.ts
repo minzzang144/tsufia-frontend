@@ -4,6 +4,7 @@ export interface ImgProps {
   height?: string;
   justifyContentprop?: 'flex-start' | 'center' | 'flex-end';
   alignItemsprop?: 'flex-start' | 'center' | 'flex-end';
+  marginprop?: string[];
   paddingProp?: string[];
   borderRadiusProp?: string;
   widthprop?: string;

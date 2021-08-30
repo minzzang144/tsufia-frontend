@@ -7,13 +7,14 @@ type DisplayPick = Pick<I.SpanProps, 'displayProp'>;
 type AlignSelfPick = Pick<I.SpanProps, 'alignSelfProp'>;
 type MarginPick = Pick<I.SpanProps, 'marginProp'>;
 type ColorPick = Pick<I.SpanProps, 'colorProp'>;
+type LineHeightPick = Pick<I.SpanProps, 'lineHeightprop'>;
 type HighlightPick = Pick<I.SpanProps, 'highlightProp'>;
 
 const levelStyles = css<LevelPick>`
   ${({ levelProp }) =>
     levelProp &&
     css`
-      font-size: ${`${0.75 + 0.25 * (6 / levelProp)}rem`};
+      font-size: ${`${0.5 + 0.25 * (6 / levelProp)}rem`};
     `}
 `;
 
@@ -101,6 +102,14 @@ const colorStyles = css<ColorPick>`
     `}
 `;
 
+const lineHeightStyles = css<LineHeightPick>`
+  ${({ lineHeightprop }) =>
+    lineHeightprop &&
+    css`
+      line-height: ${lineHeightprop};
+    `}
+`;
+
 const highlightStyles = css<HighlightPick>`
   ${({ highlightProp }) =>
     highlightProp === true &&
@@ -129,6 +138,9 @@ export const Wrapper = styled.span`
 
   /* Color Styles */
   ${colorStyles}
+
+  /* Line Height Styles */
+  ${lineHeightStyles}
 
   /* Highlight Styles */
   ${highlightStyles}

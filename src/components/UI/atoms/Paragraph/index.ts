@@ -11,6 +11,7 @@ export enum ColorProp {
 }
 
 export interface ParagraphProps {
+  marginprop?: string[];
   fontFamilyProp?: string;
   fontSizeProp?: FontSizeProp;
   colorProp?: ColorProp;

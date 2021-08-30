@@ -2,9 +2,38 @@ import styled, { css } from 'styled-components';
 
 import * as I from '.';
 
+type MarginPick = Pick<I.ParagraphProps, 'marginprop'>;
 type FontSizePick = Pick<I.ParagraphProps, 'fontSizeProp'>;
-
 type ColorPick = Pick<I.ParagraphProps, 'colorProp'>;
+
+const marginStyles = css<MarginPick>`
+  ${({ marginprop }) => {
+    switch (marginprop?.length) {
+      case 1:
+        return css`
+          margin: 0;
+          margin: ${marginprop[0]} !important;
+        `;
+      case 2:
+        return css`
+          margin: 0;
+          margin: ${marginprop[0]} ${marginprop[1]} !important;
+        `;
+      case 3:
+        return css`
+          margin: 0;
+          margin: ${marginprop[0]} ${marginprop[1]} ${marginprop[2]} !important;
+        `;
+      case 4:
+        return css`
+          margin: 0;
+          margin: ${marginprop[0]} ${marginprop[1]} ${marginprop[2]} ${marginprop[3]} !important;
+        `;
+      default:
+        break;
+    }
+  }}
+`;
 
 const fontSizeStyles = css<FontSizePick>`
   ${({ fontSizeProp }) =>
@@ -43,8 +72,10 @@ const colorStyles = css<ColorPick>`
 `;
 
 export const Wrapper = styled.p`
-  margin: 1rem 0;
   line-height: 1.5;
+
+  /* Margin Styles */
+  ${marginStyles}
 
   /* Font Size Styles */
   ${fontSizeStyles}

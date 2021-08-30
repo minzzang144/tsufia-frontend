@@ -6,8 +6,11 @@ type DisplayPick = Pick<I.ListProps, 'displayprop'>;
 type FlexDirectionPick = Pick<I.ListProps, 'flexDirectionprop'>;
 type JustifyContentPick = Pick<I.ListProps, 'justifyContentprop'>;
 type AlignItemsPick = Pick<I.ListProps, 'alignItemsprop'>;
-type ColorPick = Pick<I.ListProps, 'colorProp'>;
+type AlignSelfPick = Pick<I.ListProps, 'alignSelfprop'>;
 type PaddingPick = Pick<I.ListProps, 'paddingProp'>;
+type BorderPick = Pick<I.ListProps, 'borderprop'>;
+type BorderRadiusPick = Pick<I.ListProps, 'borderRadiusprop'>;
+type ColorPick = Pick<I.ListProps, 'colorProp'>;
 
 const displayStyles = css<DisplayPick>`
   ${({ displayprop }) => {
@@ -81,17 +84,25 @@ const alignItemsStyles = css<AlignItemsPick>`
   }}
 `;
 
-const colorStyles = css<ColorPick>`
-  ${({ colorProp }) =>
-    colorProp === 'white' &&
-    css`
-      color: ${({ theme }) => theme.color.dark};
-    `}
-  ${({ colorProp }) =>
-    colorProp === 'black' &&
-    css`
-      color: ${({ theme }) => theme.color.light};
-    `}
+const alignSelfStyles = css<AlignSelfPick>`
+  ${({ alignSelfprop }) => {
+    switch (alignSelfprop) {
+      case 'flex-start':
+        return css`
+          align-self: flex-start;
+        `;
+      case 'center':
+        return css`
+          align-self: center;
+        `;
+      case 'flex-end':
+        return css`
+          align-self: flex-end;
+        `;
+      default:
+        break;
+    }
+  }}
 `;
 
 const paddingStyles = css<PaddingPick>`
@@ -125,6 +136,35 @@ const paddingStyles = css<PaddingPick>`
     `}
 `;
 
+const borderStyles = css<BorderPick>`
+  ${({ borderprop }) =>
+    borderprop &&
+    css`
+      border: ${borderprop['line-style']} ${borderprop['line-width']} ${borderprop.color};
+    `}
+`;
+
+const borderRadiusStyles = css<BorderRadiusPick>`
+  ${({ borderRadiusprop }) =>
+    borderRadiusprop &&
+    css`
+      border-radius: ${borderRadiusprop};
+    `}
+`;
+
+const colorStyles = css<ColorPick>`
+  ${({ colorProp }) =>
+    colorProp === 'white' &&
+    css`
+      color: ${({ theme }) => theme.color.dark};
+    `}
+  ${({ colorProp }) =>
+    colorProp === 'black' &&
+    css`
+      color: ${({ theme }) => theme.color.light};
+    `}
+`;
+
 export const Wrapper = styled.li`
   list-style: none;
 
@@ -133,8 +173,13 @@ export const Wrapper = styled.li`
   ${flexDirectionStyles}
   ${justifyContentStyles}
   ${alignItemsStyles}
-  /* Padding Styles */
+  ${alignSelfStyles}
+
+  /* Padding Border Styles */
   ${paddingStyles}
+  ${borderStyles}
+  ${borderRadiusStyles}
+  
   /* Color Styles */
   ${colorStyles}
 `;

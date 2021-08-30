@@ -4,6 +4,7 @@ import * as I from '.';
 
 type JustifyContentPick = Pick<I.ImgProps, 'justifyContentprop'>;
 type AlignItemsPick = Pick<I.ImgProps, 'alignItemsprop'>;
+type MarginPick = Pick<I.ImgProps, 'marginprop'>;
 type PaddingPick = Pick<I.ImgProps, 'paddingProp'>;
 type BorderRadiusPick = Pick<I.ImgProps, 'borderRadiusProp'>;
 type WidthPick = Pick<I.ImgProps, 'widthprop'>;
@@ -45,6 +46,35 @@ const alignItemsStyles = css<AlignItemsPick>`
       case 'flex-end':
         return css`
           align-items: flex-end;
+        `;
+      default:
+        break;
+    }
+  }}
+`;
+
+const marginStyles = css<MarginPick>`
+  ${({ marginprop }) => {
+    switch (marginprop?.length) {
+      case 1:
+        return css`
+          margin: 0;
+          margin: ${marginprop[0]} !important;
+        `;
+      case 2:
+        return css`
+          margin: 0;
+          margin: ${marginprop[0]} ${marginprop[1]} !important;
+        `;
+      case 3:
+        return css`
+          margin: 0;
+          margin: ${marginprop[0]} ${marginprop[1]} ${marginprop[2]} !important;
+        `;
+      case 4:
+        return css`
+          margin: 0;
+          margin: ${marginprop[0]} ${marginprop[1]} ${marginprop[2]} ${marginprop[3]} !important;
         `;
       default:
         break;
@@ -119,6 +149,7 @@ const colorStyles = css<ColorPick>`
 
 export const Wrapper = styled.img`
   /* Padding & Border Styles */
+  ${marginStyles}
   ${paddingStyles}
   ${borderRadiusStyles}
 `;
@@ -131,6 +162,7 @@ export const SubWrapper = styled.div`
   ${alignItemsStyles}
 
   /* Padding & Border Styles */
+  ${marginStyles}
   ${paddingStyles}
   ${borderRadiusStyles}
 
