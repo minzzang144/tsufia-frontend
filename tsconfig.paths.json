@@ -14,6 +14,8 @@
       "@assets": ["src/assets/*"],
       "@auth": ["src/modules/auth"],
       "@auth/*": ["src/modules/auth/*"],
+      "@chats": ["src/modules/chats"],
+      "@chats/*": ["src/modules/chats/*"],
       "@room": ["src/modules/room"],
       "@room/*": ["src/modules/room/*"],
       "@rooms": ["src/modules/rooms"],
