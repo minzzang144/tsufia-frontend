@@ -5,6 +5,7 @@ import {
   CreateRoomResponse,
   EnterRoomRequest,
   EnterRoomResponse,
+  GetChatsResponse,
   GetRoomRequest,
   GetRoomResponse,
   GetRoomsResponse,
@@ -82,4 +83,8 @@ export const RoomAPI = {
   leaveRoom: (body: LeaveRoomRequest): Promise<LeaveRoomResponse> =>
     requests.patch(`api/rooms/${body.roomId}/leave`),
   removeRoom: (): Promise<RemoveRoomResponse> => requests.delete(`rooms/delete`),
+};
+
+export const ChatAPI = {
+  getChats: (): Promise<GetChatsResponse> => requests.get('chats'),
 };

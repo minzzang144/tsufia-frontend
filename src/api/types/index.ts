@@ -1,4 +1,5 @@
 import { User } from '@auth';
+import { Chat } from '@chats/types';
 import { Room } from '@rooms';
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
@@ -104,4 +105,10 @@ export interface LeaveRoomResponse extends CommonResponse {
 // Remove Room
 export interface RemoveRoomResponse extends CommonResponse {
   roomId: number;
+}
+
+/* Chat API */
+// Get Chats
+export interface GetChatsResponse extends CommonResponse {
+  chats: Chat[];
 }
