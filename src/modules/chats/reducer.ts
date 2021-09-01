@@ -1,6 +1,7 @@
+import produce from 'immer';
 import { createReducer } from 'typesafe-actions';
 
-import { GET_CHATS, UPDATE_CHATS_ERROR, UPDATE_CHATS_LOADING } from '@chats/actions';
+import { CREATE_CHATS, GET_CHATS, UPDATE_CHATS_ERROR, UPDATE_CHATS_LOADING } from '@chats/actions';
 import { ChatsAction, ChatsState } from '@chats/types';
 
 const initialState = {
@@ -22,6 +23,10 @@ const chats = createReducer<ChatsState, ChatsAction>(initialState, {
     ...state,
     data: action.payload,
   }),
+  [CREATE_CHATS]: (state, action) =>
+    produce(state, (draft) => {
+      draft.data?.push(action.payload);
+    }),
 });
 
 export default chats;
