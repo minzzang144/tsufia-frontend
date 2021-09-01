@@ -22,7 +22,14 @@ import {
 } from '@room';
 import { resetRooms } from '@rooms';
 import { RoomPagePresenter } from '@pages/RoomPage/RoomPagePresenter';
-import { Chat, createChats, getChats, updateChatsError, updateChatsLoading } from '@chats';
+import {
+  Chat,
+  createChats,
+  getChats,
+  resetChats,
+  updateChatsError,
+  updateChatsLoading,
+} from '@chats';
 
 // Update Room Validate Schema
 const updateRoomSchema = yup.object().shape({
@@ -136,7 +143,7 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
-  // [Private] 다른 사용자가 방에서 퇴장했을 때 방의 정보를 업데이트 하는 API 함수
+  // [Private] 사용자가 방에서 퇴장했을 때 방의 정보를 업데이트 하는 API 함수
   async function leaveRoomProcess() {
     try {
       const { id } = params;
@@ -145,6 +152,7 @@ export const RoomPageContainer: React.FC = () => {
       if (ok === false && error) dispatch(updateRoomError(error));
       if (ok === true && room) {
         dispatch(removeRoom());
+        dispatch(resetChats());
         socket.emit('rooms:leave:server', room);
       }
     } catch (error) {
@@ -160,6 +168,7 @@ export const RoomPageContainer: React.FC = () => {
       if (ok === false && error) dispatch(updateRoomError(error));
       if (ok === true && roomId) {
         dispatch(removeRoom());
+        dispatch(resetChats());
         socket.emit('rooms:remove:server', roomId);
       }
     } catch (error) {
