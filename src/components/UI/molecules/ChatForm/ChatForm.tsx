@@ -25,7 +25,7 @@ export const ChatForm: React.FC = () => {
           type="text"
           label="채팅을 입력하세요"
           variant="outlined"
-          flexProp={['1', '1', '0']}
+          flexprop={['1', '1', '0']}
           marginprop={['0']}
         />
         <Button

@@ -9,7 +9,7 @@ export interface InputProps {
   helperText?: any;
   marginprop?: string[];
   widthprop?: string;
-  flexProp?: string[];
+  flexprop?: string[];
 }
 
 export interface LoginFormInput {
