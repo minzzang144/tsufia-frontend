@@ -1,5 +1,6 @@
 import { User } from '@auth';
 import { Chat } from '@chats/types';
+import { Game } from '@game';
 import { Room } from '@rooms';
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
@@ -120,4 +121,10 @@ export interface CreateChatsRequest {
 
 export interface CreateChatsResponse extends CommonResponse {
   chat?: Chat;
+}
+
+/* Game API */
+// Create Game
+export interface CreateGameResponse extends CommonResponse {
+  game?: Game;
 }

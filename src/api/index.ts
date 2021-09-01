@@ -3,6 +3,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import {
   CreateChatsRequest,
   CreateChatsResponse,
+  CreateGameResponse,
   CreateRoomRequest,
   CreateRoomResponse,
   EnterRoomRequest,
@@ -91,4 +92,8 @@ export const ChatAPI = {
   getChats: (): Promise<GetChatsResponse> => requests.get('chats'),
   createChats: (body: CreateChatsRequest): Promise<CreateChatsResponse> =>
     requests.post('chats/create', body),
+};
+
+export const GameAPI = {
+  createGame: (): Promise<CreateGameResponse> => requests.post('games/create'),
 };
