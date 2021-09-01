@@ -112,3 +112,12 @@ export interface RemoveRoomResponse extends CommonResponse {
 export interface GetChatsResponse extends CommonResponse {
   chats: Chat[];
 }
+
+// Create Chats
+export interface CreateChatsRequest {
+  content: string;
+}
+
+export interface CreateChatsResponse extends CommonResponse {
+  chat?: Chat;
+}

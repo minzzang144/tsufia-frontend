@@ -1,6 +1,8 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 import {
+  CreateChatsRequest,
+  CreateChatsResponse,
   CreateRoomRequest,
   CreateRoomResponse,
   EnterRoomRequest,
@@ -87,4 +89,6 @@ export const RoomAPI = {
 
 export const ChatAPI = {
   getChats: (): Promise<GetChatsResponse> => requests.get('chats'),
+  createChats: (body: CreateChatsRequest): Promise<CreateChatsResponse> =>
+    requests.post('chats/create', body),
 };
