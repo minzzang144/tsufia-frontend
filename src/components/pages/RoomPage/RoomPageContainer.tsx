@@ -22,7 +22,7 @@ import {
 } from '@room';
 import { resetRooms } from '@rooms';
 import { RoomPagePresenter } from '@pages/RoomPage/RoomPagePresenter';
-import { getChats, updateChatsError, updateChatsLoading } from '@chats';
+import { Chat, createChats, getChats, updateChatsError, updateChatsLoading } from '@chats';
 
 // Update Room Validate Schema
 const updateRoomSchema = yup.object().shape({
@@ -207,6 +207,11 @@ export const RoomPageContainer: React.FC = () => {
     dispatch(removeRoom());
   }
 
+  // [Private] 채팅을 입력한 유저가 속한 방의 유저에게 해당 채팅을 전송하는 콜백 함수
+  function createChatCallback(data: Chat) {
+    dispatch(createChats(data));
+  }
+
   // [Private] 윈도우 창이 종료되기 전에 실행되는 이벤트
   function handleBeforeUnload(e: BeforeUnloadEvent) {
     e.preventDefault();
@@ -254,8 +259,18 @@ export const RoomPageContainer: React.FC = () => {
 
   // [ChatForm] Chat Form이 유효한 경우 실행되는 함수
   async function onChatValid() {
-    console.log(chatGetValues());
-    chatReset({ content: '' });
+    try {
+      const values = chatGetValues();
+      const response = await ChatAPI.createChats(values);
+      const { ok, error, chat } = response;
+      if (ok === false && error) dispatch(updateRoomError(error));
+      if (ok === true && chat) {
+        socket.emit('chats:create:server', { roomId: params.id, data: chat });
+      }
+      chatReset({ content: '' });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   const roomPageValue = {
@@ -288,6 +303,7 @@ export const RoomPageContainer: React.FC = () => {
   }, [storeRoom?.userList]);
 
   useEffect(() => {
+    socket.emit('rooms:join-room:server', params.id);
     getRoomProcess();
     enterRoomProcess();
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -309,12 +325,15 @@ export const RoomPageContainer: React.FC = () => {
     socket.on('rooms:leave:each-client', leaveRoomCallback);
     // 방의 마지막 멤버가 퇴장한 경우 해당 room을 삭제한다
     socket.on('rooms:remove:each-client', removeRoomCallback);
+    // 클라이언트가 채팅을 입력하면 해당 방의 모든 유저에게 채팅을 전송한다
+    socket.on('chats:create:each-client', createChatCallback);
 
     return () => {
       socket.off('rooms:update:each-client', updateRoomCallback);
       socket.off('rooms:enter:each-client', enterRoomCallback);
       socket.off('rooms:leave:each-client', leaveRoomCallback);
       socket.off('rooms:remove:each-client', removeRoomCallback);
+      socket.off('chats:create:each-client', createChatCallback);
     };
   }, []);
 
