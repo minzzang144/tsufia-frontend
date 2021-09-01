@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import * as I from '.';
 
 import socket from '@/socket';
-import { ChatAPI, RoomAPI } from '@api';
+import { ChatAPI, GameAPI, RoomAPI } from '@api';
 import { User } from '@auth';
 import { RootState } from '@modules';
 import {
@@ -30,6 +30,7 @@ import {
   updateChatsError,
   updateChatsLoading,
 } from '@chats';
+import { createGame, Game, updateGameLoading } from '@game';
 
 // Update Room Validate Schema
 const updateRoomSchema = yup.object().shape({
@@ -193,6 +194,21 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
+  // [Private] 방의 인원이 꽉찼을 때 게임을 시작하기 위해 생성하는 API 함수
+  async function createGameProcess() {
+    try {
+      dispatch(updateGameLoading());
+      const response = await GameAPI.createGame();
+      const { ok, error, game } = response;
+      if (ok === false && error) dispatch(updateChatsError(error));
+      if (ok === true && game) {
+        socket.emit('games:create:server', game);
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
   // [Private] 사용자가 방에 처음 입장했을 때 방의 정보를 가져오는 콜백 함수
   function updateRoomCallback(data: any) {
     dispatch(updateRoom(data));
@@ -219,6 +235,12 @@ export const RoomPageContainer: React.FC = () => {
   // [Private] 채팅을 입력한 유저가 속한 방의 유저에게 해당 채팅을 전송하는 콜백 함수
   function createChatCallback(data: Chat) {
     dispatch(createChats(data));
+  }
+
+  // [Private] 게임을 생성한 방에 게임 데이터를 전달하는 콜백 함수
+  function createGameCallback(data: Game) {
+    dispatch(createGame(data));
+    dispatch(updateGameLoading());
   }
 
   // [Private] 윈도우 창이 종료되기 전에 실행되는 이벤트
@@ -336,6 +358,10 @@ export const RoomPageContainer: React.FC = () => {
     socket.on('rooms:remove:each-client', removeRoomCallback);
     // 클라이언트가 채팅을 입력하면 해당 방의 모든 유저에게 채팅을 전송한다
     socket.on('chats:create:each-client', createChatCallback);
+    // 방의 최대 인원수가 꽉 찼을 때, 게임을 시작하기 위해 생성한다
+    socket.on('games:create:only-self-client', createGameProcess);
+    // 해당 방의 사용자에게 생성된 게임 데이터를 전달한다
+    socket.on('games:create:each-client', createGameCallback);
 
     return () => {
       socket.off('rooms:update:each-client', updateRoomCallback);
@@ -343,6 +369,8 @@ export const RoomPageContainer: React.FC = () => {
       socket.off('rooms:leave:each-client', leaveRoomCallback);
       socket.off('rooms:remove:each-client', removeRoomCallback);
       socket.off('chats:create:each-client', createChatCallback);
+      socket.off('games:create:only-self-client', createGameProcess);
+      socket.off('games:create:each-client', createGameCallback);
     };
   }, []);
 
