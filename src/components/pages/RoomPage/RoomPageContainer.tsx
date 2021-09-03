@@ -31,7 +31,7 @@ import {
   updateChatsError,
   updateChatsLoading,
 } from '@chats';
-import { createGame, Game, getGame, updateGameError, updateGameLoading } from '@game';
+import { createGame, Game, getGame, resetGame, updateGameError, updateGameLoading } from '@game';
 
 // Update Room Validate Schema
 const updateRoomSchema = yup.object().shape({
@@ -154,6 +154,7 @@ export const RoomPageContainer: React.FC = () => {
       if (ok === false && error) dispatch(updateRoomError(error));
       if (ok === true && room) {
         dispatch(removeRoom());
+        dispatch(resetGame());
         dispatch(resetChats());
         socket.emit('rooms:leave:server', room);
       }
@@ -170,6 +171,7 @@ export const RoomPageContainer: React.FC = () => {
       if (ok === false && error) dispatch(updateRoomError(error));
       if (ok === true && roomId) {
         dispatch(removeRoom());
+        dispatch(resetGame());
         dispatch(resetChats());
         socket.emit('rooms:remove:server', roomId);
       }
