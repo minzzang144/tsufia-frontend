@@ -8,6 +8,7 @@ import {
   REMOVE_ROOM,
   UPDATE_ROOM,
   UPDATE_ROOM_ERROR,
+  UPDATE_ROOM_GAME,
   UPDATE_ROOM_LOADING,
 } from '@room/actions';
 import { RoomAction, RoomState } from '@room/types';
@@ -35,6 +36,12 @@ const room = createReducer<RoomState, RoomAction>(initialState, {
     ...state,
     data: action.payload,
   }),
+  [UPDATE_ROOM_GAME]: (state, action) =>
+    produce(state, (draft) => {
+      if (draft.data) {
+        draft.data.game = action.payload;
+      }
+    }),
   [ENTER_ROOM]: (state, action) =>
     produce(state, (draft) => {
       draft.data = action.payload;

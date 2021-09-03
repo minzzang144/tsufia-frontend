@@ -3,6 +3,7 @@ import { ActionType } from 'typesafe-actions';
 import * as RA from '@room/actions';
 
 import { User } from '@auth';
+import { Game } from '@game';
 
 export type RoomAction = ActionType<typeof RA>;
 
@@ -18,6 +19,7 @@ export type Room = {
   totalHeadCount: number;
   status: Status;
   userList: User[];
+  game: Game;
 };
 
 export type RoomState = {
