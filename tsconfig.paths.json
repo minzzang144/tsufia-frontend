@@ -22,6 +22,7 @@
       "@room/*": ["src/modules/room/*"],
       "@rooms": ["src/modules/rooms"],
       "@rooms/*": ["src/modules/rooms/*"],
+      "@hooks/*": ["src/hooks/*"],
       "@modules": ["src/modules"],
       "@routers/*": ["src/routers/*"],
       "@theme": ["src/theme"],
