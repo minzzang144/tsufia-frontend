@@ -1,6 +1,6 @@
 import { createReducer } from 'typesafe-actions';
 
-import { CREATE_GAME, UPDATE_GAME_ERROR, UPDATE_GAME_LOADING } from '@game/actions';
+import { CREATE_GAME, GET_GAME, UPDATE_GAME_ERROR, UPDATE_GAME_LOADING } from '@game/actions';
 import { GameAction, GameState } from '@game/types';
 
 const initialState = {
@@ -19,6 +19,10 @@ const game = createReducer<GameState, GameAction>(initialState, {
     error: action.payload,
   }),
   [CREATE_GAME]: (state, action) => ({
+    ...state,
+    data: action.payload,
+  }),
+  [GET_GAME]: (state, action) => ({
     ...state,
     data: action.payload,
   }),
