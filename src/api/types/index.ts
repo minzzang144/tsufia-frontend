@@ -1,15 +1,17 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import { User } from '@auth';
 import { Chat } from '@chats/types';
 import { Game } from '@game';
 import { Room } from '@rooms';
 
-/* eslint-disable @typescript-eslint/no-empty-interface */
 export interface CommonResponse {
   ok: boolean;
   error?: string;
 }
 
-/* Auth API */
+/**
+ * Auth API
+ */
 // Login
 export interface LoginResponse extends CommonResponse {
   accessToken?: string;
@@ -50,7 +52,9 @@ export interface GetUserResponse extends CommonResponse {
   user?: User;
 }
 
-/* Room API */
+/**
+ * Room API
+ */
 // Get Rooms
 export interface GetRoomsResponse extends CommonResponse {
   rooms?: Room[];
@@ -108,7 +112,9 @@ export interface RemoveRoomResponse extends CommonResponse {
   roomId: number;
 }
 
-/* Chat API */
+/**
+ * Chat API
+ */
 // Get Chats
 export interface GetChatsResponse extends CommonResponse {
   chats: Chat[];
@@ -123,8 +129,20 @@ export interface CreateChatsResponse extends CommonResponse {
   chat?: Chat;
 }
 
-/* Game API */
+/**
+ * Game API
+ */
+
 // Create Game
 export interface CreateGameResponse extends CommonResponse {
+  game?: Game;
+}
+
+// Get Game
+export interface GetGameRequest {
+  id: string;
+}
+
+export interface GetGameResponse extends CommonResponse {
   game?: Game;
 }

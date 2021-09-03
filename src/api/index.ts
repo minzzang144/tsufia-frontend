@@ -9,6 +9,8 @@ import {
   EnterRoomRequest,
   EnterRoomResponse,
   GetChatsResponse,
+  GetGameRequest,
+  GetGameResponse,
   GetRoomRequest,
   GetRoomResponse,
   GetRoomsResponse,
@@ -96,4 +98,5 @@ export const ChatAPI = {
 
 export const GameAPI = {
   createGame: (): Promise<CreateGameResponse> => requests.post('games/create'),
+  getGame: (body: GetGameRequest): Promise<GetGameResponse> => requests.get(`games/${body.id}`),
 };
