@@ -197,7 +197,6 @@ export const RoomPageContainer: React.FC = () => {
   // [Private] 방의 인원이 꽉찼을 때 게임을 시작하기 위해 생성하는 API 함수
   async function createGameProcess() {
     try {
-      dispatch(updateGameLoading());
       const response = await GameAPI.createGame();
       const { ok, error, game } = response;
       if (ok === false && error) dispatch(updateChatsError(error));
@@ -239,6 +238,7 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 게임을 생성한 방에 게임 데이터를 전달하는 콜백 함수
   function createGameCallback(data: Game) {
+    dispatch(updateGameLoading());
     dispatch(createGame(data));
     dispatch(updateGameLoading());
   }
