@@ -18,6 +18,7 @@ import {
   removeRoom,
   updateRoom,
   updateRoomError,
+  updateRoomGame,
   updateRoomLoading,
 } from '@room';
 import { resetRooms } from '@rooms';
@@ -30,7 +31,7 @@ import {
   updateChatsError,
   updateChatsLoading,
 } from '@chats';
-import { createGame, Game, updateGameLoading } from '@game';
+import { createGame, Game, getGame, updateGameError, updateGameLoading } from '@game';
 
 // Update Room Validate Schema
 const updateRoomSchema = yup.object().shape({
@@ -195,13 +196,27 @@ export const RoomPageContainer: React.FC = () => {
   }
 
   // [Private] 방의 인원이 꽉찼을 때 게임을 시작하기 위해 생성하는 API 함수
-  async function createGameProcess() {
+  async function createGameProcess(roomId: number) {
     try {
       const response = await GameAPI.createGame();
       const { ok, error, game } = response;
       if (ok === false && error) dispatch(updateChatsError(error));
       if (ok === true && game) {
-        socket.emit('games:create:server', game);
+        socket.emit('games:create:server', { game, roomId });
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  // [Private] 게임이 시작한 경우에만 게임 정보를 가져오는 API 함수
+  async function getGameProcess(id: number) {
+    try {
+      const response = await GameAPI.getGame({ id: String(id) });
+      const { ok, error, game } = response;
+      if (ok === false && error) dispatch(updateGameError(error));
+      if (ok === true && game) {
+        dispatch(getGame(game));
       }
     } catch (error) {
       throw new Error(error);
@@ -240,6 +255,7 @@ export const RoomPageContainer: React.FC = () => {
   function createGameCallback(data: Game) {
     dispatch(updateGameLoading());
     dispatch(createGame(data));
+    dispatch(updateRoomGame(data));
     dispatch(updateGameLoading());
   }
 
@@ -346,6 +362,12 @@ export const RoomPageContainer: React.FC = () => {
       removeRoomProcess();
     };
   }, []);
+
+  useEffect(() => {
+    if (storeRoom && storeRoom.game) {
+      getGameProcess(storeRoom.game.id);
+    }
+  }, [storeRoom?.game]);
 
   useEffect(() => {
     // 클라이언트가 속한 방에서 모든 소켓이 Redux Store의 Room을 업데이트 한다
