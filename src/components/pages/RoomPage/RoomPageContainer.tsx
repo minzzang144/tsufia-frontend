@@ -72,6 +72,7 @@ export const useChatFormContext = () => {
 export const RoomPageContainer: React.FC = () => {
   const [toggleModal, setToggleModal] = useState<boolean>(false);
   const [selfUserInRoom, setSelfUserInRoom] = useState<User | undefined>();
+  const [enterUserName, setEnterUserName] = useState<string>('');
   const {
     register,
     handleSubmit,
@@ -122,7 +123,7 @@ export const RoomPageContainer: React.FC = () => {
         dispatch(getRoom(room));
       }
     } catch (error) {
-      throw new Error(error);
+      console.log(error);
     } finally {
       dispatch(updateRoomLoading());
       getChatsProcess();
@@ -138,10 +139,10 @@ export const RoomPageContainer: React.FC = () => {
       if (ok === false && error) dispatch(updateRoomError(error));
       if (ok === true && room) {
         dispatch(resetRooms());
-        socket.emit('rooms:enter:server', room);
+        socket.emit('rooms:enter:server', { room, user: currentUser });
       }
     } catch (error) {
-      throw new Error(error);
+      console.log(error);
     }
   }
 
@@ -159,7 +160,7 @@ export const RoomPageContainer: React.FC = () => {
         socket.emit('rooms:leave:server', room);
       }
     } catch (error) {
-      throw new Error(error);
+      console.log(error);
     }
   }
 
@@ -176,7 +177,7 @@ export const RoomPageContainer: React.FC = () => {
         socket.emit('rooms:remove:server', roomId);
       }
     } catch (error) {
-      throw new Error(error);
+      console.log(error);
     }
   }
 
@@ -191,7 +192,7 @@ export const RoomPageContainer: React.FC = () => {
         dispatch(getChats(chats));
       }
     } catch (error) {
-      throw new Error(error);
+      console.log(error);
     } finally {
       dispatch(updateChatsLoading());
     }
@@ -207,7 +208,7 @@ export const RoomPageContainer: React.FC = () => {
         socket.emit('games:create:server', { game, roomId });
       }
     } catch (error) {
-      throw new Error(error);
+      console.log(error);
     }
   }
 
@@ -221,7 +222,7 @@ export const RoomPageContainer: React.FC = () => {
         dispatch(getGame(game));
       }
     } catch (error) {
-      throw new Error(error);
+      console.log(error);
     }
   }
 
@@ -236,6 +237,12 @@ export const RoomPageContainer: React.FC = () => {
   // [Private] 다른 사용자가 방에 입장했을 때 방의 정보를 업데이트 하는 콜백 함수
   function enterRoomCallback(data: any) {
     dispatch(enterRoom(data));
+  }
+
+  // [Private] 방에 입장한 유저를 Broadcast하는 콜백 함수
+  function enterRoomBroadcastCb(data: User) {
+    const enterUserName = data.firstName ? `${data.firstName} ${data.lastName}` : data.nickname;
+    setEnterUserName(enterUserName);
   }
 
   // [Private] 다른 사용자가 방에서 퇴장했을 때 방의 정보를 업데이트 하는 콜백 함수
@@ -302,7 +309,7 @@ export const RoomPageContainer: React.FC = () => {
         setToggleModal(!toggleModal);
       }
     } catch (error) {
-      throw new Error(error);
+      console.log(error);
     }
   }
 
@@ -318,7 +325,7 @@ export const RoomPageContainer: React.FC = () => {
       }
       chatReset({ content: '' });
     } catch (error) {
-      throw new Error(error);
+      console.log(error);
     }
   }
 
@@ -376,6 +383,8 @@ export const RoomPageContainer: React.FC = () => {
     socket.on('rooms:update:each-client', updateRoomCallback);
     // 누군가 방에 입장한 경우 room.userList에 새로운 유저를 추가한다
     socket.on('rooms:enter:each-client', enterRoomCallback);
+    // 방에 입장한 유저를 braodcast한다
+    socket.on('rooms:enter:broadcast-client', enterRoomBroadcastCb);
     // 누군가 방에서 퇴장한 경우 room.userList에서 유저를 삭제한다
     socket.on('rooms:leave:each-client', leaveRoomCallback);
     // 방의 마지막 멤버가 퇴장한 경우 해당 room을 삭제한다
@@ -390,6 +399,7 @@ export const RoomPageContainer: React.FC = () => {
     return () => {
       socket.off('rooms:update:each-client', updateRoomCallback);
       socket.off('rooms:enter:each-client', enterRoomCallback);
+      socket.off('rooms:enter:broadcast-client', enterRoomBroadcastCb);
       socket.off('rooms:leave:each-client', leaveRoomCallback);
       socket.off('rooms:remove:each-client', removeRoomCallback);
       socket.off('chats:create:each-client', createChatCallback);
