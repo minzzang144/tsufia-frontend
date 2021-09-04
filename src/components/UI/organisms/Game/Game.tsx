@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toast';
 import moment from 'moment';
 
 import * as S from '@organisms/Game/style';
@@ -51,6 +52,7 @@ export const Game: React.FC = () => {
             <Notification>{`게임 시작까지 ${countDown}초 남았습니다`}</Notification>
           )}
           {gameError && <Notification>{gameError}</Notification>}
+          <ToastContainer delay={1500} position="top-center" />
           <ChatList />
           <UserList />
           <ChatForm />

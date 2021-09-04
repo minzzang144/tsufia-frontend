@@ -3,6 +3,7 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
 import { useForm } from 'react-hook-form';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Prompt, useHistory, useParams } from 'react-router-dom';
+import { toast } from 'react-toast';
 import * as yup from 'yup';
 
 import * as I from '.';
@@ -377,6 +378,13 @@ export const RoomPageContainer: React.FC = () => {
       getGameProcess(storeRoom.game.id);
     }
   }, [storeRoom?.game]);
+
+  useEffect(() => {
+    toast(`${enterUserName}님이 입장하셨습니다`, {
+      backgroundColor: '#323131',
+      color: '#ffffff',
+    });
+  }, [enterUserName]);
 
   useEffect(() => {
     // 클라이언트가 속한 방에서 모든 소켓이 Redux Store의 Room을 업데이트 한다
