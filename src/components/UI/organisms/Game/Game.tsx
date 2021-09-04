@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toast';
-import moment from 'moment';
 
 import * as S from '@organisms/Game/style';
 
@@ -12,11 +11,10 @@ import { FormModal } from '@molecules/FormModal/FormModal';
 import { Notification } from '@molecules/Notification/Notification';
 import { UserList } from '@molecules/UserList/UserList';
 import { RootState } from '@modules';
-import { useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
-import { useState } from 'react';
-import useInterval from '@hooks/useInterval';
+import { useRoomPageContext, useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
 
 export const Game: React.FC = () => {
+  const { countDown } = useRoomPageContext();
   const updateRoomFormContext = useUpdateRoomFormContext();
   const { roomLoading, gameLoading, roomError, gameError, room, game } = useSelector(
     (state: RootState) => ({
@@ -29,15 +27,6 @@ export const Game: React.FC = () => {
     }),
     shallowEqual,
   );
-  const [countDown, setCountDown] = useState<number>(0);
-
-  useInterval(() => {
-    if (game && game.countDown) {
-      const substract = game.countDown - moment().unix();
-      const duration = moment.duration(substract, 'seconds');
-      setCountDown(duration.seconds());
-    }
-  }, 1000);
 
   return (
     <React.Fragment>

@@ -48,4 +48,5 @@ export interface ChatFormInput {
 export interface IRoomPageContext {
   selfUserInRoom: User | undefined;
   onLeaveRoomListClick: () => void;
+  countDown: number;
 }

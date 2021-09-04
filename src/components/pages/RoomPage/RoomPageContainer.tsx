@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import moment from 'moment';
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
@@ -11,6 +12,7 @@ import * as I from '.';
 import socket from '@/socket';
 import { ChatAPI, GameAPI, RoomAPI } from '@api';
 import { User } from '@auth';
+import useInterval from '@hooks/useInterval';
 import { RootState } from '@modules';
 import {
   enterRoom,
@@ -75,6 +77,7 @@ export const RoomPageContainer: React.FC = () => {
   const [selfUserInRoom, setSelfUserInRoom] = useState<User | undefined>();
   const [enterUserName, setEnterUserName] = useState<string>('');
   const [leaveUserName, setleaveUserName] = useState<string>('');
+  const [countDown, setCountDown] = useState<number>(0);
   const {
     register,
     handleSubmit,
@@ -91,12 +94,17 @@ export const RoomPageContainer: React.FC = () => {
     formState: { errors: chatErrors, isValid: chatIsValid },
     reset: chatReset,
   } = useForm<I.ChatFormInput>({ mode: 'all', resolver: yupResolver(chatFormSchema) });
-  const { currentUser, room: storeRoom } = useSelector(
+  const {
+    currentUser,
+    room: storeRoom,
+    game,
+  } = useSelector(
     (state: RootState) => ({
       currentUser: state.authentication.user,
       loading: state.room.loading,
       error: state.room.error,
       room: state.room.data,
+      game: state.game.data,
     }),
     shallowEqual,
   );
@@ -340,6 +348,7 @@ export const RoomPageContainer: React.FC = () => {
   const roomPageValue = {
     selfUserInRoom,
     onLeaveRoomListClick,
+    countDown,
   };
 
   const updateRoomFormValue = {
@@ -362,10 +371,21 @@ export const RoomPageContainer: React.FC = () => {
     isValid: chatIsValid,
   };
 
+  // [Private] 카운트다운을 하기 위해 필요한 Hook
+  useInterval(() => {
+    if (game && game.countDown) {
+      const substract = game.countDown - moment().unix();
+      const duration = moment.duration(substract, 'seconds');
+      setCountDown(duration.seconds());
+    }
+  }, 1000);
+
+  // [Private] 사용자 자신의 정보를 가져온다
   useEffect(() => {
     getSelfUserInRoom();
   }, [storeRoom?.userList]);
 
+  // [Private] 클라이언트로부터 서버로 소켓 이벤트를 전달
   useEffect(() => {
     socket.emit('rooms:join-room:server', params.id);
     getRoomProcess();
@@ -380,12 +400,14 @@ export const RoomPageContainer: React.FC = () => {
     };
   }, []);
 
+  // [Private] 게임이 생성된 이후에만 게임 정보를 불러오도록 한다
   useEffect(() => {
     if (storeRoom && storeRoom.game) {
       getGameProcess(storeRoom.game.id);
     }
   }, [storeRoom?.game]);
 
+  // [Private] 방에 유저가 입장한 경우 Broadcast하여 알려준다
   useEffect(() => {
     toast(`${enterUserName}님이 입장하셨습니다`, {
       backgroundColor: '#323131',
@@ -393,6 +415,7 @@ export const RoomPageContainer: React.FC = () => {
     });
   }, [enterUserName]);
 
+  // [Private] 방에 유저가 퇴장한 경우 Broadcast하여 알려준다
   useEffect(() => {
     toast(`${leaveUserName}님이 퇴장하셨습니다`, {
       backgroundColor: '#323131',
@@ -400,6 +423,7 @@ export const RoomPageContainer: React.FC = () => {
     });
   }, [leaveUserName]);
 
+  // [Private] 서버로부터 클라이언트에게 응답하는 소켓 이벤트
   useEffect(() => {
     // 클라이언트가 속한 방에서 모든 소켓이 Redux Store의 Room을 업데이트 한다
     socket.on('rooms:update:each-client', updateRoomCallback);
