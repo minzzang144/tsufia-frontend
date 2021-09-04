@@ -75,8 +75,8 @@ export const useChatFormContext = () => {
 export const RoomPageContainer: React.FC = () => {
   const [toggleModal, setToggleModal] = useState<boolean>(false);
   const [selfUserInRoom, setSelfUserInRoom] = useState<User | undefined>();
-  const [enterUserName, setEnterUserName] = useState<string>('');
-  const [leaveUserName, setleaveUserName] = useState<string>('');
+  const [enterUser, setEnterUser] = useState<User | undefined>();
+  const [leaveUser, setleaveUser] = useState<User | undefined>(undefined);
   const [countDown, setCountDown] = useState<number>(0);
   const {
     register,
@@ -251,8 +251,8 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 방에 입장한 유저를 Broadcast하는 콜백 함수
   function enterRoomBroadcastCb(data: User) {
-    const enterUserName = data.firstName ? `${data.firstName} ${data.lastName}` : data.nickname;
-    setEnterUserName(enterUserName);
+    // const enterUserName = data.firstName ? `${data.firstName} ${data.lastName}` : data.nickname;
+    setEnterUser(data);
   }
 
   // [Private] 다른 사용자가 방에서 퇴장했을 때 방의 정보를 업데이트 하는 콜백 함수
@@ -262,8 +262,8 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 방에서 퇴장한 유저를 Broadcast하는 콜백 함수
   function leaveRoomBroadcastCb(data: User) {
-    const leaveUserName = data.firstName ? `${data.firstName} ${data.lastName}` : data.nickname;
-    setleaveUserName(leaveUserName);
+    // const leaveUserName = data.firstName ? `${data.firstName} ${data.lastName}` : data.nickname;
+    setleaveUser(data);
   }
 
   // [Private] 방의 마지막 멤버가 방에서 퇴장했을 때 방을 삭제하는 콜백 함수
@@ -395,10 +395,17 @@ export const RoomPageContainer: React.FC = () => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       window.removeEventListener('unload', handleUnload);
-      leaveRoomProcess();
-      removeRoomProcess();
     };
   }, []);
+
+  useEffect(() => {
+    if (currentUser) {
+      return () => {
+        leaveRoomProcess();
+        removeRoomProcess();
+      };
+    }
+  }, [currentUser]);
 
   // [Private] 게임이 생성된 이후에만 게임 정보를 불러오도록 한다
   useEffect(() => {
@@ -409,19 +416,29 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 방에 유저가 입장한 경우 Broadcast하여 알려준다
   useEffect(() => {
-    toast(`${enterUserName}님이 입장하셨습니다`, {
-      backgroundColor: '#323131',
-      color: '#ffffff',
-    });
-  }, [enterUserName]);
+    if (enterUser) {
+      const enterUserName = enterUser.firstName
+        ? `${enterUser.firstName} ${enterUser.lastName}`
+        : enterUser.nickname;
+      toast(`${enterUserName}님이 입장하셨습니다`, {
+        backgroundColor: '#323131',
+        color: '#ffffff',
+      });
+    }
+  }, [enterUser]);
 
   // [Private] 방에 유저가 퇴장한 경우 Broadcast하여 알려준다
   useEffect(() => {
-    toast(`${leaveUserName}님이 퇴장하셨습니다`, {
-      backgroundColor: '#323131',
-      color: '#ffffff',
-    });
-  }, [leaveUserName]);
+    if (leaveUser) {
+      const leaveUserName = leaveUser.firstName
+        ? `${leaveUser.firstName} ${leaveUser.lastName}`
+        : leaveUser.nickname;
+      toast(`${leaveUserName}님이 퇴장하셨습니다`, {
+        backgroundColor: '#323131',
+        color: '#ffffff',
+      });
+    }
+  }, [leaveUser]);
 
   // [Private] 서버로부터 클라이언트에게 응답하는 소켓 이벤트
   useEffect(() => {
