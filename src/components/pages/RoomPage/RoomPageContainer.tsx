@@ -74,6 +74,7 @@ export const RoomPageContainer: React.FC = () => {
   const [toggleModal, setToggleModal] = useState<boolean>(false);
   const [selfUserInRoom, setSelfUserInRoom] = useState<User | undefined>();
   const [enterUserName, setEnterUserName] = useState<string>('');
+  const [leaveUserName, setleaveUserName] = useState<string>('');
   const {
     register,
     handleSubmit,
@@ -158,7 +159,7 @@ export const RoomPageContainer: React.FC = () => {
         dispatch(removeRoom());
         dispatch(resetGame());
         dispatch(resetChats());
-        socket.emit('rooms:leave:server', room);
+        socket.emit('rooms:leave:server', { room, user: currentUser });
       }
     } catch (error) {
       console.log(error);
@@ -249,6 +250,12 @@ export const RoomPageContainer: React.FC = () => {
   // [Private] 다른 사용자가 방에서 퇴장했을 때 방의 정보를 업데이트 하는 콜백 함수
   function leaveRoomCallback(data: any) {
     dispatch(leaveRoom(data));
+  }
+
+  // [Private] 방에서 퇴장한 유저를 Broadcast하는 콜백 함수
+  function leaveRoomBroadcastCb(data: User) {
+    const leaveUserName = data.firstName ? `${data.firstName} ${data.lastName}` : data.nickname;
+    setleaveUserName(leaveUserName);
   }
 
   // [Private] 방의 마지막 멤버가 방에서 퇴장했을 때 방을 삭제하는 콜백 함수
@@ -387,6 +394,13 @@ export const RoomPageContainer: React.FC = () => {
   }, [enterUserName]);
 
   useEffect(() => {
+    toast(`${leaveUserName}님이 퇴장하셨습니다`, {
+      backgroundColor: '#323131',
+      color: '#ffffff',
+    });
+  }, [leaveUserName]);
+
+  useEffect(() => {
     // 클라이언트가 속한 방에서 모든 소켓이 Redux Store의 Room을 업데이트 한다
     socket.on('rooms:update:each-client', updateRoomCallback);
     // 누군가 방에 입장한 경우 room.userList에 새로운 유저를 추가한다
@@ -395,6 +409,8 @@ export const RoomPageContainer: React.FC = () => {
     socket.on('rooms:enter:broadcast-client', enterRoomBroadcastCb);
     // 누군가 방에서 퇴장한 경우 room.userList에서 유저를 삭제한다
     socket.on('rooms:leave:each-client', leaveRoomCallback);
+    //방에 퇴장한 유저를 Broadcast한다
+    socket.on('rooms:leave:broadcast-client', leaveRoomBroadcastCb);
     // 방의 마지막 멤버가 퇴장한 경우 해당 room을 삭제한다
     socket.on('rooms:remove:each-client', removeRoomCallback);
     // 클라이언트가 채팅을 입력하면 해당 방의 모든 유저에게 채팅을 전송한다
@@ -409,6 +425,7 @@ export const RoomPageContainer: React.FC = () => {
       socket.off('rooms:enter:each-client', enterRoomCallback);
       socket.off('rooms:enter:broadcast-client', enterRoomBroadcastCb);
       socket.off('rooms:leave:each-client', leaveRoomCallback);
+      socket.off('rooms:leave:broadcast-client', leaveRoomBroadcastCb);
       socket.off('rooms:remove:each-client', removeRoomCallback);
       socket.off('chats:create:each-client', createChatCallback);
       socket.off('games:create:only-self-client', createGameProcess);
