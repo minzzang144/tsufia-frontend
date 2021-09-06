@@ -138,11 +138,11 @@ export interface CreateGameResponse extends CommonResponse {
   game?: Game;
 }
 
-// Get Game
-export interface GetGameRequest {
+// Patch Game
+export interface PatchGameRequest {
   id: string;
 }
 
-export interface GetGameResponse extends CommonResponse {
+export interface PatchGameResponse extends CommonResponse {
   game?: Game;
 }

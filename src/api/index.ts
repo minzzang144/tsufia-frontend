@@ -9,8 +9,6 @@ import {
   EnterRoomRequest,
   EnterRoomResponse,
   GetChatsResponse,
-  GetGameRequest,
-  GetGameResponse,
   GetRoomRequest,
   GetRoomResponse,
   GetRoomsResponse,
@@ -22,6 +20,8 @@ import {
   LeaveRoomRequest,
   LeaveRoomResponse,
   LoginResponse,
+  PatchGameRequest,
+  PatchGameResponse,
   RemoveRoomResponse,
   SignUpResponse,
   SilentRefreshResponse,
@@ -98,5 +98,6 @@ export const ChatAPI = {
 
 export const GameAPI = {
   createGame: (): Promise<CreateGameResponse> => requests.post('games/create'),
-  getGame: (body: GetGameRequest): Promise<GetGameResponse> => requests.get(`games/${body.id}`),
+  patchGame: (body: PatchGameRequest): Promise<PatchGameResponse> =>
+    requests.patch(`games/${body.id}/update`),
 };
