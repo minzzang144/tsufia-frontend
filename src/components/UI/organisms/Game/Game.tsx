@@ -12,6 +12,7 @@ import { Notification } from '@molecules/Notification/Notification';
 import { UserList } from '@molecules/UserList/UserList';
 import { RootState } from '@modules';
 import { useRoomPageContext, useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
+import { Circle } from '@game';
 
 export const Game: React.FC = () => {
   const { countDown } = useRoomPageContext();
@@ -29,7 +30,19 @@ export const Game: React.FC = () => {
     if (room && room.game && countDown > 0) {
       switch (room.game.circle) {
         case null:
-          return <Notification>{`게임 시작까지 ${countDown}초 남았습니다`}</Notification>;
+          return (
+            <Notification topprop="6rem">{`게임 시작까지 ${countDown}초 남았습니다`}</Notification>
+          );
+        case Circle.밤:
+          return (
+            <>
+              <Notification topprop="6rem">
+                밤이 되었습니다. 마피아는 서로를 확인하시기 바랍니다
+              </Notification>
+              <Notification topprop="7.5rem">마피아는 죽일 사람을 선택해 주세요</Notification>
+              <Notification topprop="9rem">{`${countDown}초 남았습니다`}</Notification>
+            </>
+          );
         default:
           break;
       }
