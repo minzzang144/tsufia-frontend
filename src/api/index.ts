@@ -6,6 +6,8 @@ import {
   CreateGameResponse,
   CreateRoomRequest,
   CreateRoomResponse,
+  CreateUserRoleRequest,
+  CreateUserRoleResponse,
   EnterRoomRequest,
   EnterRoomResponse,
   GetChatsResponse,
@@ -88,6 +90,8 @@ export const RoomAPI = {
   leaveRoom: (body: LeaveRoomRequest): Promise<LeaveRoomResponse> =>
     requests.patch(`api/rooms/${body.roomId}/leave`),
   removeRoom: (): Promise<RemoveRoomResponse> => requests.delete(`rooms/delete`),
+  createUserRole: (body: CreateUserRoleRequest): Promise<CreateUserRoleResponse> =>
+    requests.patch(`api/rooms/${body.roomId}/create/user-role`),
 };
 
 export const ChatAPI = {

@@ -112,6 +112,15 @@ export interface RemoveRoomResponse extends CommonResponse {
   roomId: number;
 }
 
+// Create UserRole from Room
+export interface CreateUserRoleRequest {
+  roomId: number;
+}
+
+export interface CreateUserRoleResponse extends CommonResponse {
+  room?: Room;
+}
+
 /**
  * Chat API
  */
