@@ -19,6 +19,7 @@ import {
   getRoom,
   leaveRoom,
   removeRoom,
+  Room,
   updateRoom,
   updateRoomError,
   updateRoomGame,
@@ -222,7 +223,21 @@ export const RoomPageContainer: React.FC = () => {
       const { ok, error, game } = response;
       if (ok === false && error) dispatch(updateRoomError(error));
       if (ok === true && game) {
-        socket.emit('games:patch:server', { game, roomId });
+        socket.emit('games:patch:game:server', { game, roomId });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // [Private] 게임이 시작하면 유저의 역할을 랜덤으로 부여하기 위한 API 함수
+  async function patchUserRoleProcess(roomId: number) {
+    try {
+      const response = await RoomAPI.createUserRole({ roomId });
+      const { ok, error, room } = response;
+      if (ok === false && error) dispatch(updateRoomError(error));
+      if (ok === true && room) {
+        socket.emit('games:patch:user-role:server', room);
       }
     } catch (error) {
       console.log(error);
@@ -277,6 +292,10 @@ export const RoomPageContainer: React.FC = () => {
   // [Private] 게임을 생성한 방에 게임 데이터를 전달하는 콜백 함수
   function patchGameCallback(data: Game) {
     dispatch(updateRoomGame(data));
+  }
+
+  function patchUserRoleCallback(data: Room) {
+    dispatch(updateRoom(data));
   }
 
   // [Private] 윈도우 창이 종료되기 전에 실행되는 이벤트
@@ -381,7 +400,7 @@ export const RoomPageContainer: React.FC = () => {
       switch (room.game.circle) {
         case null:
           if (currentUser?.host === true)
-            socket.emit('games:patch:send-server', { gameId: room.game.id, roomId: room.id });
+            socket.emit('games:patch:server', { gameId: room.game.id, roomId: room.id });
           break;
         default:
           break;
@@ -463,10 +482,12 @@ export const RoomPageContainer: React.FC = () => {
     socket.on('games:create:only-self-client', createGameProcess);
     // 해당 방의 사용자에게 생성된 게임 데이터를 전달한다
     socket.on('games:create:each-client', createGameCallback);
-    // 게임 순환을 업데이트 한다
-    socket.on('games:patch:only-self-client', patchGameProcess);
+    // 게임 순환 및 유저 역할을 업데이트 한다
+    socket.on('games:patch:game:only-self-client', patchGameProcess);
+    socket.on('games:patch:user-role:only-self-client', patchUserRoleProcess);
     // 해당 방의 사용자에게 패치된 게임 데이터를 전달한다
-    socket.on('games:patch:each-client', patchGameCallback);
+    socket.on('games:patch:game:each-client', patchGameCallback);
+    socket.on('games:patch:user-role:each-client', patchUserRoleCallback);
 
     return () => {
       socket.off('rooms:update:each-client', updateRoomCallback);
@@ -478,8 +499,10 @@ export const RoomPageContainer: React.FC = () => {
       socket.off('chats:create:each-client', createChatCallback);
       socket.off('games:create:only-self-client', createGameProcess);
       socket.off('games:create:each-client', createGameCallback);
-      socket.off('games:patch:only-self-client', patchGameProcess);
-      socket.off('games:patch:each-client', patchGameCallback);
+      socket.off('games:patch:game:only-self-client', patchGameProcess);
+      socket.off('games:patch:user-role:only-self-client', patchUserRoleProcess);
+      socket.off('games:patch:game:each-client', patchGameCallback);
+      socket.off('games:patch:user-role:each-client', patchUserRoleCallback);
     };
   }, []);
 
