@@ -10,6 +10,12 @@ enum Provider {
   Kakao,
 }
 
+export enum UserRole {
+  Mafia,
+  Citizen,
+  Police,
+}
+
 export type User = {
   id: number;
   email: string;
@@ -21,6 +27,8 @@ export type User = {
   refreshToken: string;
   roomId: number;
   host: boolean;
+  role: UserRole;
+  survive: boolean;
 };
 
 export type AuthState = {
