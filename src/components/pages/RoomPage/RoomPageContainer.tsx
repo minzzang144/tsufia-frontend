@@ -77,7 +77,7 @@ export const RoomPageContainer: React.FC = () => {
   const [selfUserInRoom, setSelfUserInRoom] = useState<User | undefined>();
   const [enterUser, setEnterUser] = useState<User | undefined>();
   const [leaveUser, setleaveUser] = useState<User | undefined>(undefined);
-  const [countDown, setCountDown] = useState<number>(0);
+  const [countDown, setCountDown] = useState<number>(-1);
   const {
     register,
     handleSubmit,
@@ -215,6 +215,20 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
+  // [Private] 상황에 필요한 게임 순환을 업데이트 하기 위한 API 함수
+  async function patchGameProcess(gameId: number, roomId: number) {
+    try {
+      const response = await GameAPI.patchGame({ id: String(gameId) });
+      const { ok, error, game } = response;
+      if (ok === false && error) dispatch(updateRoomError(error));
+      if (ok === true && game) {
+        socket.emit('games:patch:server', { game, roomId });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   // [Private] 사용자가 방에 처음 입장했을 때 방의 정보를 가져오는 콜백 함수
   function updateRoomCallback(data: any) {
     dispatch(updateRoom(data));
@@ -257,9 +271,12 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 게임을 생성한 방에 게임 데이터를 전달하는 콜백 함수
   function createGameCallback(data: Game) {
-    dispatch(updateRoomLoading());
     dispatch(updateRoomGame(data));
-    dispatch(updateRoomLoading());
+  }
+
+  // [Private] 게임을 생성한 방에 게임 데이터를 전달하는 콜백 함수
+  function patchGameCallback(data: Game) {
+    dispatch(updateRoomGame(data));
   }
 
   // [Private] 윈도우 창이 종료되기 전에 실행되는 이벤트
@@ -358,6 +375,20 @@ export const RoomPageContainer: React.FC = () => {
     }
   }, 1000);
 
+  useEffect(() => {
+    const currentUser = room && user && room.userList.find((listUser) => listUser.id === user.id);
+    if (room && room.game && countDown === 0) {
+      switch (room.game.circle) {
+        case null:
+          if (currentUser?.host === true)
+            socket.emit('games:patch:send-server', { gameId: room.game.id, roomId: room.id });
+          break;
+        default:
+          break;
+      }
+    }
+  }, [room, room?.game, countDown, user]);
+
   // [Private] 사용자 자신의 정보를 가져온다
   useEffect(() => {
     getSelfUserInRoom();
@@ -400,7 +431,8 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 방에 유저가 퇴장한 경우 Broadcast하여 알려준다
   useEffect(() => {
-    if (leaveUser) {
+    const currentUser = room && user && room.userList.find((listUser) => listUser.id === user.id);
+    if (currentUser?.host === false && leaveUser) {
       const leaveUserName = leaveUser.firstName
         ? `${leaveUser.firstName} ${leaveUser.lastName}`
         : leaveUser.nickname;
@@ -409,7 +441,7 @@ export const RoomPageContainer: React.FC = () => {
         color: '#ffffff',
       });
     }
-  }, [leaveUser]);
+  }, [leaveUser, room, user]);
 
   // [Private] 서버로부터 클라이언트에게 응답하는 소켓 이벤트
   useEffect(() => {
@@ -431,6 +463,10 @@ export const RoomPageContainer: React.FC = () => {
     socket.on('games:create:only-self-client', createGameProcess);
     // 해당 방의 사용자에게 생성된 게임 데이터를 전달한다
     socket.on('games:create:each-client', createGameCallback);
+    // 게임 순환을 업데이트 한다
+    socket.on('games:patch:only-self-client', patchGameProcess);
+    // 해당 방의 사용자에게 패치된 게임 데이터를 전달한다
+    socket.on('games:patch:each-client', patchGameCallback);
 
     return () => {
       socket.off('rooms:update:each-client', updateRoomCallback);
@@ -442,6 +478,8 @@ export const RoomPageContainer: React.FC = () => {
       socket.off('chats:create:each-client', createChatCallback);
       socket.off('games:create:only-self-client', createGameProcess);
       socket.off('games:create:each-client', createGameCallback);
+      socket.off('games:patch:only-self-client', patchGameProcess);
+      socket.off('games:patch:each-client', patchGameCallback);
     };
   }, []);
 
