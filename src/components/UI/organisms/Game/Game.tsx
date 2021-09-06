@@ -16,17 +16,27 @@ import { useRoomPageContext, useUpdateRoomFormContext } from '@pages/RoomPage/Ro
 export const Game: React.FC = () => {
   const { countDown } = useRoomPageContext();
   const updateRoomFormContext = useUpdateRoomFormContext();
-  const { roomLoading, gameLoading, roomError, gameError, room, game } = useSelector(
+  const { roomLoading, roomError, room } = useSelector(
     (state: RootState) => ({
       roomLoading: state.room.loading,
-      gameLoading: state.game.loading,
       roomError: state.room.error,
-      gameError: state.game.error,
       room: state.room.data,
-      game: state.game.data,
     }),
     shallowEqual,
   );
+
+  function renderGameInformation() {
+    if (room && room.game && countDown > 0) {
+      switch (room.game.circle) {
+        case null:
+          return <Notification>{`게임 시작까지 ${countDown}초 남았습니다`}</Notification>;
+        default:
+          break;
+      }
+    } else if (roomError) {
+      return <Notification>{roomError}</Notification>;
+    }
+  }
 
   return (
     <React.Fragment>
@@ -37,10 +47,7 @@ export const Game: React.FC = () => {
             title="방 수정하기"
             defaultValue={{ input: room.title, radio: String(room.totalHeadCount) }}
           />
-          {gameLoading === false && game && game.circle === null && countDown > 0 && (
-            <Notification>{`게임 시작까지 ${countDown}초 남았습니다`}</Notification>
-          )}
-          {gameError && <Notification>{gameError}</Notification>}
+          {renderGameInformation()}
           <ToastContainer delay={1500} position="top-center" />
           <ChatList />
           <UserList />

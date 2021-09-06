@@ -34,7 +34,7 @@ import {
   updateChatsError,
   updateChatsLoading,
 } from '@chats';
-import { createGame, Game, getGame, resetGame, updateGameError, updateGameLoading } from '@game';
+import { Game } from '@game';
 
 // Update Room Validate Schema
 const updateRoomSchema = yup.object().shape({
@@ -94,17 +94,12 @@ export const RoomPageContainer: React.FC = () => {
     formState: { errors: chatErrors, isValid: chatIsValid },
     reset: chatReset,
   } = useForm<I.ChatFormInput>({ mode: 'all', resolver: yupResolver(chatFormSchema) });
-  const {
-    currentUser,
-    room: storeRoom,
-    game,
-  } = useSelector(
+  const { user, room } = useSelector(
     (state: RootState) => ({
-      currentUser: state.authentication.user,
+      user: state.authentication.user,
       loading: state.room.loading,
       error: state.room.error,
       room: state.room.data,
-      game: state.game.data,
     }),
     shallowEqual,
   );
@@ -114,11 +109,11 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 방에 입장한 후 유저의 정보를 가져오는 함수
   const getSelfUserInRoom = useCallback(() => {
-    if (storeRoom && currentUser) {
-      const self = storeRoom.userList.find((user) => user.id === currentUser.id);
+    if (room && user) {
+      const self = room.userList.find((listUser) => listUser.id === user.id);
       if (self) setSelfUserInRoom(() => self);
     }
-  }, [storeRoom?.userList, currentUser]);
+  }, [room?.userList, user]);
 
   // [Private] 사용자가 방에 처음 입장했을 때 방의 정보를 가져오는 API 함수
   async function getRoomProcess() {
@@ -149,7 +144,7 @@ export const RoomPageContainer: React.FC = () => {
       if (ok === false && error) dispatch(updateRoomError(error));
       if (ok === true && room) {
         dispatch(resetRooms());
-        socket.emit('rooms:enter:server', { room, user: currentUser });
+        socket.emit('rooms:enter:server', { room, user });
       }
     } catch (error) {
       console.log(error);
@@ -165,9 +160,8 @@ export const RoomPageContainer: React.FC = () => {
       if (ok === false && error) dispatch(updateRoomError(error));
       if (ok === true && room) {
         dispatch(removeRoom());
-        dispatch(resetGame());
         dispatch(resetChats());
-        socket.emit('rooms:leave:server', { room, user: currentUser });
+        socket.emit('rooms:leave:server', { room, user });
       }
     } catch (error) {
       console.log(error);
@@ -182,7 +176,6 @@ export const RoomPageContainer: React.FC = () => {
       if (ok === false && error) dispatch(updateRoomError(error));
       if (ok === true && roomId) {
         dispatch(removeRoom());
-        dispatch(resetGame());
         dispatch(resetChats());
         socket.emit('rooms:remove:server', roomId);
       }
@@ -222,25 +215,11 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
-  // [Private] 게임이 시작한 경우에만 게임 정보를 가져오는 API 함수
-  async function getGameProcess(id: number) {
-    try {
-      const response = await GameAPI.getGame({ id: String(id) });
-      const { ok, error, game } = response;
-      if (ok === false && error) dispatch(updateGameError(error));
-      if (ok === true && game) {
-        dispatch(getGame(game));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   // [Private] 사용자가 방에 처음 입장했을 때 방의 정보를 가져오는 콜백 함수
   function updateRoomCallback(data: any) {
     dispatch(updateRoom(data));
-    if (storeRoom) {
-      reset({ title: storeRoom.title, totalHeadCount: String(storeRoom.totalHeadCount) });
+    if (room) {
+      reset({ title: room.title, totalHeadCount: String(room.totalHeadCount) });
     }
   }
 
@@ -278,10 +257,9 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 게임을 생성한 방에 게임 데이터를 전달하는 콜백 함수
   function createGameCallback(data: Game) {
-    dispatch(updateGameLoading());
-    dispatch(createGame(data));
+    dispatch(updateRoomLoading());
     dispatch(updateRoomGame(data));
-    dispatch(updateGameLoading());
+    dispatch(updateRoomLoading());
   }
 
   // [Private] 윈도우 창이 종료되기 전에 실행되는 이벤트
@@ -373,8 +351,8 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 카운트다운을 하기 위해 필요한 Hook
   useInterval(() => {
-    if (game && game.countDown) {
-      const substract = game.countDown - moment().unix();
+    if (room && room.game) {
+      const substract = room.game.countDown - moment().unix();
       const duration = moment.duration(substract, 'seconds');
       setCountDown(duration.seconds());
     }
@@ -383,7 +361,7 @@ export const RoomPageContainer: React.FC = () => {
   // [Private] 사용자 자신의 정보를 가져온다
   useEffect(() => {
     getSelfUserInRoom();
-  }, [storeRoom?.userList]);
+  }, [room?.userList]);
 
   // [Private] 클라이언트로부터 서버로 소켓 이벤트를 전달
   useEffect(() => {
@@ -399,20 +377,13 @@ export const RoomPageContainer: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (currentUser) {
+    if (user) {
       return () => {
         leaveRoomProcess();
         removeRoomProcess();
       };
     }
-  }, [currentUser]);
-
-  // [Private] 게임이 생성된 이후에만 게임 정보를 불러오도록 한다
-  useEffect(() => {
-    if (storeRoom && storeRoom.game) {
-      getGameProcess(storeRoom.game.id);
-    }
-  }, [storeRoom?.game]);
+  }, [user]);
 
   // [Private] 방에 유저가 입장한 경우 Broadcast하여 알려준다
   useEffect(() => {
