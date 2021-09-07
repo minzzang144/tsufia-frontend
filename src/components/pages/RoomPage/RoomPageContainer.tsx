@@ -35,7 +35,7 @@ import {
   updateChatsError,
   updateChatsLoading,
 } from '@chats';
-import { Game } from '@game';
+import { Circle, Game } from '@game';
 
 // Update Room Validate Schema
 const updateRoomSchema = yup.object().shape({
@@ -104,6 +104,7 @@ export const RoomPageContainer: React.FC = () => {
     }),
     shallowEqual,
   );
+  const currentUser = room && user && room.userList.find((listUser) => listUser.id === user.id);
   const dispatch = useDispatch();
   const history = useHistory();
   const params = useParams<{ id: string }>();
@@ -223,7 +224,7 @@ export const RoomPageContainer: React.FC = () => {
       const { ok, error, game } = response;
       if (ok === false && error) dispatch(updateRoomError(error));
       if (ok === true && game) {
-        socket.emit('games:patch:game:server', { game, roomId });
+        socket.emit('games:patch:game/2:server', { game, roomId });
       }
     } catch (error) {
       console.log(error);
@@ -237,7 +238,7 @@ export const RoomPageContainer: React.FC = () => {
       const { ok, error, room } = response;
       if (ok === false && error) dispatch(updateRoomError(error));
       if (ok === true && room) {
-        socket.emit('games:patch:user-role:server', room);
+        socket.emit('games:patch:user-role/2:server', room);
       }
     } catch (error) {
       console.log(error);
@@ -395,18 +396,18 @@ export const RoomPageContainer: React.FC = () => {
   }, 1000);
 
   useEffect(() => {
-    const currentUser = room && user && room.userList.find((listUser) => listUser.id === user.id);
-    if (room && room.game && countDown === 0) {
-      switch (room.game.circle) {
-        case null:
-          if (currentUser?.host === true)
-            socket.emit('games:patch:server', { gameId: room.game.id, roomId: room.id });
-          break;
-        default:
-          break;
+    if (currentUser?.host === true && room && countDown === 0) {
+      if (room.game.circle === null) {
+        socket.emit('games:patch:game/1:server', {
+          gameId: room.game.id,
+          roomId: room.id,
+        });
+      }
+      if (room.game.circle === Circle.밤) {
+        socket.emit('games:patch:user-role/1:server', room.id);
       }
     }
-  }, [room, room?.game, countDown, user]);
+  }, [room?.game?.circle, countDown]);
 
   // [Private] 사용자 자신의 정보를 가져온다
   useEffect(() => {
@@ -483,8 +484,8 @@ export const RoomPageContainer: React.FC = () => {
     // 해당 방의 사용자에게 생성된 게임 데이터를 전달한다
     socket.on('games:create:each-client', createGameCallback);
     // 게임 순환 및 유저 역할을 업데이트 한다
-    socket.on('games:patch:game:only-self-client', patchGameProcess);
-    socket.on('games:patch:user-role:only-self-client', patchUserRoleProcess);
+    socket.on('games:patch:game:self-client', patchGameProcess);
+    socket.on('games:patch:user-role:self-client', patchUserRoleProcess);
     // 해당 방의 사용자에게 패치된 게임 데이터를 전달한다
     socket.on('games:patch:game:each-client', patchGameCallback);
     socket.on('games:patch:user-role:each-client', patchUserRoleCallback);
@@ -499,8 +500,8 @@ export const RoomPageContainer: React.FC = () => {
       socket.off('chats:create:each-client', createChatCallback);
       socket.off('games:create:only-self-client', createGameProcess);
       socket.off('games:create:each-client', createGameCallback);
-      socket.off('games:patch:game:only-self-client', patchGameProcess);
-      socket.off('games:patch:user-role:only-self-client', patchUserRoleProcess);
+      socket.off('games:patch:game:self-client', patchGameProcess);
+      socket.off('games:patch:user-role:self-client', patchUserRoleProcess);
       socket.off('games:patch:game:each-client', patchGameCallback);
       socket.off('games:patch:user-role:each-client', patchUserRoleCallback);
     };
