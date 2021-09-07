@@ -5,6 +5,8 @@ import { ToastContainer } from 'react-toast';
 import * as S from '@organisms/Game/style';
 
 import { Span } from '@atoms/Span/Span';
+import { User, UserRole } from '@auth';
+import { Circle } from '@game';
 import { ChatForm } from '@molecules/ChatForm/ChatForm';
 import { ChatList } from '@molecules/ChatList/ChatList';
 import { FormModal } from '@molecules/FormModal/FormModal';
@@ -12,35 +14,55 @@ import { Notification } from '@molecules/Notification/Notification';
 import { UserList } from '@molecules/UserList/UserList';
 import { RootState } from '@modules';
 import { useRoomPageContext, useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
-import { Circle } from '@game';
 
 export const Game: React.FC = () => {
   const { countDown } = useRoomPageContext();
   const updateRoomFormContext = useUpdateRoomFormContext();
-  const { roomLoading, roomError, room } = useSelector(
+  const { roomLoading, roomError, room, user } = useSelector(
     (state: RootState) => ({
       roomLoading: state.room.loading,
       roomError: state.room.error,
       room: state.room.data,
+      user: state.authentication.user,
     }),
     shallowEqual,
   );
+  let currentUser: User | undefined;
+  if (room && user) currentUser = room.userList.find((listUser) => listUser.id === user.id);
 
-  function renderGameInformation() {
+  function renderGameNotification() {
     if (room && room.game && countDown > 0) {
       switch (room.game.circle) {
         case null:
           return (
-            <Notification topprop="6rem">{`게임 시작까지 ${countDown}초 남았습니다`}</Notification>
+            <Notification
+              topprop="6rem"
+              colorprop="white"
+            >{`게임 시작까지 ${countDown}초 남았습니다`}</Notification>
           );
         case Circle.밤:
           return (
             <>
-              <Notification topprop="6rem">
+              <Notification topprop="6rem" colorprop="white">
                 밤이 되었습니다. 마피아는 서로를 확인하시기 바랍니다
               </Notification>
-              <Notification topprop="7.5rem">마피아는 죽일 사람을 선택해 주세요</Notification>
-              <Notification topprop="9rem">{`${countDown}초 남았습니다`}</Notification>
+              <Notification topprop="7.5rem" colorprop="white">
+                마피아는 죽일 사람을 선택해 주세요
+              </Notification>
+              <Notification
+                topprop="9rem"
+                colorprop="white"
+              >{`${countDown}초 남았습니다`}</Notification>
+              {currentUser?.role === UserRole.Mafia && (
+                <Notification topprop="11rem" colorprop="red">
+                  당신은 마피아입니다. 시민을 모두 죽여 게임을 승리하세요!
+                </Notification>
+              )}
+              {currentUser?.role === UserRole.Citizen && (
+                <Notification topprop="11rem" colorprop="white">
+                  당신은 시민입니다. 마피아를 모두 찾아 게임을 승리하세요!
+                </Notification>
+              )}
             </>
           );
         default:
@@ -60,7 +82,7 @@ export const Game: React.FC = () => {
             title="방 수정하기"
             defaultValue={{ input: room.title, radio: String(room.totalHeadCount) }}
           />
-          {renderGameInformation()}
+          {renderGameNotification()}
           <ToastContainer delay={1500} position="top-center" />
           <ChatList />
           <UserList />

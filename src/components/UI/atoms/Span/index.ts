@@ -1,4 +1,4 @@
-type ColorProp = 'black' | 'white';
+type ColorProp = 'black' | 'white' | 'red';
 
 type LevelProp = 1 | 2 | 3 | 4 | 5 | 6;
 type DisplayProp = 'inline' | 'inline-block';

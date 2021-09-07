@@ -100,6 +100,11 @@ const colorStyles = css<ColorPick>`
     css`
       color: ${({ theme }) => theme.color.light};
     `}
+  ${({ colorProp }) =>
+    colorProp === 'red' &&
+    css`
+      color: ${({ theme }) => theme.color.red};
+    `}
 `;
 
 const lineHeightStyles = css<LineHeightPick>`
