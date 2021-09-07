@@ -3,9 +3,13 @@ import styled, { css } from 'styled-components';
 import * as I from '.';
 
 type LevelPick = Pick<I.SpanProps, 'levelProp'>;
+type PositionPick = Pick<I.SpanProps, 'positionprop'>;
+type TopPick = Pick<I.SpanProps, 'topprop'>;
 type DisplayPick = Pick<I.SpanProps, 'displayProp'>;
 type AlignSelfPick = Pick<I.SpanProps, 'alignSelfProp'>;
+type JustifyContentPick = Pick<I.SpanProps, 'justifyContentprop'>;
 type MarginPick = Pick<I.SpanProps, 'marginProp'>;
+type WidthPick = Pick<I.SpanProps, 'widthprop'>;
 type ColorPick = Pick<I.SpanProps, 'colorProp'>;
 type LineHeightPick = Pick<I.SpanProps, 'lineHeightprop'>;
 type HighlightPick = Pick<I.SpanProps, 'highlightProp'>;
@@ -15,6 +19,22 @@ const levelStyles = css<LevelPick>`
     levelProp &&
     css`
       font-size: ${`${0.5 + 0.25 * (6 / levelProp)}rem`};
+    `}
+`;
+
+const positionStyles = css<PositionPick>`
+  ${({ positionprop }) =>
+    positionprop &&
+    css`
+      position: ${positionprop};
+    `}
+`;
+
+const topStyles = css<TopPick>`
+  ${({ topprop }) =>
+    topprop &&
+    css`
+      top: ${topprop};
     `}
 `;
 
@@ -28,6 +48,10 @@ const displayStyles = css<DisplayPick>`
       case 'inline-block':
         return css`
           display: inline-block;
+        `;
+      case 'inline-flex':
+        return css`
+          display: inline-flex !important;
         `;
       default:
         break;
@@ -49,6 +73,27 @@ const alignSelfStyles = css<AlignSelfPick>`
       case 'flex-end':
         return css`
           align-self: flex-end;
+        `;
+      default:
+        break;
+    }
+  }}
+`;
+
+const justifyContentStyles = css<JustifyContentPick>`
+  ${({ justifyContentprop }) => {
+    switch (justifyContentprop) {
+      case 'flex-start':
+        return css`
+          justify-content: flex-start;
+        `;
+      case 'center':
+        return css`
+          justify-content: center;
+        `;
+      case 'flex-end':
+        return css`
+          justify-content: flex-end;
         `;
       default:
         break;
@@ -86,6 +131,14 @@ const marginStyles = css<MarginPick>`
     css`
       margin: 0;
       margin: ${marginProp[0]} ${marginProp[1]} ${marginProp[2]} ${marginProp[3]};
+    `}
+`;
+
+const widthStyles = css<WidthPick>`
+  ${({ widthprop }) =>
+    widthprop &&
+    css`
+      width: ${widthprop};
     `}
 `;
 
@@ -135,11 +188,17 @@ export const Wrapper = styled.span`
   ${levelStyles}
 
   /* Display Styles */
+  ${positionStyles}
+  ${topStyles}
   ${displayStyles}
   ${alignSelfStyles}
+  ${justifyContentStyles}
 
   /* Margin Styles */
   ${marginStyles}
+
+  /* Width Styles */
+  ${widthStyles}
 
   /* Color Styles */
   ${colorStyles}
