@@ -5,6 +5,7 @@ export interface InputProps {
   type: string;
   label: string;
   variant: any;
+  disabled?: boolean;
   errors?: any;
   helperText?: any;
   marginprop?: string[];

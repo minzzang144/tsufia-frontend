@@ -13,6 +13,7 @@ export const Input: React.FC<I.InputProps> = ({
   type,
   label,
   variant,
+  disabled,
   errors,
   helperText,
   ...rest
@@ -26,6 +27,7 @@ export const Input: React.FC<I.InputProps> = ({
         <S.Wrapper
           margin="normal"
           {...field}
+          disabled={disabled}
           type={type}
           label={label}
           variant={variant}
