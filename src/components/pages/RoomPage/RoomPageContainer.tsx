@@ -271,7 +271,6 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 방에서 퇴장한 유저를 Broadcast하는 콜백 함수
   function leaveRoomBroadcastCb(data: User) {
-    // const leaveUserName = data.firstName ? `${data.firstName} ${data.lastName}` : data.nickname;
     setleaveUser(data);
   }
 
@@ -451,8 +450,7 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 방에 유저가 퇴장한 경우 Broadcast하여 알려준다
   useEffect(() => {
-    const currentUser = room && user && room.userList.find((listUser) => listUser.id === user.id);
-    if (currentUser?.host === false && leaveUser) {
+    if (leaveUser) {
       const leaveUserName = leaveUser.firstName
         ? `${leaveUser.firstName} ${leaveUser.lastName}`
         : leaveUser.nickname;
@@ -461,7 +459,7 @@ export const RoomPageContainer: React.FC = () => {
         color: '#ffffff',
       });
     }
-  }, [leaveUser, room, user]);
+  }, [leaveUser?.id]);
 
   // [Private] 서버로부터 클라이언트에게 응답하는 소켓 이벤트
   useEffect(() => {
