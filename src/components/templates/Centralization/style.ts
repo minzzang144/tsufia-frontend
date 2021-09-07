@@ -43,7 +43,11 @@ export const Background = styled.div<{ isBackground: boolean }>`
 `;
 
 export const Center = styled.div`
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
   width: 100%;
+  height: 100vh;
+  padding: 0;
+  padding-top: 5rem;
 `;

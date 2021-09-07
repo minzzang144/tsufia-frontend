@@ -13,7 +13,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  margin: 5rem auto 0;
+  margin: 0 auto;
   width: 70%;
 `;
 

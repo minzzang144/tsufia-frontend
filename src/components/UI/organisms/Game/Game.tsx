@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toast';
 
+import * as I from '.';
 import * as S from '@organisms/Game/style';
 
 import { Span } from '@atoms/Span/Span';
@@ -13,7 +15,7 @@ import { RootState } from '@modules';
 import { useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
 import { Notification } from '@molecules/Notification/Notification';
 
-export const Game: React.FC = () => {
+export const Game: React.FC<I.GameProps> = ({ children, ...rest }) => {
   const updateRoomFormContext = useUpdateRoomFormContext();
   const { roomLoading, roomError, room } = useSelector(
     (state: RootState) => ({
@@ -27,7 +29,7 @@ export const Game: React.FC = () => {
   return (
     <React.Fragment>
       {roomLoading === false && room ? (
-        <S.Wrapper>
+        <S.Wrapper {...rest}>
           <FormModal
             roomFormContext={updateRoomFormContext}
             title="방 수정하기"

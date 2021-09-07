@@ -23,6 +23,9 @@ const CommonStyles = withStyles({
       '& fieldset': {
         borderColor: 'white',
       },
+      '& fieldset legend span': {
+        display: 'none',
+      },
       '& .MuiOutlinedInput-notchedOutline': {
         borderColor: 'white',
       },
