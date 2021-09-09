@@ -80,7 +80,7 @@ export const RoomPageContainer: React.FC = () => {
   const [leaveUser, setleaveUser] = useState<User | undefined>(undefined);
   const [countDown, setCountDown] = useState<number>(-1);
   const [increment, setIncrement] = useState<number>(0);
-  const [selectUserId, setSelectUserId] = useState<number | undefined>(undefined);
+  const [selectCitizenId, setSelectCitizenId] = useState<number | undefined>(undefined);
   const {
     register,
     handleSubmit,
@@ -110,6 +110,7 @@ export const RoomPageContainer: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const params = useParams<{ id: string }>();
+  console.log(selectCitizenId);
 
   // [Private] 방에 입장한 후 유저의 정보를 가져오는 함수
   const getSelfUserInRoom = useCallback(() => {
@@ -320,7 +321,7 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 밤 사이클 중, 마피아가 유저를 클릭했을 때 어떤 유저가 클릭되었는지 전달하는 콜백 함수
   function selectUserCallback(userId: number) {
-    setSelectUserId((prevUserId) => {
+    setSelectCitizenId((prevUserId) => {
       if (prevUserId === userId) {
         return undefined;
       } else {
@@ -395,7 +396,7 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
-  // [UserList] 게임이 시작하고 유저를 픽할 때 실행되는 함수
+  // [UserList] 게임이 시작하고 마피아가 시민을 픽할 때 실행되는 함수
   function onUserListClick(userId: number) {
     socket.emit('games:select:user:server', {
       roomId: room?.id,
@@ -409,7 +410,7 @@ export const RoomPageContainer: React.FC = () => {
     onLeaveRoomListClick,
     countDown,
     onUserListClick,
-    selectUserId,
+    selectCitizenId,
   };
 
   const updateRoomFormValue = {
@@ -461,7 +462,7 @@ export const RoomPageContainer: React.FC = () => {
       }
       if (room.game.cycle === Cycle.낮 && increment === 1) {
         setIncrement((prev) => prev + 1);
-        socket.emit('games:patch:survive/1:server', { roomId: room.id, selectId: selectUserId });
+        socket.emit('games:patch:survive/1:server', { roomId: room.id, selectId: selectCitizenId });
       }
     }
   }, [room?.game?.cycle, countDown]);

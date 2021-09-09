@@ -13,7 +13,7 @@ import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
 import { Cycle } from '@game';
 
 export const UserList: React.FC = () => {
-  const { onUserListClick, selectUserId } = useRoomPageContext();
+  const { onUserListClick, selectCitizenId } = useRoomPageContext();
   const { loading, error, room, user } = useSelector(
     (state: RootState) => ({
       loading: state.room.loading,
@@ -44,6 +44,18 @@ export const UserList: React.FC = () => {
     return undefined;
   }, [room?.game?.cycle, currentUser?.role]);
 
+  const setBorder = useCallback(
+    (userId: number): boolean => {
+      if (typeof room?.game?.cycle === 'number') {
+        if (room.game?.cycle === Cycle.밤) {
+          return currentUser?.role === UserRole.Mafia && selectCitizenId === userId ? true : false;
+        }
+      }
+      return false;
+    },
+    [room?.game?.cycle, currentUser?.role, selectCitizenId],
+  );
+
   const setClick = useCallback((): boolean => {
     if (typeof room?.game?.cycle === 'number') {
       if (room.game?.cycle === Cycle.밤) {
@@ -73,7 +85,7 @@ export const UserList: React.FC = () => {
                   onClick={setClick() ? () => onUserListClick(user.id) : undefined}
                   paddingProp={['0.5rem']}
                   borderprop={
-                    currentUser?.role === UserRole.Mafia && selectUserId === user.id
+                    setBorder(user.id)
                       ? { 'line-width': '2px', 'line-style': 'solid', color: 'white' }
                       : undefined
                   }

@@ -50,5 +50,5 @@ export interface IRoomPageContext {
   onLeaveRoomListClick: () => void;
   countDown: number;
   onUserListClick: (userId: number) => void;
-  selectUserId: number | undefined;
+  selectCitizenId: number | undefined;
 }
