@@ -121,6 +121,16 @@ export interface CreateUserRoleResponse extends CommonResponse {
   room?: Room;
 }
 
+// Patch Survive in Game UserList
+export interface PatchSurviveRequest {
+  roomId: number;
+  selectId: number;
+}
+
+export interface PatchSurviveResponse extends CommonResponse {
+  room?: Room;
+}
+
 /**
  * Chat API
  */

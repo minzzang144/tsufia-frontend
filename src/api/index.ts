@@ -24,6 +24,8 @@ import {
   LoginResponse,
   PatchGameRequest,
   PatchGameResponse,
+  PatchSurviveRequest,
+  PatchSurviveResponse,
   RemoveRoomResponse,
   SignUpResponse,
   SilentRefreshResponse,
@@ -92,6 +94,8 @@ export const RoomAPI = {
   removeRoom: (): Promise<RemoveRoomResponse> => requests.delete(`rooms/delete`),
   createUserRole: (body: CreateUserRoleRequest): Promise<CreateUserRoleResponse> =>
     requests.patch(`api/rooms/${body.roomId}/create/user-role`),
+  patchSurvive: (body: PatchSurviveRequest): Promise<PatchSurviveResponse> =>
+    requests.patch(`api/rooms/${body.roomId}/patch/survive`, { selectId: body.selectId }),
 };
 
 export const ChatAPI = {
