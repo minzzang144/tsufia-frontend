@@ -3,6 +3,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 
 import * as S from '@molecules/UserList/style';
 
+import { UserRole } from '@auth';
 import { Img } from '@atoms/Img/Img';
 import { Span } from '@atoms/Span/Span';
 import { List } from '@atoms/List/List';
@@ -12,14 +13,16 @@ import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
 
 export const UserList: React.FC = () => {
   const { onUserListClick, selectUserId } = useRoomPageContext();
-  const { loading, error, room } = useSelector(
+  const { loading, error, room, user } = useSelector(
     (state: RootState) => ({
       loading: state.room.loading,
       error: state.room.error,
       room: state.room.data,
+      user: state.authentication.user,
     }),
     shallowEqual,
   );
+  const currentUser = room && user && room.userList.find((listUser) => listUser.id === user.id);
 
   function getUserInitial(firstName: string, nickname: string) {
     let initial: string;
@@ -49,7 +52,7 @@ export const UserList: React.FC = () => {
                   flexDirectionprop="column"
                   alignItemsprop="center"
                   onClick={
-                    typeof room.game?.circle === 'number'
+                    typeof room.game?.circle === 'number' && currentUser?.role === UserRole.Mafia
                       ? () => onUserListClick(user.id)
                       : undefined
                   }
