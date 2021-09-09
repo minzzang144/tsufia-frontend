@@ -247,6 +247,23 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
+  // [Private] 낮 사이클이 되면 유저이 생존현황을 업데이트 하는 API 함수
+  async function patchSurviveProcess(roomId: number, selectId: number) {
+    try {
+      const response = await RoomAPI.patchSurvive({ roomId, selectId });
+      const { ok, error, room } = response;
+      if (ok === false && error) dispatch(updateRoomError(error));
+      if (ok === true) {
+        socket.emit('games:patch:survive/2:server');
+      }
+      if (ok === true && room) {
+        socket.emit('games:patch:survive/2:server', room);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   // [Private] 사용자가 방에 처음 입장했을 때 방의 정보를 가져오는 콜백 함수
   function updateRoomCallback(data: any) {
     dispatch(updateRoom(data));
@@ -310,6 +327,11 @@ export const RoomPageContainer: React.FC = () => {
         return userId;
       }
     });
+  }
+
+  // [Private] 낮 사이클이 되면 마피아가 죽인 유저를 broadcasting 하는 콜백 함수
+  function patchSurviveCallback(data: Room) {
+    dispatch(updateRoom(data));
   }
 
   // [Private] 윈도우 창이 종료되기 전에 실행되는 이벤트
@@ -431,9 +453,16 @@ export const RoomPageContainer: React.FC = () => {
         setIncrement((prev) => prev + 1);
         socket.emit('games:patch:user-role/1:server', room.id);
       }
-      /* if (room.game.cycle === cycle.밤 && increment === 1) {
-        
-      } */
+      if (room.game.cycle === Cycle.밤 && increment === 1) {
+        socket.emit('games:patch:game/1:server', {
+          gameId: room.game.id,
+          roomId: room.id,
+        });
+      }
+      if (room.game.cycle === Cycle.낮 && increment === 1) {
+        setIncrement((prev) => prev + 1);
+        socket.emit('games:patch:survive/1:server', { roomId: room.id, selectId: selectUserId });
+      }
     }
   }, [room?.game?.cycle, countDown]);
 
@@ -518,6 +547,9 @@ export const RoomPageContainer: React.FC = () => {
     socket.on('games:patch:user-role:each-client', patchUserRoleCallback);
     // 밤 사이클 중, 마피아가 유저를 클릭했을 때 어떤 유저가 클릭되었는지 전달한다
     socket.on('games:select:user:each-client', selectUserCallback);
+    // 밤 사이클이 끝나면, 유저의 생존목록을 업데이트 한다
+    socket.on('games:patch:survive:self-client', patchSurviveProcess);
+    socket.on('games:patch:survive:each-client', patchSurviveCallback);
 
     return () => {
       socket.off('rooms:update:each-client', updateRoomCallback);
@@ -534,6 +566,8 @@ export const RoomPageContainer: React.FC = () => {
       socket.off('games:patch:game:each-client', patchGameCallback);
       socket.off('games:patch:user-role:each-client', patchUserRoleCallback);
       socket.off('games:select:user:each-client', selectUserCallback);
+      socket.off('games:patch:survive:self-client', patchSurviveProcess);
+      socket.off('games:patch:survive:each-client', patchSurviveCallback);
     };
   }, []);
 
