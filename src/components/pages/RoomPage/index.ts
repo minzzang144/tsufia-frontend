@@ -49,4 +49,6 @@ export interface IRoomPageContext {
   selfUserInRoom: User | undefined;
   onLeaveRoomListClick: () => void;
   countDown: number;
+  onUserListClick: (userId: number) => void;
+  selectUserId: number | undefined;
 }

@@ -6,10 +6,12 @@ import * as S from '@molecules/UserList/style';
 import { Img } from '@atoms/Img/Img';
 import { Span } from '@atoms/Span/Span';
 import { List } from '@atoms/List/List';
-import { RootState } from '@modules';
 import { UnorderedList } from '@atoms/UnorderedList/UnorderedList';
+import { RootState } from '@modules';
+import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
 
 export const UserList: React.FC = () => {
+  const { onUserListClick, selectUserId } = useRoomPageContext();
   const { loading, error, room } = useSelector(
     (state: RootState) => ({
       loading: state.room.loading,
@@ -32,7 +34,7 @@ export const UserList: React.FC = () => {
   return (
     <React.Fragment>
       {loading === false && !error && (
-        <S.Wrapper>
+        <S.Wrapper backgroundprop={typeof room?.game?.circle === 'number' ? 'gray' : 'transparent'}>
           <UnorderedList
             flexDirection="row"
             justifyContentProp="space-evenly"
@@ -46,6 +48,18 @@ export const UserList: React.FC = () => {
                   displayprop="flex"
                   flexDirectionprop="column"
                   alignItemsprop="center"
+                  onClick={
+                    typeof room.game?.circle === 'number'
+                      ? () => onUserListClick(user.id)
+                      : undefined
+                  }
+                  paddingProp={['0.5rem']}
+                  borderprop={
+                    selectUserId === user.id
+                      ? { 'line-width': '2px', 'line-style': 'solid', color: 'white' }
+                      : undefined
+                  }
+                  borderRadiusprop="4px"
                 >
                   {user.photo && (
                     <Img src={user.photo} width="50px" height="50px" borderRadiusProp="50%" />

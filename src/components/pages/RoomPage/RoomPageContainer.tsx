@@ -79,6 +79,7 @@ export const RoomPageContainer: React.FC = () => {
   const [enterUser, setEnterUser] = useState<User | undefined>();
   const [leaveUser, setleaveUser] = useState<User | undefined>(undefined);
   const [countDown, setCountDown] = useState<number>(-1);
+  const [selectUserId, setSelectUserId] = useState<number | undefined>(undefined);
   const {
     register,
     handleSubmit,
@@ -359,10 +360,23 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
+  // [UserList] 게임이 시작하고 유저를 픽할 때 실행되는 함수
+  function onUserListClick(userId: number) {
+    setSelectUserId((prevUserId) => {
+      if (prevUserId === userId) {
+        return undefined;
+      } else {
+        return userId;
+      }
+    });
+  }
+
   const roomPageValue = {
     selfUserInRoom,
     onLeaveRoomListClick,
     countDown,
+    onUserListClick,
+    selectUserId,
   };
 
   const updateRoomFormValue = {
