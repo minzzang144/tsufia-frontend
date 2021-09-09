@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import * as S from '@molecules/UserList/style';
@@ -10,6 +10,7 @@ import { List } from '@atoms/List/List';
 import { UnorderedList } from '@atoms/UnorderedList/UnorderedList';
 import { RootState } from '@modules';
 import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
+import { Circle } from '@game';
 
 export const UserList: React.FC = () => {
   const { onUserListClick, selectUserId } = useRoomPageContext();
@@ -34,10 +35,28 @@ export const UserList: React.FC = () => {
     return initial;
   }
 
+  const setBackground = useCallback((): 'gray' | 'initial' | undefined => {
+    if (typeof room?.game?.circle === 'number') {
+      if (room.game?.circle === Circle.밤) {
+        return currentUser?.role === UserRole.Mafia ? 'gray' : 'initial';
+      }
+    }
+    return undefined;
+  }, [room?.game?.circle, currentUser?.role]);
+
+  const setClick = useCallback((): boolean => {
+    if (typeof room?.game?.circle === 'number') {
+      if (room.game?.circle === Circle.밤) {
+        return currentUser?.role === UserRole.Mafia ? true : false;
+      }
+    }
+    return false;
+  }, [room?.game?.circle, currentUser?.role]);
+
   return (
     <React.Fragment>
       {loading === false && !error && (
-        <S.Wrapper backgroundprop={typeof room?.game?.circle === 'number' ? 'gray' : 'transparent'}>
+        <S.Wrapper backgroundprop={setBackground()}>
           <UnorderedList
             flexDirection="row"
             justifyContentProp="space-evenly"
@@ -51,18 +70,15 @@ export const UserList: React.FC = () => {
                   displayprop="flex"
                   flexDirectionprop="column"
                   alignItemsprop="center"
-                  onClick={
-                    typeof room.game?.circle === 'number' && currentUser?.role === UserRole.Mafia
-                      ? () => onUserListClick(user.id)
-                      : undefined
-                  }
+                  onClick={setClick() ? () => onUserListClick(user.id) : undefined}
                   paddingProp={['0.5rem']}
                   borderprop={
-                    selectUserId === user.id
+                    currentUser?.role === UserRole.Mafia && selectUserId === user.id
                       ? { 'line-width': '2px', 'line-style': 'solid', color: 'white' }
                       : undefined
                   }
                   borderRadiusprop="4px"
+                  cursorprop={setClick()}
                 >
                   {user.photo && (
                     <Img src={user.photo} width="50px" height="50px" borderRadiusProp="50%" />

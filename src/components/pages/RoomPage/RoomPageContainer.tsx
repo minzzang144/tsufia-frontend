@@ -11,7 +11,7 @@ import * as I from '.';
 
 import socket from '@/socket';
 import { ChatAPI, GameAPI, RoomAPI } from '@api';
-import { User, UserRole } from '@auth';
+import { User } from '@auth';
 import useInterval from '@hooks/useInterval';
 import { RootState } from '@modules';
 import {
@@ -301,18 +301,14 @@ export const RoomPageContainer: React.FC = () => {
   }
 
   // [Private] 밤 사이클 중, 마피아가 유저를 클릭했을 때 어떤 유저가 클릭되었는지 전달하는 콜백 함수
-  function selectUserCallback(userId: number, userList: User[]) {
-    let selfUser;
-    if (user) selfUser = userList.find((listUser) => listUser.id === user.id);
-    if (selfUser?.role === UserRole.Mafia) {
-      setSelectUserId((prevUserId) => {
-        if (prevUserId === userId) {
-          return undefined;
-        } else {
-          return userId;
-        }
-      });
-    }
+  function selectUserCallback(userId: number) {
+    setSelectUserId((prevUserId) => {
+      if (prevUserId === userId) {
+        return undefined;
+      } else {
+        return userId;
+      }
+    });
   }
 
   // [Private] 윈도우 창이 종료되기 전에 실행되는 이벤트
@@ -378,13 +374,6 @@ export const RoomPageContainer: React.FC = () => {
 
   // [UserList] 게임이 시작하고 유저를 픽할 때 실행되는 함수
   function onUserListClick(userId: number) {
-    /* setSelectUserId((prevUserId) => {
-      if (prevUserId === userId) {
-        return undefined;
-      } else {
-        return userId;
-      }
-    }); */
     socket.emit('games:select:user:server', {
       roomId: room?.id,
       userId,

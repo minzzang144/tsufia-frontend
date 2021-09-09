@@ -20,4 +20,5 @@ export interface ListProps {
   borderprop?: BorderProp;
   borderRadiusprop?: string;
   colorProp?: ColorProp;
+  cursorprop?: boolean;
 }

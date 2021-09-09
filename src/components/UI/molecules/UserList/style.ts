@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 interface UserListWrapper {
-  backgroundprop?: 'gray' | 'transparent';
+  backgroundprop?: 'gray' | 'initial';
 }
 
 export const Wrapper = styled.div<UserListWrapper>`
@@ -16,7 +16,7 @@ export const Wrapper = styled.div<UserListWrapper>`
         return css`
           background-color: rgba(255, 255, 255, 0.1);
         `;
-      case 'transparent':
+      case 'initial':
         return css`
           background-color: initial;
         `;

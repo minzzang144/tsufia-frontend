@@ -13,6 +13,7 @@ type PaddingPick = Pick<I.ListProps, 'paddingProp'>;
 type BorderPick = Pick<I.ListProps, 'borderprop'>;
 type BorderRadiusPick = Pick<I.ListProps, 'borderRadiusprop'>;
 type ColorPick = Pick<I.ListProps, 'colorProp'>;
+type CursorPick = Pick<I.ListProps, 'cursorprop'>;
 
 const displayStyles = css<DisplayPick>`
   ${({ displayprop }) => {
@@ -204,6 +205,19 @@ const colorStyles = css<ColorPick>`
     `}
 `;
 
+const cursorStyles = css<CursorPick>`
+  ${({ cursorprop }) => {
+    switch (cursorprop) {
+      case true:
+        return css`
+          cursor: pointer;
+        `;
+      default:
+        break;
+    }
+  }}
+`;
+
 export const Wrapper = styled.li`
   list-style: none;
 
@@ -225,4 +239,7 @@ export const Wrapper = styled.li`
   
   /* Color Styles */
   ${colorStyles}
+
+  /* Cursor Styles */
+  ${cursorStyles}
 `;
