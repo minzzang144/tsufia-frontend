@@ -8,7 +8,7 @@ import { Span } from '@atoms/Span/Span';
 import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
 import { User, UserRole } from '@auth';
 import { RootState } from '@modules';
-import { Circle } from '@game';
+import { Cycle } from '@game';
 
 export const Notification: React.FC = ({ children, ...rest }) => {
   const { countDown } = useRoomPageContext();
@@ -24,7 +24,7 @@ export const Notification: React.FC = ({ children, ...rest }) => {
   if (room && user) currentUser = room.userList.find((listUser) => listUser.id === user.id);
   function renderGameNotification() {
     if (room && room.game && countDown > 0) {
-      switch (room.game.circle) {
+      switch (room.game.cycle) {
         case null:
           return (
             <Span
@@ -38,7 +38,7 @@ export const Notification: React.FC = ({ children, ...rest }) => {
               colorProp="white"
             >{`게임 시작까지 ${countDown}초 남았습니다`}</Span>
           );
-        case Circle.밤:
+        case Cycle.밤:
           return (
             <>
               <Span

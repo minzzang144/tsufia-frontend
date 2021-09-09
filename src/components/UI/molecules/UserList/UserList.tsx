@@ -10,7 +10,7 @@ import { List } from '@atoms/List/List';
 import { UnorderedList } from '@atoms/UnorderedList/UnorderedList';
 import { RootState } from '@modules';
 import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
-import { Circle } from '@game';
+import { Cycle } from '@game';
 
 export const UserList: React.FC = () => {
   const { onUserListClick, selectUserId } = useRoomPageContext();
@@ -36,22 +36,22 @@ export const UserList: React.FC = () => {
   }
 
   const setBackground = useCallback((): 'gray' | 'initial' | undefined => {
-    if (typeof room?.game?.circle === 'number') {
-      if (room.game?.circle === Circle.밤) {
+    if (typeof room?.game?.cycle === 'number') {
+      if (room.game?.cycle === Cycle.밤) {
         return currentUser?.role === UserRole.Mafia ? 'gray' : 'initial';
       }
     }
     return undefined;
-  }, [room?.game?.circle, currentUser?.role]);
+  }, [room?.game?.cycle, currentUser?.role]);
 
   const setClick = useCallback((): boolean => {
-    if (typeof room?.game?.circle === 'number') {
-      if (room.game?.circle === Circle.밤) {
+    if (typeof room?.game?.cycle === 'number') {
+      if (room.game?.cycle === Cycle.밤) {
         return currentUser?.role === UserRole.Mafia ? true : false;
       }
     }
     return false;
-  }, [room?.game?.circle, currentUser?.role]);
+  }, [room?.game?.cycle, currentUser?.role]);
 
   return (
     <React.Fragment>

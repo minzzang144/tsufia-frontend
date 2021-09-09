@@ -9,7 +9,7 @@ import { Input } from '@atoms/Input/Input';
 import { User, UserRole } from '@auth';
 import { RootState } from '@modules';
 import { useChatFormContext } from '@pages/RoomPage/RoomPageContainer';
-import { Circle } from '@game';
+import { Cycle } from '@game';
 
 export const ChatForm: React.FC = () => {
   const { handleSubmit, control, onValid, isValid } = useChatFormContext();
@@ -25,8 +25,8 @@ export const ChatForm: React.FC = () => {
 
   function inputDisabled() {
     if (room && room.game) {
-      switch (room.game.circle) {
-        case Circle.밤:
+      switch (room.game.cycle) {
+        case Cycle.밤:
           if (currentUser?.role === UserRole.Citizen) {
             return true;
           }

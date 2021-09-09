@@ -35,7 +35,7 @@ import {
   updateChatsError,
   updateChatsLoading,
 } from '@chats';
-import { Circle, Game } from '@game';
+import { Cycle, Game } from '@game';
 
 // Update Room Validate Schema
 const updateRoomSchema = yup.object().shape({
@@ -79,6 +79,7 @@ export const RoomPageContainer: React.FC = () => {
   const [enterUser, setEnterUser] = useState<User | undefined>();
   const [leaveUser, setleaveUser] = useState<User | undefined>(undefined);
   const [countDown, setCountDown] = useState<number>(-1);
+  const [increment, setIncrement] = useState<number>(0);
   const [selectUserId, setSelectUserId] = useState<number | undefined>(undefined);
   const {
     register,
@@ -420,17 +421,21 @@ export const RoomPageContainer: React.FC = () => {
 
   useEffect(() => {
     if (currentUser?.host === true && room && countDown === 0) {
-      if (room.game.circle === null) {
+      if (room.game.cycle === null) {
         socket.emit('games:patch:game/1:server', {
           gameId: room.game.id,
           roomId: room.id,
         });
       }
-      if (room.game.circle === Circle.밤) {
+      if (room.game.cycle === Cycle.밤 && increment === 0) {
+        setIncrement((prev) => prev + 1);
         socket.emit('games:patch:user-role/1:server', room.id);
       }
+      /* if (room.game.cycle === cycle.밤 && increment === 1) {
+        
+      } */
     }
-  }, [room?.game?.circle, countDown]);
+  }, [room?.game?.cycle, countDown]);
 
   // [Private] 사용자 자신의 정보를 가져온다
   useEffect(() => {

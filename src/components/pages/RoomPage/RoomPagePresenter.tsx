@@ -4,7 +4,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 import MafiaPoster from '@assets/mafia.png';
 import CitizenPoster from '@assets/citizen.png';
 import { User, UserRole } from '@auth';
-import { Circle } from '@game';
+import { Cycle } from '@game';
 import { RootState } from '@modules';
 import { Game } from '@organisms/Game/Game';
 import { Header } from '@organisms/Header/Header';
@@ -25,8 +25,8 @@ export const RoomPagePresenter: React.FC = () => {
 
   function setBackground(): { image: string; size: string } | undefined {
     if (room && room.game) {
-      switch (room.game.circle) {
-        case Circle.밤:
+      switch (room.game.cycle) {
+        case Cycle.밤:
           if (currentUser?.role === UserRole.Mafia) {
             return { image: MafiaPoster, size: 'contain' };
           } else if (currentUser?.role === UserRole.Citizen) {
