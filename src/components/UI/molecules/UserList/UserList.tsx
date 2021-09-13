@@ -56,14 +56,17 @@ export const UserList: React.FC = () => {
     [room?.game?.cycle, currentUser?.role, selectCitizenId],
   );
 
-  const setClick = useCallback((): boolean => {
-    if (typeof room?.game?.cycle === 'number') {
-      if (room.game?.cycle === Cycle.밤) {
-        return currentUser?.role === UserRole.Mafia ? true : false;
+  const setClick = useCallback(
+    (userRole: UserRole): boolean => {
+      if (typeof room?.game?.cycle === 'number') {
+        if (room.game?.cycle === Cycle.밤) {
+          return currentUser?.role === UserRole.Mafia && userRole !== UserRole.Mafia ? true : false;
+        }
       }
-    }
-    return false;
-  }, [room?.game?.cycle, currentUser?.role]);
+      return false;
+    },
+    [room?.game?.cycle, currentUser?.role],
+  );
 
   return (
     <React.Fragment>
@@ -82,7 +85,7 @@ export const UserList: React.FC = () => {
                   displayprop="flex"
                   flexDirectionprop="column"
                   alignItemsprop="center"
-                  onClick={setClick() ? () => onUserListClick(user.id) : undefined}
+                  onClick={setClick(user.role) ? () => onUserListClick(user.id) : undefined}
                   paddingProp={['0.5rem']}
                   borderprop={
                     setBorder(user.id)
@@ -90,7 +93,7 @@ export const UserList: React.FC = () => {
                       : undefined
                   }
                   borderRadiusprop="4px"
-                  cursorprop={setClick()}
+                  cursorprop={setClick(user.role)}
                 >
                   {user.photo && (
                     <Img src={user.photo} width="50px" height="50px" borderRadiusProp="50%" />
