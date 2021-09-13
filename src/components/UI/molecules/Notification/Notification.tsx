@@ -11,7 +11,7 @@ import { RootState } from '@modules';
 import { Cycle } from '@game';
 
 export const Notification: React.FC = ({ children, ...rest }) => {
-  const { countDown } = useRoomPageContext();
+  const { countDown, selectCitizenId } = useRoomPageContext();
   const { roomError, room, user } = useSelector(
     (state: RootState) => ({
       roomError: state.room.error,
@@ -21,7 +21,19 @@ export const Notification: React.FC = ({ children, ...rest }) => {
     shallowEqual,
   );
   let currentUser: User | undefined;
+  let selectUser: User | undefined;
   if (room && user) currentUser = room.userList.find((listUser) => listUser.id === user.id);
+  if (selectCitizenId)
+    selectUser = room?.userList.find((listUser) => listUser.id === selectCitizenId);
+
+  function getUserFullName(firstName: string, lastName: string, nickname: string): string {
+    if (firstName && lastName) {
+      return `${firstName} ${lastName}`;
+    } else {
+      return nickname;
+    }
+  }
+
   function renderGameNotification() {
     if (room && room.game && countDown > 0) {
       switch (room.game.cycle) {
@@ -103,6 +115,66 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                   당신은 시민입니다. 마피아를 모두 찾아 게임을 승리하세요!
                 </Span>
               )}
+            </>
+          );
+        case Cycle.낮:
+          return (
+            <>
+              <Span
+                positionprop="absolute"
+                topprop="6rem"
+                displayProp="inline-flex"
+                justifyContentprop="center"
+                widthprop="70%"
+                levelProp={4}
+                marginProp={['0']}
+                colorProp="white"
+              >
+                낮이 되었습니다
+              </Span>
+              {selectUser ? (
+                <Span
+                  positionprop="absolute"
+                  topprop="7.5rem"
+                  displayProp="inline-flex"
+                  justifyContentprop="center"
+                  widthprop="70%"
+                  levelProp={4}
+                  marginProp={['0']}
+                  colorProp="red"
+                >
+                  {`${getUserFullName(
+                    selectUser.firstName,
+                    selectUser.lastName,
+                    selectUser.nickname,
+                  )}님이 살해당하였습니다`}
+                </Span>
+              ) : (
+                <Span
+                  positionprop="absolute"
+                  topprop="7.5rem"
+                  displayProp="inline-flex"
+                  justifyContentprop="center"
+                  widthprop="70%"
+                  levelProp={4}
+                  marginProp={['0']}
+                  colorProp="white"
+                >
+                  밤 사이 아무일도 일어나지 않았습니다
+                </Span>
+              )}
+              <Span
+                positionprop="absolute"
+                topprop="9rem"
+                displayProp="inline-flex"
+                justifyContentprop="center"
+                widthprop="70%"
+                levelProp={4}
+                marginProp={['0']}
+                colorProp="white"
+              >
+                {`시민 여러분께 낮 동안 자유롭게 대화할 시간 ${countDown}초를 드립니다`}
+              </Span>
             </>
           );
         default:
