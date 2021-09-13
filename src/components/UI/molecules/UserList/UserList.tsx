@@ -8,12 +8,12 @@ import { Img } from '@atoms/Img/Img';
 import { Span } from '@atoms/Span/Span';
 import { List } from '@atoms/List/List';
 import { UnorderedList } from '@atoms/UnorderedList/UnorderedList';
+import { Cycle } from '@game';
 import { RootState } from '@modules';
 import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
-import { Cycle } from '@game';
 
 export const UserList: React.FC = () => {
-  const { onUserListClick, selectCitizenId } = useRoomPageContext();
+  const { onUserListClick, selectCitizenId, selectUserId } = useRoomPageContext();
   const { loading, error, room, user } = useSelector(
     (state: RootState) => ({
       loading: state.room.loading,
@@ -45,22 +45,28 @@ export const UserList: React.FC = () => {
   }, [room?.game?.cycle, currentUser?.role]);
 
   const setBorder = useCallback(
-    (userId: number): boolean => {
+    (userId: number, survive: boolean): boolean => {
       if (typeof room?.game?.cycle === 'number') {
-        if (room.game?.cycle === Cycle.밤) {
+        if (room.game.cycle === Cycle.밤) {
           return currentUser?.role === UserRole.Mafia && selectCitizenId === userId ? true : false;
+        }
+        if (room.game.cycle === Cycle.낮) {
+          return survive && selectUserId === userId ? true : false;
         }
       }
       return false;
     },
-    [room?.game?.cycle, currentUser?.role, selectCitizenId],
+    [room?.game?.cycle, currentUser?.role, selectCitizenId, selectUserId],
   );
 
   const setClick = useCallback(
-    (userRole: UserRole): boolean => {
+    (userRole: UserRole, survive: boolean): boolean => {
       if (typeof room?.game?.cycle === 'number') {
-        if (room.game?.cycle === Cycle.밤) {
+        if (room.game.cycle === Cycle.밤) {
           return currentUser?.role === UserRole.Mafia && userRole !== UserRole.Mafia ? true : false;
+        }
+        if (room.game.cycle === Cycle.낮) {
+          return survive ? true : false;
         }
       }
       return false;
@@ -86,15 +92,19 @@ export const UserList: React.FC = () => {
                   displayprop="flex"
                   flexDirectionprop="column"
                   alignItemsprop="center"
-                  onClick={setClick(user.role) ? () => onUserListClick(user.id) : undefined}
+                  onClick={
+                    setClick(user.role, user.survive)
+                      ? () => onUserListClick(user.id, room.game.cycle)
+                      : undefined
+                  }
                   paddingProp={['0.5rem']}
                   borderprop={
-                    setBorder(user.id)
+                    setBorder(user.id, user.survive)
                       ? { 'line-width': '2px', 'line-style': 'solid', color: 'white' }
                       : undefined
                   }
                   borderRadiusprop="4px"
-                  cursorprop={setClick(user.role)}
+                  cursorprop={setClick(user.role, user.survive)}
                 >
                   {user.survive === false && (
                     <Span

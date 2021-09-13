@@ -81,6 +81,7 @@ export const RoomPageContainer: React.FC = () => {
   const [countDown, setCountDown] = useState<number>(-1);
   const [increment, setIncrement] = useState<number>(0);
   const [selectCitizenId, setSelectCitizenId] = useState<number | undefined>(undefined);
+  const [selectUserId, setSelectUserId] = useState<number | undefined>(undefined);
   const {
     register,
     handleSubmit,
@@ -396,12 +397,27 @@ export const RoomPageContainer: React.FC = () => {
   }
 
   // [UserList] 게임이 시작하고 마피아가 시민을 픽할 때 실행되는 함수
-  function onUserListClick(userId: number) {
-    socket.emit('games:select:user:server', {
-      roomId: room?.id,
-      userId,
-      userList: room?.userList.map((user) => ({ id: user.id, role: user.role })),
-    });
+  function onUserListClick(userId: number, cycle: Cycle | null) {
+    switch (cycle) {
+      case Cycle.밤:
+        socket.emit('games:select:user:server', {
+          roomId: room?.id,
+          userId,
+          userList: room?.userList.map((user) => ({ id: user.id, role: user.role })),
+        });
+        break;
+      case Cycle.낮:
+        setSelectUserId((prevUserId) => {
+          if (prevUserId === userId) {
+            return undefined;
+          } else {
+            return userId;
+          }
+        });
+        break;
+      default:
+        break;
+    }
   }
 
   const roomPageValue = {
@@ -410,6 +426,7 @@ export const RoomPageContainer: React.FC = () => {
     countDown,
     onUserListClick,
     selectCitizenId,
+    selectUserId,
   };
 
   const updateRoomFormValue = {

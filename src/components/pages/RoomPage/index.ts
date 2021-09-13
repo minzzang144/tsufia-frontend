@@ -7,6 +7,7 @@ import {
 } from 'react-hook-form';
 
 import { User } from '@auth';
+import { Cycle } from '@game';
 import { RoomPageContainer } from '@pages/RoomPage/RoomPageContainer';
 
 export default RoomPageContainer;
@@ -49,6 +50,7 @@ export interface IRoomPageContext {
   selfUserInRoom: User | undefined;
   onLeaveRoomListClick: () => void;
   countDown: number;
-  onUserListClick: (userId: number) => void;
+  onUserListClick: (userId: number, cycle: Cycle | null) => void;
   selectCitizenId: number | undefined;
+  selectUserId: number | undefined;
 }
