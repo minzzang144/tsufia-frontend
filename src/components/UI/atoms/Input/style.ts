@@ -32,6 +32,9 @@ const CommonStyles = withStyles({
       '&.Mui-focused fieldset': {
         borderColor: '#90caf9',
       },
+      '&.Mui-focused fieldset legend span': {
+        display: 'inline-block',
+      },
     },
     '& .MuiFormHelperText-root': {
       color: 'red',
