@@ -10,4 +10,5 @@ export interface ImgProps {
   widthprop?: string;
   heightprop?: string;
   colorprop?: 'white';
+  opacityprop?: string;
 }

@@ -17,4 +17,6 @@ export interface SpanProps {
   colorProp?: ColorProp;
   lineHeightprop?: string;
   highlightProp?: boolean;
+  fontweightprop?: string;
+  opacityprop?: string;
 }

@@ -10,6 +10,7 @@ type BorderRadiusPick = Pick<I.ImgProps, 'borderRadiusProp'>;
 type WidthPick = Pick<I.ImgProps, 'widthprop'>;
 type HeightPick = Pick<I.ImgProps, 'heightprop'>;
 type ColorPick = Pick<I.ImgProps, 'colorprop'>;
+type OpacityPick = Pick<I.ImgProps, 'opacityprop'>;
 
 const justifyContentStyles = css<JustifyContentPick>`
   ${({ justifyContentprop }) => {
@@ -147,11 +148,22 @@ const colorStyles = css<ColorPick>`
     `}
 `;
 
+const opacityStyles = css<OpacityPick>`
+  ${({ opacityprop }) =>
+    opacityprop &&
+    css`
+      opacity: ${opacityprop};
+    `}
+`;
+
 export const Wrapper = styled.img`
   /* Padding & Border Styles */
   ${marginStyles}
   ${paddingStyles}
   ${borderRadiusStyles}
+
+  /* Opcaity Styles */
+  ${opacityStyles}
 `;
 
 export const SubWrapper = styled.div`
@@ -172,4 +184,7 @@ export const SubWrapper = styled.div`
 
   /* Color Styles */
   ${colorStyles}
+
+  /* Opcaity Styles */
+  ${opacityStyles}
 `;

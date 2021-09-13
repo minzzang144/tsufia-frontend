@@ -82,6 +82,7 @@ export const UserList: React.FC = () => {
               room.userList.map((user) => (
                 <List
                   key={user.id}
+                  positionprop="relative"
                   displayprop="flex"
                   flexDirectionprop="column"
                   alignItemsprop="center"
@@ -95,8 +96,27 @@ export const UserList: React.FC = () => {
                   borderRadiusprop="4px"
                   cursorprop={setClick(user.role)}
                 >
+                  {user.survive === false && (
+                    <Span
+                      positionprop="absolute"
+                      topprop="30%"
+                      displayProp="inline-block"
+                      levelProp={2}
+                      fontweightprop="600"
+                      marginProp={['0']}
+                      colorProp="red"
+                    >
+                      사망
+                    </Span>
+                  )}
                   {user.photo && (
-                    <Img src={user.photo} width="50px" height="50px" borderRadiusProp="50%" />
+                    <Img
+                      src={user.photo}
+                      width="50px"
+                      height="50px"
+                      borderRadiusProp="50%"
+                      opacityprop={user.survive === false ? '0.2' : undefined}
+                    />
                   )}
                   {!user.photo && (
                     <Img
@@ -106,16 +126,21 @@ export const UserList: React.FC = () => {
                       heightprop="50px"
                       borderRadiusProp="50%"
                       colorprop="white"
+                      opacityprop={user.survive === false ? '0.2' : undefined}
                     >
                       {getUserInitial(user.firstName, user.nickname)}
                     </Img>
                   )}
                   {user.firstName && (
-                    <Span levelProp={6}>
+                    <Span levelProp={6} opacityprop={user.survive === false ? '0.5' : undefined}>
                       {user.firstName} {user.lastName}
                     </Span>
                   )}
-                  {user.nickname && <Span>{user.nickname}</Span>}
+                  {user.nickname && (
+                    <Span opacityprop={user.survive === false ? '0.5' : undefined}>
+                      {user.nickname}
+                    </Span>
+                  )}
                 </List>
               ))}
           </UnorderedList>

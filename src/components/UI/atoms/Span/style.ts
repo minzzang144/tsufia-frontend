@@ -13,6 +13,8 @@ type WidthPick = Pick<I.SpanProps, 'widthprop'>;
 type ColorPick = Pick<I.SpanProps, 'colorProp'>;
 type LineHeightPick = Pick<I.SpanProps, 'lineHeightprop'>;
 type HighlightPick = Pick<I.SpanProps, 'highlightProp'>;
+type OpacityPick = Pick<I.SpanProps, 'opacityprop'>;
+type FontWeightPick = Pick<I.SpanProps, 'fontweightprop'>;
 
 const levelStyles = css<LevelPick>`
   ${({ levelProp }) =>
@@ -181,6 +183,22 @@ const highlightStyles = css<HighlightPick>`
     `}
 `;
 
+const fontweightStyles = css<FontWeightPick>`
+  ${({ fontweightprop }) =>
+    fontweightprop &&
+    css`
+      font-weight: ${fontweightprop};
+    `}
+`;
+
+const opacityStyles = css<OpacityPick>`
+  ${({ opacityprop }) =>
+    opacityprop &&
+    css`
+      opacity: ${opacityprop};
+    `}
+`;
+
 export const Wrapper = styled.span`
   line-height: 2em;
 
@@ -208,4 +226,10 @@ export const Wrapper = styled.span`
 
   /* Highlight Styles */
   ${highlightStyles}
+
+  /* Font Weight Styles */
+  ${fontweightStyles}
+
+  /* Opcaity Styles */
+  ${opacityStyles}
 `;

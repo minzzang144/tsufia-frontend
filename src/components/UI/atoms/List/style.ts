@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 import * as I from '.';
 
+type PositionPick = Pick<I.ListProps, 'positionprop'>;
 type DisplayPick = Pick<I.ListProps, 'displayprop'>;
 type FlexDirectionPick = Pick<I.ListProps, 'flexDirectionprop'>;
 type JustifyContentPick = Pick<I.ListProps, 'justifyContentprop'>;
@@ -14,6 +15,23 @@ type BorderPick = Pick<I.ListProps, 'borderprop'>;
 type BorderRadiusPick = Pick<I.ListProps, 'borderRadiusprop'>;
 type ColorPick = Pick<I.ListProps, 'colorProp'>;
 type CursorPick = Pick<I.ListProps, 'cursorprop'>;
+
+const positionStyles = css<PositionPick>`
+  ${({ positionprop }) => {
+    switch (positionprop) {
+      case 'relative':
+        return css`
+          position: relative;
+        `;
+      case 'absolute':
+        return css`
+          position: absolute;
+        `;
+      default:
+        break;
+    }
+  }}
+`;
 
 const displayStyles = css<DisplayPick>`
   ${({ displayprop }) => {
@@ -220,6 +238,9 @@ const cursorStyles = css<CursorPick>`
 
 export const Wrapper = styled.li`
   list-style: none;
+
+  /* Position Styles */
+  ${positionStyles}
 
   /* Flex Styles */
   ${displayStyles}
