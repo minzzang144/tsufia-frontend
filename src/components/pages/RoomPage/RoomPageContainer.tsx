@@ -110,7 +110,6 @@ export const RoomPageContainer: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const params = useParams<{ id: string }>();
-  console.log(selectCitizenId);
 
   // [Private] 방에 입장한 후 유저의 정보를 가져오는 함수
   const getSelfUserInRoom = useCallback(() => {

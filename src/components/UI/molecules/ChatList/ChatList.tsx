@@ -11,6 +11,7 @@ import { Paragraph } from '@atoms/Paragraph/Paragraph';
 import { User, UserRole } from '@auth';
 import { Chat } from '@chats';
 import { RootState } from '@modules';
+import { Cycle } from '@game';
 
 export const ChatList: React.FC = () => {
   const { loading, error, chats, user, room } = useSelector(
@@ -38,12 +39,26 @@ export const ChatList: React.FC = () => {
   }
 
   function renderFilteringChats() {
-    if (currentUser?.role !== UserRole.Mafia) {
-      Chats = chats?.filter((chat) => chat.user.role !== UserRole.Mafia);
-    } else {
-      Chats = chats;
+    switch (room?.game?.cycle) {
+      case null:
+        return chats;
+      case Cycle.밤:
+        if (currentUser?.role !== UserRole.Mafia) {
+          Chats = chats?.filter((chat) => chat.user.role !== UserRole.Mafia);
+        } else {
+          Chats = chats;
+        }
+        return Chats;
+      case Cycle.낮:
+        if (currentUser?.survive === true) {
+          Chats = chats?.filter((chat) => chat.user.survive === true);
+        } else {
+          Chats = chats;
+        }
+        return Chats;
+      default:
+        return chats;
     }
-    return Chats;
   }
 
   return (
