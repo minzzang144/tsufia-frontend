@@ -16,6 +16,9 @@ const CommonStyles = withStyles({
     '& label.Mui-focused': {
       color: '#90caf9',
     },
+    '& label.MuiFormLabel-filled:not(.Mui-focused)': {
+      opacity: '0',
+    },
     '& .MuiOutlinedInput-root': {
       '& input': {
         color: 'white',
