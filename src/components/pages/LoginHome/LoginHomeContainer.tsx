@@ -98,7 +98,7 @@ export const LoginHomeContainer: React.FC = () => {
         history.push(`/rooms/${room.id}`);
       }
     } catch (error) {
-      throw new Error(error);
+      console.log(error);
     }
   }
 
@@ -118,7 +118,7 @@ export const LoginHomeContainer: React.FC = () => {
         dispatch(getRooms(response.rooms));
       }
     } catch (error) {
-      throw new Error(error);
+      console.log(error);
     } finally {
       dispatch(updateRoomsLoading());
     }
@@ -161,7 +161,6 @@ export const LoginHomeContainer: React.FC = () => {
       socket.off('rooms:update:client', updateRoomCallback);
       socket.off('rooms:enter:client', enterRoomCallback);
       socket.off('rooms:leave:client', leaveRoomCallback);
-      socket.off('rooms:remove:client', removeRoomCallback);
     };
   }, []);
 
