@@ -335,23 +335,6 @@ export const RoomPageContainer: React.FC = () => {
     dispatch(updateRoom(data));
   }
 
-  // [Private] 윈도우 창이 종료되기 전에 실행되는 이벤트
-  function handleBeforeUnload(e: BeforeUnloadEvent) {
-    e.preventDefault();
-    if (e) {
-      e.returnValue = '게임을 나가시겠습니까? 게임중에는 다시 입장할 수 없습니다.';
-    }
-    return '게임을 나가시겠습니까? 게임중에는 다시 입장할 수 없습니다.';
-  }
-
-  // [Private] 윈도우 창이 종료될 때 실행되는 이벤트
-  function handleUnload() {
-    if (window.performance.getEntriesByType('navigation')[0].entryType !== 'reload') {
-      leaveRoomProcess();
-      removeRoomProcess();
-    }
-  }
-
   // [Header] Header 메뉴의 방 수정하기 버튼 클릭 시 발생하는 이벤트
   function onToggleModal() {
     setToggleModal(!toggleModal);
@@ -491,12 +474,6 @@ export const RoomPageContainer: React.FC = () => {
     socket.emit('rooms:join-room:server', params.id);
     getRoomProcess();
     enterRoomProcess();
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    window.addEventListener('unload', handleUnload);
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('unload', handleUnload);
-    };
   }, []);
 
   useEffect(() => {

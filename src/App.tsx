@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
+import socket from '@/socket';
 import { AuthAPI, axiosInstance } from '@api';
 import {
   GoogleLoginRequest,
@@ -124,6 +125,7 @@ function App() {
       if (ok === false && error) dispatch(updateError(error));
       if (ok === true && user) {
         dispatch(getUser(user));
+        socket.emit('users:get:server', user);
       }
     } catch (error) {
       console.log(error);
