@@ -54,6 +54,9 @@ export const UserList: React.FC = () => {
           return false;
         }
         if (room.game.cycle === Cycle.저녁) {
+          if (!currentUser?.survive) {
+            return false;
+          }
           return survive && selectUserId === userId ? true : false;
         }
       }
@@ -72,6 +75,9 @@ export const UserList: React.FC = () => {
           return false;
         }
         if (room.game.cycle === Cycle.저녁) {
+          if (!currentUser?.survive) {
+            return false;
+          }
           return survive ? true : false;
         }
       }
