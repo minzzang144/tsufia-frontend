@@ -387,7 +387,7 @@ export const RoomPageContainer: React.FC = () => {
           userList: room?.userList.map((user) => ({ id: user.id, role: user.role })),
         });
         break;
-      case Cycle.낮:
+      case Cycle.저녁:
         setSelectUserId((prevUserId) => {
           if (prevUserId === userId) {
             return undefined;

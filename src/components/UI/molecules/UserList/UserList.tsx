@@ -51,6 +51,9 @@ export const UserList: React.FC = () => {
           return currentUser?.role === UserRole.Mafia && selectCitizenId === userId ? true : false;
         }
         if (room.game.cycle === Cycle.낮) {
+          return false;
+        }
+        if (room.game.cycle === Cycle.저녁) {
           return survive && selectUserId === userId ? true : false;
         }
       }
@@ -66,6 +69,9 @@ export const UserList: React.FC = () => {
           return currentUser?.role === UserRole.Mafia && userRole !== UserRole.Mafia ? true : false;
         }
         if (room.game.cycle === Cycle.낮) {
+          return false;
+        }
+        if (room.game.cycle === Cycle.저녁) {
           return survive ? true : false;
         }
       }
