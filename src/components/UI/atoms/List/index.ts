@@ -1,6 +1,6 @@
 export type ColorProp = 'black' | 'white';
 
-type BorderProp = {
+export type BorderProp = {
   'line-width': string;
   'line-style': 'solid';
   color: string;

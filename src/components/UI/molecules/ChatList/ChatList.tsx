@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import * as S from '@molecules/ChatList/style';
 
 import { UnorderedList } from '@atoms/UnorderedList/UnorderedList';
+import { BorderProp } from '@atoms/List';
 import { List } from '@atoms/List/List';
 import { Img } from '@atoms/Img/Img';
 import { Span } from '@atoms/Span/Span';
@@ -38,7 +39,7 @@ export const ChatList: React.FC = () => {
     return initial;
   }
 
-  function renderFilteringChats() {
+  const renderFilteringChats = useCallback(() => {
     switch (room?.game?.cycle) {
       case null:
         return chats;
@@ -50,16 +51,33 @@ export const ChatList: React.FC = () => {
         }
         return Chats;
       case Cycle.낮:
-        if (currentUser?.survive === true) {
-          Chats = chats?.filter((chat) => chat.user.survive === true);
+      case Cycle.저녁:
+        if (currentUser?.role !== UserRole.Mafia) {
+          Chats = chats?.filter((chat) => chat.user.role !== UserRole.Mafia);
         } else {
           Chats = chats;
+        }
+        if (currentUser?.survive === true) {
+          Chats = Chats?.filter((chat) => chat.user.survive === true);
         }
         return Chats;
       default:
         return chats;
     }
-  }
+  }, [chats, room?.game?.cycle, currentUser]);
+
+  const setBorder = useCallback((user: User): BorderProp | undefined => {
+    if (!user.survive)
+      return { 'line-width': '1px', 'line-style': 'solid', color: 'rgba(255, 255, 255, 0.3)' };
+    switch (user.role) {
+      case UserRole.Mafia:
+        return { 'line-width': '1px', 'line-style': 'solid', color: 'red' };
+      case UserRole.Citizen:
+        return { 'line-width': '1px', 'line-style': 'solid', color: 'white' };
+      default:
+        break;
+    }
+  }, []);
 
   return (
     <S.Wrapper>
@@ -74,7 +92,7 @@ export const ChatList: React.FC = () => {
               maxWidthprop="50%"
               marginprop={['0', '0', '1rem', '0']}
               paddingProp={['1rem']}
-              borderprop={{ 'line-width': '1px', 'line-style': 'solid', color: 'white' }}
+              borderprop={setBorder(chat.user)}
               borderRadiusprop="4px"
             >
               {chat.user.photo && (
