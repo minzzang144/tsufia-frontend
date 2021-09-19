@@ -461,6 +461,12 @@ export const RoomPageContainer: React.FC = () => {
         setIncrement((prev) => prev + 1);
         socket.emit('games:patch:survive/1:server', { roomId: room.id, selectId: selectCitizenId });
       }
+      if (room.game.cycle === Cycle.낮 && increment === 2) {
+        socket.emit('games:patch:game/1:server', {
+          gameId: room.game.id,
+          roomId: room.id,
+        });
+      }
     }
   }, [room?.game?.cycle, countDown]);
 
