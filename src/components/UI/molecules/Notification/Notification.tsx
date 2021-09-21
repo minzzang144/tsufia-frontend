@@ -118,7 +118,7 @@ export const Notification: React.FC = ({ children, ...rest }) => {
             </>
           );
         case Cycle.낮:
-          return (
+          return currentUser?.survive ? (
             <>
               <Span
                 positionprop="absolute"
@@ -174,6 +174,45 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                 colorProp="white"
               >
                 {`시민 여러분께 낮 동안 자유롭게 대화할 시간 ${countDown}초를 드립니다`}
+              </Span>
+            </>
+          ) : (
+            <>
+              <Span
+                positionprop="absolute"
+                topprop="6rem"
+                displayProp="inline-flex"
+                justifyContentprop="center"
+                widthprop="70%"
+                levelProp={4}
+                marginProp={['0']}
+                colorProp="red"
+              >
+                당신은 살해당하였습니다
+              </Span>
+              <Span
+                positionprop="absolute"
+                topprop="7.5rem"
+                displayProp="inline-flex"
+                justifyContentprop="center"
+                widthprop="70%"
+                levelProp={4}
+                marginProp={['0']}
+                colorProp="white"
+              >
+                지금부터 다른 유저와의 소통은 불가하며 죽은 사람 또는 마피아와 채팅할 수 있습니다
+              </Span>
+              <Span
+                positionprop="absolute"
+                topprop="9rem"
+                displayProp="inline-flex"
+                justifyContentprop="center"
+                widthprop="70%"
+                levelProp={4}
+                marginProp={['0']}
+                colorProp="white"
+              >
+                {`${countDown}초 남았습니다`}
               </Span>
             </>
           );
