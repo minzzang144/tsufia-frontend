@@ -3,15 +3,19 @@ import { shallowEqual, useSelector } from 'react-redux';
 
 import MafiaPoster from '@assets/mafia.png';
 import CitizenPoster from '@assets/citizen.png';
+import KillPoster from '@assets/kill.png';
+import LivePoster from '@assets/live.png';
+import VotePoster from '@assets/vote.png';
 import { User, UserRole } from '@auth';
 import { Cycle } from '@game';
 import { RootState } from '@modules';
 import { Game } from '@organisms/Game/Game';
 import { Header } from '@organisms/Header/Header';
-import { useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
+import { useRoomPageContext, useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
 import { Centralization } from '@templates/Centralization/Centralization';
 
 export const RoomPagePresenter: React.FC = () => {
+  const { selectCitizenId } = useRoomPageContext();
   const { onToggleModal } = useUpdateRoomFormContext();
   const { user, room } = useSelector(
     (state: RootState) => ({
@@ -33,6 +37,14 @@ export const RoomPagePresenter: React.FC = () => {
             return { image: CitizenPoster, size: 'contain' };
           }
           break;
+        case Cycle.낮:
+          if (selectCitizenId) {
+            return { image: KillPoster, size: 'contain' };
+          } else {
+            return { image: LivePoster, size: 'contain' };
+          }
+        case Cycle.저녁:
+          return { image: VotePoster, size: 'contain' };
         default:
           break;
       }
