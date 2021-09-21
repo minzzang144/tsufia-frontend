@@ -85,6 +85,7 @@ export const RoomPageContainer: React.FC = () => {
   const [increment, setIncrement] = useState<number>(-1);
   const [selectCitizenId, setSelectCitizenId] = useState<number | undefined>(undefined);
   const [selectUserId, setSelectUserId] = useState<number | undefined>(undefined);
+  const [votedUserList, setVotedUserList] = useState<number[]>([]);
   const {
     register,
     handleSubmit,
@@ -266,6 +267,11 @@ export const RoomPageContainer: React.FC = () => {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  // [Private] 밤 사이클이 끝나면 투표된 유저들을 상태에 담아두는 함수
+  function patchGameVoteProcess(userId: number) {
+    setVotedUserList((prev) => [...prev, userId]);
   }
 
   // [Private] 사용자가 방에 처음 입장했을 때 방의 정보를 가져오는 콜백 함수
@@ -467,7 +473,8 @@ export const RoomPageContainer: React.FC = () => {
         setIncrement((prev) => prev + 1);
       }
       if (room.game.cycle === Cycle.저녁 && increment === 3) {
-        socket.emit('games:vote:game:server', { roomId: room.id, userId: selectUserId });
+        setIncrement((prev) => prev + 1);
+        socket.emit('games:patch:vote/1:server', { roomId: room.id, userId: selectUserId });
       }
     }
     // 방장만 해당
@@ -526,6 +533,13 @@ export const RoomPageContainer: React.FC = () => {
       };
     }
   }, [user]);
+
+  // [Private] 밤 사이클에서 투표가 완료되면 투표리스트를 서버로 전달
+  useEffect(() => {
+    if (votedUserList.length === room?.currentHeadCount) {
+      socket.emit('games:patch:vote/2:server', { roomId: room.id, votedUserList });
+    }
+  }, [votedUserList]);
 
   // [Private] 방에 유저가 입장한 경우 Broadcast하여 알려준다
   useEffect(() => {
@@ -586,6 +600,7 @@ export const RoomPageContainer: React.FC = () => {
     // 밤 사이클이 끝나면, 유저의 생존목록을 업데이트 한다
     socket.on('games:patch:survive:self-client', patchSurviveProcess);
     socket.on('games:patch:survive:each-client', patchSurviveCallback);
+    socket.on('games:patch:vote:host-client', patchGameVoteProcess);
 
     return () => {
       socket.off('rooms:update:each-client', updateRoomCallback);
@@ -605,6 +620,7 @@ export const RoomPageContainer: React.FC = () => {
       socket.off('games:select:user:each-client', selectUserCallback);
       socket.off('games:patch:survive:self-client', patchSurviveProcess);
       socket.off('games:patch:survive:each-client', patchSurviveCallback);
+      socket.off('games:patch:vote:host-client', patchGameVoteProcess);
     };
   }, []);
 
