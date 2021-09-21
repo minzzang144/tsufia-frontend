@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 type CallbackType = () => void;
 
-function useInterval(callback: CallbackType, delay: number) {
+function useInterval(callback: CallbackType, delay: number | null) {
   const savedCallback = useRef<CallbackType>();
 
   useEffect(() => {

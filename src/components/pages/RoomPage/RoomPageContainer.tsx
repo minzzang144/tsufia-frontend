@@ -78,8 +78,11 @@ export const RoomPageContainer: React.FC = () => {
   const [selfUserInRoom, setSelfUserInRoom] = useState<User | undefined>();
   const [enterUser, setEnterUser] = useState<User | undefined>();
   const [leaveUser, setleaveUser] = useState<User | undefined>(undefined);
-  const [countDown, setCountDown] = useState<number>(-1);
-  const [increment, setIncrement] = useState<number>(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [delay, _setDelay] = useState<number>(1000);
+  const [countDown, setCountDown] = useState<number>(-2);
+  const [reciveCountDown, setRecieveCountDown] = useState<number>();
+  const [increment, setIncrement] = useState<number>(-1);
   const [selectCitizenId, setSelectCitizenId] = useState<number | undefined>(undefined);
   const [selectUserId, setSelectUserId] = useState<number | undefined>(undefined);
   const {
@@ -309,6 +312,11 @@ export const RoomPageContainer: React.FC = () => {
     dispatch(updateRoomGame(data));
   }
 
+  // [Private] 게임에서 카운트다운을 동기화 하기 위한 콜백 함수
+  function gameCountDownCallback(data: number) {
+    setRecieveCountDown(data);
+  }
+
   // [Private] 게임을 생성한 방에 게임 데이터를 전달하는 콜백 함수
   function patchGameCallback(data: Game) {
     dispatch(updateRoomGame(data));
@@ -431,24 +439,46 @@ export const RoomPageContainer: React.FC = () => {
   };
 
   // [Private] 카운트다운을 하기 위해 필요한 Hook
-  useInterval(() => {
-    if (room && room.game) {
-      const substract = room.game.countDown - moment().unix();
-      const duration = moment.duration(substract, 'seconds');
-      setCountDown(duration.seconds());
-    }
-  }, 1000);
+  useInterval(
+    () => {
+      if (room && room.game) {
+        const substract = room.game.countDown - moment().unix();
+        const duration = moment.duration(substract, 'seconds');
+        setCountDown(duration.seconds());
+      }
+    },
+    countDown !== -1 ? delay : null,
+  );
 
+  // [Private] 게임을 패치하기 위한 소켓 이벤트
   useEffect(() => {
-    if (currentUser?.host === true && room && countDown === 0) {
-      if (room.game.cycle === null) {
+    // 모든 유저에게 해당
+    if (room && reciveCountDown === 0) {
+      if (room.game.cycle === null && increment === -1) {
+        setIncrement((prev) => prev + 1);
+      }
+      if (room.game.cycle === Cycle.밤 && increment === 0) {
+        setIncrement((prev) => prev + 1);
+      }
+      if (room.game.cycle === Cycle.낮 && increment === 1) {
+        setIncrement((prev) => prev + 1);
+      }
+      if (room.game.cycle === Cycle.저녁 && increment === 2) {
+        setIncrement((prev) => prev + 1);
+      }
+      if (room.game.cycle === Cycle.저녁 && increment === 3) {
+        socket.emit('games:vote:game:server', { roomId: room.id, userId: selectUserId });
+      }
+    }
+    // 방장만 해당
+    if (currentUser?.host === true && room && reciveCountDown === 0) {
+      if (room.game.cycle === null && increment === -1) {
         socket.emit('games:patch:game/1:server', {
           gameId: room.game.id,
           roomId: room.id,
         });
       }
       if (room.game.cycle === Cycle.밤 && increment === 0) {
-        setIncrement((prev) => prev + 1);
         socket.emit('games:patch:user-role/1:server', room.id);
       }
       if (room.game.cycle === Cycle.밤 && increment === 1) {
@@ -458,7 +488,6 @@ export const RoomPageContainer: React.FC = () => {
         });
       }
       if (room.game.cycle === Cycle.낮 && increment === 1) {
-        setIncrement((prev) => prev + 1);
         socket.emit('games:patch:survive/1:server', { roomId: room.id, selectId: selectCitizenId });
       }
       if (room.game.cycle === Cycle.낮 && increment === 2) {
@@ -468,7 +497,14 @@ export const RoomPageContainer: React.FC = () => {
         });
       }
     }
-  }, [room?.game?.cycle, countDown]);
+  }, [room?.game?.cycle, reciveCountDown, selectUserId]);
+
+  // [Private] 카운트다운을 동기화시키기 위한 소켓 이벤트
+  useEffect(() => {
+    if (currentUser?.host) {
+      socket.emit('games:countDown:server', { roomId: room?.id, countDown });
+    }
+  }, [countDown]);
 
   // [Private] 사용자 자신의 정보를 가져온다
   useEffect(() => {
@@ -537,6 +573,8 @@ export const RoomPageContainer: React.FC = () => {
     socket.on('games:create:only-self-client', createGameProcess);
     // 해당 방의 사용자에게 생성된 게임 데이터를 전달한다
     socket.on('games:create:each-client', createGameCallback);
+    // 해당 방의 카운트다운을 동기화시킨다
+    socket.on('games:countDown:client', gameCountDownCallback);
     // 게임 순환 및 유저 역할을 업데이트 한다
     socket.on('games:patch:game:self-client', patchGameProcess);
     socket.on('games:patch:user-role:self-client', patchUserRoleProcess);
@@ -559,6 +597,7 @@ export const RoomPageContainer: React.FC = () => {
       socket.off('chats:create:each-client', createChatCallback);
       socket.off('games:create:only-self-client', createGameProcess);
       socket.off('games:create:each-client', createGameCallback);
+      socket.off('games:countDown:client', gameCountDownCallback);
       socket.off('games:patch:game:self-client', patchGameProcess);
       socket.off('games:patch:user-role:self-client', patchUserRoleProcess);
       socket.off('games:patch:game:each-client', patchGameCallback);
