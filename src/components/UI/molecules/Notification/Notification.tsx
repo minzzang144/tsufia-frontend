@@ -177,6 +177,47 @@ export const Notification: React.FC = ({ children, ...rest }) => {
               </Span>
             </>
           );
+        case Cycle.저녁:
+          return (
+            <>
+              <Span
+                positionprop="absolute"
+                topprop="6rem"
+                displayProp="inline-flex"
+                justifyContentprop="center"
+                widthprop="70%"
+                levelProp={4}
+                marginProp={['0']}
+                colorProp="white"
+              >
+                투표의 시간이 찾아왔습니다
+              </Span>
+              <Span
+                positionprop="absolute"
+                topprop="7.5rem"
+                displayProp="inline-flex"
+                justifyContentprop="center"
+                widthprop="70%"
+                levelProp={4}
+                marginProp={['0']}
+                colorProp="white"
+              >
+                투표는 비공개로 이루어지며 아래 사용자 박스에서 클릭하여 선택할 수 있습니다
+              </Span>
+              <Span
+                positionprop="absolute"
+                topprop="9rem"
+                displayProp="inline-flex"
+                justifyContentprop="center"
+                widthprop="70%"
+                levelProp={4}
+                marginProp={['0']}
+                colorProp="white"
+              >
+                {`${countDown}초 남았습니다`}
+              </Span>
+            </>
+          );
         default:
           break;
       }
