@@ -349,6 +349,11 @@ export const RoomPageContainer: React.FC = () => {
     dispatch(updateRoom(data));
   }
 
+  // [Private] 저녁 사이클이 끝나면 투표 결과를 반영하는 콜백 함수
+  function patchGameVoteCallback(data: Room) {
+    dispatch(updateRoom(data));
+  }
+
   // [Header] Header 메뉴의 방 수정하기 버튼 클릭 시 발생하는 이벤트
   function onToggleModal() {
     setToggleModal(!toggleModal);
@@ -506,6 +511,13 @@ export const RoomPageContainer: React.FC = () => {
     }
   }, [room?.game?.cycle, reciveCountDown, selectUserId]);
 
+  // [Private] 밤 사이클에서 투표가 완료되면 투표리스트를 서버로 전달
+  useEffect(() => {
+    if (votedUserList.length === room?.currentHeadCount) {
+      socket.emit('games:patch:vote/2:server', { roomId: room.id, votedUserList });
+    }
+  }, [votedUserList]);
+
   // [Private] 카운트다운을 동기화시키기 위한 소켓 이벤트
   useEffect(() => {
     if (currentUser?.host) {
@@ -533,13 +545,6 @@ export const RoomPageContainer: React.FC = () => {
       };
     }
   }, [user]);
-
-  // [Private] 밤 사이클에서 투표가 완료되면 투표리스트를 서버로 전달
-  useEffect(() => {
-    if (votedUserList.length === room?.currentHeadCount) {
-      socket.emit('games:patch:vote/2:server', { roomId: room.id, votedUserList });
-    }
-  }, [votedUserList]);
 
   // [Private] 방에 유저가 입장한 경우 Broadcast하여 알려준다
   useEffect(() => {
@@ -601,6 +606,7 @@ export const RoomPageContainer: React.FC = () => {
     socket.on('games:patch:survive:self-client', patchSurviveProcess);
     socket.on('games:patch:survive:each-client', patchSurviveCallback);
     socket.on('games:patch:vote:host-client', patchGameVoteProcess);
+    socket.on('games:patch:vote:each-client', patchGameVoteCallback);
 
     return () => {
       socket.off('rooms:update:each-client', updateRoomCallback);
@@ -621,6 +627,7 @@ export const RoomPageContainer: React.FC = () => {
       socket.off('games:patch:survive:self-client', patchSurviveProcess);
       socket.off('games:patch:survive:each-client', patchSurviveCallback);
       socket.off('games:patch:vote:host-client', patchGameVoteProcess);
+      socket.off('games:patch:vote:each-client', patchGameVoteCallback);
     };
   }, []);
 
