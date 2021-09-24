@@ -565,10 +565,12 @@ export const RoomPageContainer: React.FC = () => {
       const leaveUserName = leaveUser.firstName
         ? `${leaveUser.firstName} ${leaveUser.lastName}`
         : leaveUser.nickname;
-      toast(`${leaveUserName}님이 퇴장하셨습니다`, {
-        backgroundColor: '#323131',
-        color: '#ffffff',
-      });
+      if (leaveUser !== currentUser) {
+        toast(`${leaveUserName}님이 퇴장하셨습니다`, {
+          backgroundColor: '#323131',
+          color: '#ffffff',
+        });
+      }
     }
   }, [leaveUser?.id]);
 
