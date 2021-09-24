@@ -477,7 +477,10 @@ export const RoomPageContainer: React.FC = () => {
       if (room.game.cycle === Cycle.밤 && increment === 0) {
         setIncrement(1);
         if (!isInit) {
+          // 투표가 시작되기 전, 게임을 계속 진행하기 위해 상태 리셋
           socket.emit('games:patch:vote/1:server', { roomId: room.id, userId: selectUserId });
+          setSelectUserId(undefined);
+          setVotedUserList([]);
         }
       }
       if (room.game.cycle === Cycle.낮 && increment === 1) {
@@ -487,8 +490,10 @@ export const RoomPageContainer: React.FC = () => {
         setIncrement(3);
       }
       if (room.game.cycle === Cycle.저녁 && increment === 3) {
+        // 밤 사이클로 돌아가 게임을 계속 진행하기 위해 상태 리셋
         setIncrement(0);
         setIsInit(false);
+        setSelectCitizenId(undefined);
       }
     }
     // 방장만 해당
