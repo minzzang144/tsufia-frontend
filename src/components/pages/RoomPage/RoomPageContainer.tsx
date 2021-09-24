@@ -456,7 +456,11 @@ export const RoomPageContainer: React.FC = () => {
       if (room && room.game) {
         const substract = room.game.countDown - moment().unix();
         const duration = moment.duration(substract, 'seconds');
-        setCountDown(duration.seconds());
+        if (duration.seconds() < 0) {
+          setCountDown(0);
+        } else {
+          setCountDown(duration.seconds());
+        }
       }
     },
     countDown !== -1 ? delay : null,
