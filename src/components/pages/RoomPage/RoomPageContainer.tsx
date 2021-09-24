@@ -86,6 +86,7 @@ export const RoomPageContainer: React.FC = () => {
   const [selectCitizenId, setSelectCitizenId] = useState<number | undefined>(undefined);
   const [selectUserId, setSelectUserId] = useState<number | undefined>(undefined);
   const [votedUserList, setVotedUserList] = useState<number[]>([]);
+  const [isInit, setIsInit] = useState<boolean>(true);
   const {
     register,
     handleSubmit,
@@ -464,22 +465,26 @@ export const RoomPageContainer: React.FC = () => {
   // [Private] 게임을 패치하기 위한 소켓 이벤트
   useEffect(() => {
     // 모든 유저에게 해당
+    console.log(reciveCountDown);
     if (room && reciveCountDown === 0) {
       if (room.game.cycle === null && increment === -1) {
-        setIncrement((prev) => prev + 1);
+        setIncrement(0);
       }
       if (room.game.cycle === Cycle.밤 && increment === 0) {
-        setIncrement((prev) => prev + 1);
+        setIncrement(1);
+        if (!isInit) {
+          socket.emit('games:patch:vote/1:server', { roomId: room.id, userId: selectUserId });
+        }
       }
       if (room.game.cycle === Cycle.낮 && increment === 1) {
-        setIncrement((prev) => prev + 1);
+        setIncrement(2);
       }
       if (room.game.cycle === Cycle.저녁 && increment === 2) {
-        setIncrement((prev) => prev + 1);
+        setIncrement(3);
       }
       if (room.game.cycle === Cycle.저녁 && increment === 3) {
-        setIncrement((prev) => prev + 1);
-        socket.emit('games:patch:vote/1:server', { roomId: room.id, userId: selectUserId });
+        setIncrement(0);
+        setIsInit(false);
       }
     }
     // 방장만 해당
@@ -490,7 +495,7 @@ export const RoomPageContainer: React.FC = () => {
           roomId: room.id,
         });
       }
-      if (room.game.cycle === Cycle.밤 && increment === 0) {
+      if (room.game.cycle === Cycle.밤 && increment === 0 && isInit) {
         socket.emit('games:patch:user-role/1:server', room.id);
       }
       if (room.game.cycle === Cycle.밤 && increment === 1) {
@@ -508,10 +513,16 @@ export const RoomPageContainer: React.FC = () => {
           roomId: room.id,
         });
       }
+      if (room.game.cycle === Cycle.저녁 && increment === 3) {
+        socket.emit('games:patch:game/1:server', {
+          gameId: room.game.id,
+          roomId: room.id,
+        });
+      }
     }
   }, [room?.game?.cycle, reciveCountDown, selectUserId]);
 
-  // [Private] 밤 사이클에서 투표가 완료되면 투표리스트를 서버로 전달
+  // [Private] 저녁 사이클에서 투표가 완료되면 투표리스트를 서버로 전달
   useEffect(() => {
     if (votedUserList.length === room?.currentHeadCount) {
       socket.emit('games:patch:vote/2:server', { roomId: room.id, votedUserList });
