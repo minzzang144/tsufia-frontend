@@ -35,6 +35,48 @@ export const Notification: React.FC = ({ children, ...rest }) => {
   }
 
   function renderGameNotification() {
+    if (room && !room.game) {
+      return (
+        <>
+          <Span
+            positionprop="absolute"
+            topprop="6rem"
+            displayProp="inline-flex"
+            justifyContentprop="center"
+            widthprop="70%"
+            levelProp={4}
+            marginProp={['0']}
+            colorProp="white"
+          >
+            Tsufia 게임에 참여하신 것을 환영합니다!
+          </Span>
+          <Span
+            positionprop="absolute"
+            topprop="7.5rem"
+            displayProp="inline-flex"
+            justifyContentprop="center"
+            widthprop="70%"
+            levelProp={4}
+            marginProp={['0']}
+            colorProp="white"
+          >
+            곧 게임이 시작됩니다
+          </Span>
+          <Span
+            positionprop="absolute"
+            topprop="9rem"
+            displayProp="inline-flex"
+            justifyContentprop="center"
+            widthprop="70%"
+            levelProp={4}
+            marginProp={['0']}
+            colorProp="white"
+          >{`게임이 시작되기까지 ${
+            room.totalHeadCount - room.currentHeadCount
+          }명 남았습니다`}</Span>
+        </>
+      );
+    }
     if (room && room.game && countDown > 0) {
       switch (room.game.cycle) {
         case null:
