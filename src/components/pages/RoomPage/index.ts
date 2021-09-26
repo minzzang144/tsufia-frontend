@@ -9,6 +9,7 @@ import {
 import { User } from '@auth';
 import { Cycle } from '@game';
 import { RoomPageContainer } from '@pages/RoomPage/RoomPageContainer';
+import { Room } from '@room';
 
 export default RoomPageContainer;
 
@@ -57,4 +58,5 @@ export interface IRoomPageContext {
   citizenCount: number;
   onCloseGameResult: () => void;
   closeGameResult: boolean;
+  fixedRoom: Room | undefined;
 }

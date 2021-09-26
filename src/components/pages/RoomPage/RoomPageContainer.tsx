@@ -90,6 +90,7 @@ export const RoomPageContainer: React.FC = () => {
   const [isInit, setIsInit] = useState<boolean>(true);
   const [mafiaCount, setMafiaCount] = useState<number>(0);
   const [citizenCount, setCitizenCount] = useState<number>(0);
+  const [fixedRoom, setFixedRoom] = useState<Room>();
   const [closeGameResult, setCloseGameResult] = useState<boolean>(false);
   const {
     register,
@@ -362,6 +363,7 @@ export const RoomPageContainer: React.FC = () => {
   // [RoomPagePresenter & GameResult] 게임 결과를 적용하기 위한 함수
   const getGameResult = useCallback(() => {
     if (room && room.status === Status.완료) {
+      setFixedRoom(room);
       room.userList.forEach((listUser) => {
         if (listUser.survive && listUser.role === UserRole.Mafia) {
           setMafiaCount((prev) => prev + 1);
@@ -457,6 +459,7 @@ export const RoomPageContainer: React.FC = () => {
     selectUserId,
     mafiaCount,
     citizenCount,
+    fixedRoom,
     onCloseGameResult,
     closeGameResult,
   };

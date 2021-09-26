@@ -13,7 +13,8 @@ import { Status } from '@room';
 import { UserRole } from '@auth';
 
 export const GameResult: React.FC = () => {
-  const { mafiaCount, citizenCount, closeGameResult, onCloseGameResult } = useRoomPageContext();
+  const { fixedRoom, mafiaCount, citizenCount, closeGameResult, onCloseGameResult } =
+    useRoomPageContext();
   const { room } = useSelector(
     (state: RootState) => ({
       room: state.room.data,
@@ -62,7 +63,7 @@ export const GameResult: React.FC = () => {
               생사
             </Thead>
           </tr>
-          {room?.userList.map((user, index) => (
+          {fixedRoom?.userList.map((user, index) => (
             <tr key={user.id}>
               <Tdata paddingprop={['4%', '0']} colorprop="white">
                 {index + 1}
