@@ -90,6 +90,7 @@ export const RoomPageContainer: React.FC = () => {
   const [isInit, setIsInit] = useState<boolean>(true);
   const [mafiaCount, setMafiaCount] = useState<number>(0);
   const [citizenCount, setCitizenCount] = useState<number>(0);
+  const [closeGameResult, setCloseGameResult] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -442,6 +443,11 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
+  // [GameResult] 유저가 게임 결과 닫기를 클릭했을 때 실행되는 함수
+  function onCloseGameResult() {
+    setCloseGameResult(true);
+  }
+
   const roomPageValue = {
     selfUserInRoom,
     onLeaveRoomListClick,
@@ -451,6 +457,8 @@ export const RoomPageContainer: React.FC = () => {
     selectUserId,
     mafiaCount,
     citizenCount,
+    onCloseGameResult,
+    closeGameResult,
   };
 
   const updateRoomFormValue = {

@@ -55,4 +55,6 @@ export interface IRoomPageContext {
   selectUserId: number | undefined;
   mafiaCount: number;
   citizenCount: number;
+  onCloseGameResult: () => void;
+  closeGameResult: boolean;
 }

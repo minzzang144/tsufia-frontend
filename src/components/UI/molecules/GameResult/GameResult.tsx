@@ -4,15 +4,16 @@ import { shallowEqual, useSelector } from 'react-redux';
 import * as S from '@molecules/GameResult/style';
 
 import { Heading } from '@atoms/Heading/Heading';
+import { Table } from '@atoms/Table/Table';
+import { Tdata } from '@atoms/Tdata/Tdata';
+import { Thead } from '@atoms/Thead/Thead';
 import { RootState } from '@modules';
 import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
 import { Status } from '@room';
-import { UnorderedList } from '@atoms/UnorderedList/UnorderedList';
-import { List } from '@atoms/List/List';
 import { UserRole } from '@auth';
 
 export const GameResult: React.FC = () => {
-  const { mafiaCount, citizenCount } = useRoomPageContext();
+  const { mafiaCount, citizenCount, closeGameResult, onCloseGameResult } = useRoomPageContext();
   const { room } = useSelector(
     (state: RootState) => ({
       room: state.room.data,
@@ -40,46 +41,47 @@ export const GameResult: React.FC = () => {
   }
 
   return (
-    <S.Wrapper visible={room?.status === Status.완료}>
+    <S.Wrapper visible={room?.status === Status.완료 && !closeGameResult}>
       <S.Container>
-        <S.CancelIconed />
+        <S.CancelIconed onClick={() => onCloseGameResult()} />
         <Heading levelProp={2} marginProp={['10%', '0']}>
           {setHeading()}
         </Heading>
-        <UnorderedList widthProp="100%" justifyContentProp="center">
-          <List paddingProp={['2.5%', '7%']} colorProp="black">
-            번호
-          </List>
-          <List paddingProp={['2.5%', '7%']} colorProp="black">
-            닉네임
-          </List>
-          <List paddingProp={['2.5%', '7%']} colorProp="black">
-            직업
-          </List>
-          <List paddingProp={['2.5%', '7%']} colorProp="black">
-            생사
-          </List>
-        </UnorderedList>
-        <UnorderedList flexDirection="column" widthProp="100%">
+        <Table widthprop="100%" maxWidthprop="70%" colorprop="white">
+          <tr>
+            <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
+              번호
+            </Thead>
+            <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
+              닉네임
+            </Thead>
+            <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
+              직업
+            </Thead>
+            <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
+              생사
+            </Thead>
+          </tr>
           {room?.userList.map((user, index) => (
-            <List key={user.id}>
-              <UnorderedList justifyContentProp="center">
-                <List paddingProp={['2.5%', '7%']} colorProp="black">
-                  {index + 1}
-                </List>
-                <List paddingProp={['2.5%', '7%']} colorProp="black">
-                  {getUserFullName(user.firstName, user.lastName, user.nickname)}
-                </List>
-                <List paddingProp={['2.5%', '7%']} colorProp="black">
-                  {user.role === UserRole.Mafia ? '마피아' : '시민'}
-                </List>
-                <List paddingProp={['2.5%', '7%']} colorProp="black">
-                  {user.survive ? '생존' : '사망'}
-                </List>
-              </UnorderedList>
-            </List>
+            <tr key={user.id}>
+              <Tdata paddingprop={['4%', '0']} colorprop="white">
+                {index + 1}
+              </Tdata>
+              <Tdata paddingprop={['4%', '0']} colorprop="white">
+                {getUserFullName(user.firstName, user.lastName, user.nickname)}
+              </Tdata>
+              <Tdata
+                paddingprop={['4%', '0']}
+                colorprop={user.role === UserRole.Mafia ? 'red' : 'white'}
+              >
+                {user.role === UserRole.Mafia ? '마피아' : '시민'}
+              </Tdata>
+              <Tdata paddingprop={['4%', '0']} colorprop={user.survive ? 'white' : 'red'}>
+                {user.survive ? '생존' : '사망'}
+              </Tdata>
+            </tr>
           ))}
-        </UnorderedList>
+        </Table>
       </S.Container>
     </S.Wrapper>
   );
