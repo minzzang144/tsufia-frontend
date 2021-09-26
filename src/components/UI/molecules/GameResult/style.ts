@@ -40,6 +40,9 @@ export const CancelIconed = withStyles({
 
 export const Container = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border: 2px solid ${({ theme }) => theme.color.light};
   border-radius: 4px;
   width: 50%;
