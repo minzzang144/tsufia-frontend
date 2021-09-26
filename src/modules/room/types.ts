@@ -7,9 +7,10 @@ import { Game } from '@game';
 
 export type RoomAction = ActionType<typeof RA>;
 
-enum Status {
+export enum Status {
   대기중,
   진행중,
+  완료,
 }
 
 export type Room = {

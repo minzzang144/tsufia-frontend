@@ -43,4 +43,5 @@ export const Container = styled.div`
   border: 2px solid ${({ theme }) => theme.color.light};
   border-radius: 4px;
   width: 50%;
+  height: 70%;
 `;

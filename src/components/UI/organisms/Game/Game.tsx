@@ -11,9 +11,11 @@ import { ChatForm } from '@molecules/ChatForm/ChatForm';
 import { ChatList } from '@molecules/ChatList/ChatList';
 import { FormModal } from '@molecules/FormModal/FormModal';
 import { UserList } from '@molecules/UserList/UserList';
+import { Notification } from '@molecules/Notification/Notification';
 import { RootState } from '@modules';
 import { useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
-import { Notification } from '@molecules/Notification/Notification';
+import { Status } from '@room';
+import { GameResult } from '@molecules/GameResult/GameResult';
 
 export const Game: React.FC<I.GameProps> = ({ children, ...rest }) => {
   const updateRoomFormContext = useUpdateRoomFormContext();
@@ -36,7 +38,7 @@ export const Game: React.FC<I.GameProps> = ({ children, ...rest }) => {
             defaultValue={{ input: room.title, radio: String(room.totalHeadCount) }}
           />
           <ToastContainer delay={1500} position="top-center" />
-          <Notification />
+          {room.status !== Status.완료 ? <Notification /> : <GameResult />}
           <ChatList />
           <UserList />
           <ChatForm />
