@@ -31,7 +31,7 @@ export const GameResult: React.FC = () => {
         return 'Mafia Win';
       }
     }
-  }, [room?.status]);
+  }, [room?.status, mafiaCount, citizenCount]);
 
   function getUserFullName(firstName: string, lastName: string, nickname: string): string {
     if (firstName && lastName) {

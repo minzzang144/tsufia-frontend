@@ -221,7 +221,7 @@ export const RoomPageContainer: React.FC = () => {
     try {
       const response = await GameAPI.createGame();
       const { ok, error, game } = response;
-      if (ok === false && error) dispatch(updateChatsError(error));
+      if (ok === false && error) dispatch(updateRoomError(error));
       if (ok === true && game) {
         socket.emit('games:create:server', { game, roomId });
       }

@@ -36,7 +36,7 @@ export const RoomPagePresenter: React.FC = () => {
         return { image: CitizenWinPoster, size: 'contain' };
       }
       if (mafiaCount >= citizenCount) {
-        return { image: MafiaWinPoster, size: 'contain' };
+        return { image: MafiaWinPoster, size: 'cover' };
       }
     }
     if (room && room.game) {
