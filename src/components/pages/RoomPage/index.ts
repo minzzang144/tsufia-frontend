@@ -53,4 +53,6 @@ export interface IRoomPageContext {
   onUserListClick: (userId: number, cycle: Cycle | null) => void;
   selectCitizenId: number | undefined;
   selectUserId: number | undefined;
+  mafiaCount: number;
+  citizenCount: number;
 }

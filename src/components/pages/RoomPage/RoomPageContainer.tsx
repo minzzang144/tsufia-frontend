@@ -11,7 +11,7 @@ import * as I from '.';
 
 import socket from '@/socket';
 import { ChatAPI, GameAPI, RoomAPI } from '@api';
-import { User } from '@auth';
+import { User, UserRole } from '@auth';
 import useInterval from '@hooks/useInterval';
 import { RootState } from '@modules';
 import {
@@ -20,6 +20,7 @@ import {
   leaveRoom,
   removeRoom,
   Room,
+  Status,
   updateRoom,
   updateRoomError,
   updateRoomGame,
@@ -87,6 +88,8 @@ export const RoomPageContainer: React.FC = () => {
   const [selectUserId, setSelectUserId] = useState<number | undefined>(undefined);
   const [votedUserList, setVotedUserList] = useState<number[]>([]);
   const [isInit, setIsInit] = useState<boolean>(true);
+  const [mafiaCount, setMafiaCount] = useState<number>(0);
+  const [citizenCount, setCitizenCount] = useState<number>(0);
   const {
     register,
     handleSubmit,
@@ -355,6 +358,24 @@ export const RoomPageContainer: React.FC = () => {
     dispatch(updateRoom(data));
   }
 
+  // [RoomPagePresenter & GameResult] 게임 결과를 적용하기 위한 함수
+  const getGameResult = useCallback(() => {
+    if (room && room.status === Status.완료) {
+      room.userList.forEach((listUser) => {
+        if (listUser.survive && listUser.role === UserRole.Mafia) {
+          setMafiaCount((prev) => prev + 1);
+        }
+        if (listUser.survive && listUser.role !== UserRole.Mafia) {
+          setCitizenCount((prev) => prev + 1);
+        }
+      });
+    }
+    if (room && room.status !== Status.완료) {
+      setMafiaCount(0);
+      setCitizenCount(0);
+    }
+  }, [room?.status]);
+
   // [Header] Header 메뉴의 방 수정하기 버튼 클릭 시 발생하는 이벤트
   function onToggleModal() {
     setToggleModal(!toggleModal);
@@ -428,6 +449,8 @@ export const RoomPageContainer: React.FC = () => {
     onUserListClick,
     selectCitizenId,
     selectUserId,
+    mafiaCount,
+    citizenCount,
   };
 
   const updateRoomFormValue = {
@@ -469,8 +492,7 @@ export const RoomPageContainer: React.FC = () => {
   // [Private] 게임을 패치하기 위한 소켓 이벤트
   useEffect(() => {
     // 모든 유저에게 해당
-    console.log(reciveCountDown);
-    if (room && reciveCountDown === 0) {
+    if (room && reciveCountDown === 0 && room.status !== Status.완료) {
       if (room.game.cycle === null && increment === -1) {
         setIncrement(0);
       }
@@ -497,7 +519,12 @@ export const RoomPageContainer: React.FC = () => {
       }
     }
     // 방장만 해당
-    if (currentUser?.host === true && room && reciveCountDown === 0) {
+    if (
+      currentUser?.host === true &&
+      room &&
+      reciveCountDown === 0 &&
+      room.status !== Status.완료
+    ) {
       if (room.game.cycle === null && increment === -1) {
         socket.emit('games:patch:game/1:server', {
           gameId: room.game.id,
@@ -549,6 +576,11 @@ export const RoomPageContainer: React.FC = () => {
   useEffect(() => {
     getSelfUserInRoom();
   }, [room?.userList]);
+
+  // [Private] 게임이 종료되면 결과를 보여준다
+  useEffect(() => {
+    getGameResult();
+  }, [room?.status]);
 
   // [Private] 클라이언트로부터 서버로 소켓 이벤트를 전달
   useEffect(() => {

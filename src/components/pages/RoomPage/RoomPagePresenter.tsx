@@ -2,7 +2,9 @@ import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 
 import MafiaPoster from '@assets/mafia.png';
+import MafiaWinPoster from '@assets/mafia-win.jpg';
 import CitizenPoster from '@assets/citizen.png';
+import CitizenWinPoster from '@assets/citizen-win.png';
 import KillPoster from '@assets/kill.png';
 import LivePoster from '@assets/live.png';
 import VotePoster from '@assets/vote.png';
@@ -13,9 +15,10 @@ import { Game } from '@organisms/Game/Game';
 import { Header } from '@organisms/Header/Header';
 import { useRoomPageContext, useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
 import { Centralization } from '@templates/Centralization/Centralization';
+import { Status } from '@room';
 
 export const RoomPagePresenter: React.FC = () => {
-  const { selectCitizenId } = useRoomPageContext();
+  const { selectCitizenId, mafiaCount, citizenCount } = useRoomPageContext();
   const { onToggleModal } = useUpdateRoomFormContext();
   const { user, room } = useSelector(
     (state: RootState) => ({
@@ -28,6 +31,14 @@ export const RoomPagePresenter: React.FC = () => {
   if (user && room) currentUser = room.userList.find((listUser) => listUser.id === user.id);
 
   function setBackground(): { image: string; size: string } | undefined {
+    if (room && room.status === Status.완료) {
+      if (mafiaCount === 0) {
+        return { image: CitizenWinPoster, size: 'contain' };
+      }
+      if (mafiaCount >= citizenCount) {
+        return { image: MafiaWinPoster, size: 'contain' };
+      }
+    }
     if (room && room.game) {
       switch (room.game.cycle) {
         case Cycle.밤:
