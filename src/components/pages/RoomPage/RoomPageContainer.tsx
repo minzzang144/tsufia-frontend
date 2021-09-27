@@ -139,6 +139,7 @@ export const RoomPageContainer: React.FC = () => {
       if (ok === true && room) {
         dispatch(resetRooms());
         dispatch(getRoom(room));
+        socket.emit('rooms:get:server', { room, user });
       }
     } catch (error) {
       console.log(error);
@@ -598,8 +599,6 @@ export const RoomPageContainer: React.FC = () => {
   useEffect(() => {
     socket.emit('rooms:join-room:server', params.id);
     socket.emit('reconnect', true);
-    getRoomProcess();
-    enterRoomProcess();
     return () => {
       localStorage.setItem('increment', '-1');
       localStorage.setItem('cycle', '1');
@@ -608,6 +607,8 @@ export const RoomPageContainer: React.FC = () => {
 
   useEffect(() => {
     if (user) {
+      getRoomProcess();
+      enterRoomProcess();
       return () => {
         leaveRoomProcess();
         removeRoomProcess();
