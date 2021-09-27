@@ -143,6 +143,8 @@ export const LoginHomeContainer: React.FC = () => {
   useEffect(() => {
     getRoomsProcess();
     socket.emit('rooms:join:server');
+    localStorage.setItem('increment', '-1');
+    localStorage.setItem('cycle', '1');
   }, []);
 
   useEffect(() => {

@@ -83,11 +83,9 @@ export const RoomPageContainer: React.FC = () => {
   const [delay, _setDelay] = useState<number>(1000);
   const [countDown, setCountDown] = useState<number>(-2);
   const [reciveCountDown, setRecieveCountDown] = useState<number>();
-  const [increment, setIncrement] = useState<number>(-1);
   const [selectCitizenId, setSelectCitizenId] = useState<number | undefined>(undefined);
   const [selectUserId, setSelectUserId] = useState<number | undefined>(undefined);
   const [votedUserList, setVotedUserList] = useState<number[]>([]);
-  const [isInit, setIsInit] = useState<boolean>(true);
   const [mafiaCount, setMafiaCount] = useState<number>(0);
   const [citizenCount, setCitizenCount] = useState<number>(0);
   const [fixedRoom, setFixedRoom] = useState<Room>();
@@ -503,29 +501,32 @@ export const RoomPageContainer: React.FC = () => {
   // [Private] 게임을 패치하기 위한 소켓 이벤트
   useEffect(() => {
     // 모든 유저에게 해당
+    const increment = localStorage.getItem('increment');
+    const cycle = localStorage.getItem('cycle');
+    console.log(increment);
     if (room && reciveCountDown === 0 && room.status !== Status.완료) {
-      if (room.game.cycle === null && increment === -1) {
-        setIncrement(0);
+      if (room.game.cycle === null && increment === '-1') {
+        localStorage.setItem('increment', '0');
       }
-      if (room.game.cycle === Cycle.밤 && increment === 0) {
-        setIncrement(1);
-        if (!isInit) {
+      if (room.game.cycle === Cycle.밤 && increment === '0') {
+        localStorage.setItem('increment', '1');
+        if (cycle === '0') {
           // 투표가 시작되기 전, 게임을 계속 진행하기 위해 상태 리셋
           socket.emit('games:patch:vote/1:server', { roomId: room.id, userId: selectUserId });
           setSelectUserId(undefined);
           setVotedUserList([]);
         }
       }
-      if (room.game.cycle === Cycle.낮 && increment === 1) {
-        setIncrement(2);
+      if (room.game.cycle === Cycle.낮 && increment === '1') {
+        localStorage.setItem('increment', '2');
       }
-      if (room.game.cycle === Cycle.저녁 && increment === 2) {
-        setIncrement(3);
+      if (room.game.cycle === Cycle.저녁 && increment === '2') {
+        localStorage.setItem('increment', '3');
       }
-      if (room.game.cycle === Cycle.저녁 && increment === 3) {
+      if (room.game.cycle === Cycle.저녁 && increment === '3') {
         // 밤 사이클로 돌아가 게임을 계속 진행하기 위해 상태 리셋
-        setIncrement(0);
-        setIsInit(false);
+        localStorage.setItem('increment', '0');
+        localStorage.setItem('cycle', '0');
         setSelectCitizenId(undefined);
       }
     }
@@ -536,31 +537,31 @@ export const RoomPageContainer: React.FC = () => {
       reciveCountDown === 0 &&
       room.status !== Status.완료
     ) {
-      if (room.game.cycle === null && increment === -1) {
+      if (room.game.cycle === null && increment === '-1') {
         socket.emit('games:patch:game/1:server', {
           gameId: room.game.id,
           roomId: room.id,
         });
       }
-      if (room.game.cycle === Cycle.밤 && increment === 0 && isInit) {
+      if (room.game.cycle === Cycle.밤 && increment === '0' && cycle === '1') {
         socket.emit('games:patch:user-role/1:server', room.id);
       }
-      if (room.game.cycle === Cycle.밤 && increment === 1) {
+      if (room.game.cycle === Cycle.밤 && increment === '1') {
         socket.emit('games:patch:game/1:server', {
           gameId: room.game.id,
           roomId: room.id,
         });
       }
-      if (room.game.cycle === Cycle.낮 && increment === 1) {
+      if (room.game.cycle === Cycle.낮 && increment === '1') {
         socket.emit('games:patch:survive/1:server', { roomId: room.id, selectId: selectCitizenId });
       }
-      if (room.game.cycle === Cycle.낮 && increment === 2) {
+      if (room.game.cycle === Cycle.낮 && increment === '2') {
         socket.emit('games:patch:game/1:server', {
           gameId: room.game.id,
           roomId: room.id,
         });
       }
-      if (room.game.cycle === Cycle.저녁 && increment === 3) {
+      if (room.game.cycle === Cycle.저녁 && increment === '3') {
         socket.emit('games:patch:game/1:server', {
           gameId: room.game.id,
           roomId: room.id,
@@ -599,6 +600,10 @@ export const RoomPageContainer: React.FC = () => {
     socket.emit('reconnect', true);
     getRoomProcess();
     enterRoomProcess();
+    return () => {
+      localStorage.setItem('increment', '-1');
+      localStorage.setItem('cycle', '1');
+    };
   }, []);
 
   useEffect(() => {
