@@ -49,39 +49,43 @@ export const GameResult: React.FC = () => {
           {setHeading()}
         </Heading>
         <Table widthprop="100%" maxWidthprop="70%" colorprop="white">
-          <tr>
-            <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
-              번호
-            </Thead>
-            <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
-              닉네임
-            </Thead>
-            <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
-              직업
-            </Thead>
-            <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
-              생사
-            </Thead>
-          </tr>
-          {fixedRoom?.userList.map((user, index) => (
-            <tr key={user.id}>
-              <Tdata paddingprop={['4%', '0']} colorprop="white">
-                {index + 1}
-              </Tdata>
-              <Tdata paddingprop={['4%', '0']} colorprop="white">
-                {getUserFullName(user.firstName, user.lastName, user.nickname)}
-              </Tdata>
-              <Tdata
-                paddingprop={['4%', '0']}
-                colorprop={user.role === UserRole.Mafia ? 'red' : 'white'}
-              >
-                {user.role === UserRole.Mafia ? '마피아' : '시민'}
-              </Tdata>
-              <Tdata paddingprop={['4%', '0']} colorprop={user.survive ? 'white' : 'red'}>
-                {user.survive ? '생존' : '사망'}
-              </Tdata>
+          <thead>
+            <tr>
+              <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
+                번호
+              </Thead>
+              <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
+                닉네임
+              </Thead>
+              <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
+                직업
+              </Thead>
+              <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
+                생사
+              </Thead>
             </tr>
-          ))}
+          </thead>
+          <tbody>
+            {fixedRoom?.userList.map((user, index) => (
+              <tr key={user.id}>
+                <Tdata paddingprop={['4%', '0']} colorprop="white">
+                  {index + 1}
+                </Tdata>
+                <Tdata paddingprop={['4%', '0']} colorprop="white">
+                  {getUserFullName(user.firstName, user.lastName, user.nickname)}
+                </Tdata>
+                <Tdata
+                  paddingprop={['4%', '0']}
+                  colorprop={user.role === UserRole.Mafia ? 'red' : 'white'}
+                >
+                  {user.role === UserRole.Mafia ? '마피아' : '시민'}
+                </Tdata>
+                <Tdata paddingprop={['4%', '0']} colorprop={user.survive ? 'white' : 'red'}>
+                  {user.survive ? '생존' : '사망'}
+                </Tdata>
+              </tr>
+            ))}
+          </tbody>
         </Table>
       </S.Container>
     </S.Wrapper>
