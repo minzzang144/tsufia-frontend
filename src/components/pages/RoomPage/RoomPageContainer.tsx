@@ -596,6 +596,7 @@ export const RoomPageContainer: React.FC = () => {
   // [Private] 클라이언트로부터 서버로 소켓 이벤트를 전달
   useEffect(() => {
     socket.emit('rooms:join-room:server', params.id);
+    socket.emit('reconnect', true);
     getRoomProcess();
     enterRoomProcess();
   }, []);
