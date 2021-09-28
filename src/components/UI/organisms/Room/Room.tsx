@@ -12,6 +12,7 @@ import { useCreateRoomFormContext } from '@pages/LoginHome/LoginHomeContainer';
 
 export const Room: React.FC = () => {
   const createRoomFormContext = useCreateRoomFormContext();
+  const { onRoomClick } = createRoomFormContext;
   const { loading, error, rooms } = useSelector(
     (state: RootState) => ({
       loading: state.rooms.loading,
@@ -31,7 +32,7 @@ export const Room: React.FC = () => {
       {loading === true && <S.Loader type="balls" color="white" width="5%" height="5%" />}
       {loading === false && rooms && !error ? (
         rooms?.map((room) => (
-          <S.RoomContainer to={`rooms/${room.id}`} key={room.id}>
+          <S.RoomContainer onClick={() => onRoomClick(room)} key={room.id}>
             <Span levelProp={2} marginProp={['1rem', '0', '0', '0']}>
               {room.status === 0 ? '대기중' : '진행중'}
             </Span>

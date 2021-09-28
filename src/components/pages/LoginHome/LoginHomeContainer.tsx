@@ -14,6 +14,7 @@ import * as yup from 'yup';
 
 import socket from '@/socket';
 import { RoomAPI } from '@api';
+import { RootState } from '@modules';
 import { LoginHomePresenter } from '@pages/LoginHome/LoginHomePresenter';
 import {
   addRooms,
@@ -25,7 +26,7 @@ import {
   updateRoomsError,
   updateRoomsLoading,
 } from '@rooms';
-import { RootState } from '@modules';
+import { Room } from '@room';
 
 // Create Room Context Interface
 export interface ICreateRoomFormContext {
@@ -37,6 +38,7 @@ export interface ICreateRoomFormContext {
   isValid: boolean;
   toggleModal: boolean;
   onToggleModal: () => void;
+  onRoomClick: (room: Room) => void;
 }
 
 // Create Room Form Input Interface
@@ -83,6 +85,7 @@ export const LoginHomeContainer: React.FC = () => {
     isValid,
     toggleModal,
     onToggleModal,
+    onRoomClick,
   };
 
   // Create Room Form 값들이 유효하면 방을 생성한다
@@ -105,6 +108,15 @@ export const LoginHomeContainer: React.FC = () => {
   // Create Form Modal Toggling
   function onToggleModal() {
     setToggleModal(!toggleModal);
+  }
+
+  // [Private] 방을 클릭할 때 실행하는 함수
+  function onRoomClick(room: Room) {
+    if (room.currentHeadCount === room.totalHeadCount) {
+      alert('방의 최대 입장 인원을 초과하였습니다');
+    } else {
+      history.push(`rooms/${room.id}`);
+    }
   }
 
   // 모든 방의 정보를 가져오기

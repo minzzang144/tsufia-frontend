@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import ReactLoading from 'react-loading';
-import { Link } from 'react-router-dom';
 
 export const Loader = styled(ReactLoading)`
   position: absolute;
@@ -17,7 +16,7 @@ export const Wrapper = styled.div`
   width: 70%;
 `;
 
-export const RoomContainer = styled(Link)`
+export const RoomContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,6 +25,7 @@ export const RoomContainer = styled(Link)`
   border-radius: 4px;
   width: 49%;
   height: 45%;
+  cursor: pointer;
 `;
 
 export const ErrorPart = styled.span`
