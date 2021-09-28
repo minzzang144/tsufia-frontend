@@ -27,7 +27,7 @@ export const ChatForm: React.FC = () => {
     if (room && room.game) {
       switch (room.game.cycle) {
         case Cycle.밤:
-          if (currentUser?.role === UserRole.Citizen) {
+          if (currentUser?.role === UserRole.Citizen && currentUser.survive === true) {
             return true;
           }
           break;

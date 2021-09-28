@@ -44,21 +44,27 @@ export const ChatList: React.FC = () => {
       case null:
         return chats;
       case Cycle.밤:
-        if (currentUser?.role !== UserRole.Mafia) {
-          Chats = chats?.filter((chat) => chat.user.role !== UserRole.Mafia);
+        if (currentUser?.role === UserRole.Mafia) {
+          Chats = chats?.filter(
+            (chat) => chat.user.role === UserRole.Mafia || chat.user.survive === false,
+          );
         } else {
-          Chats = chats;
+          if (currentUser?.survive === true) {
+            Chats = [];
+          }
+          if (currentUser?.survive === false) {
+            Chats = chats?.filter(
+              (chat) => chat.user.role === UserRole.Mafia || chat.user.survive === false,
+            );
+          }
         }
         return Chats;
       case Cycle.낮:
       case Cycle.저녁:
-        if (currentUser?.role !== UserRole.Mafia) {
-          Chats = chats?.filter((chat) => chat.user.role !== UserRole.Mafia);
-        } else {
-          Chats = chats;
-        }
         if (currentUser?.survive === true) {
-          Chats = Chats?.filter((chat) => chat.user.survive === true);
+          Chats = chats?.filter((chat) => chat.user.survive === true && chat.cycle !== Cycle.밤);
+        } else {
+          Chats = chats?.filter((chat) => chat.user.survive === false);
         }
         return Chats;
       default:
@@ -66,13 +72,19 @@ export const ChatList: React.FC = () => {
     }
   }, [chats, room?.game?.cycle, currentUser]);
 
-  const setBorder = useCallback((user: User): BorderProp | undefined => {
-    if (!user.survive)
-      return { 'line-width': '1px', 'line-style': 'solid', color: 'rgba(255, 255, 255, 0.3)' };
-    switch (user.role) {
-      case UserRole.Mafia:
-        return { 'line-width': '1px', 'line-style': 'solid', color: 'red' };
-      case UserRole.Citizen:
+  const setBorder = useCallback((chat: Chat): BorderProp | undefined => {
+    switch (chat.cycle) {
+      case null:
+      case Cycle.밤:
+        if (chat.user.role === UserRole.Mafia)
+          return { 'line-width': '1px', 'line-style': 'solid', color: 'red' };
+        if (chat.user.survive === false)
+          return { 'line-width': '1px', 'line-style': 'solid', color: 'rgba(255, 255, 255, 0.3)' };
+        return { 'line-width': '1px', 'line-style': 'solid', color: 'white' };
+      case Cycle.낮:
+      case Cycle.저녁:
+        if (chat.user.survive === false)
+          return { 'line-width': '1px', 'line-style': 'solid', color: 'rgba(255, 255, 255, 0.3)' };
         return { 'line-width': '1px', 'line-style': 'solid', color: 'white' };
       default:
         break;
@@ -92,7 +104,7 @@ export const ChatList: React.FC = () => {
               maxWidthprop="50%"
               marginprop={['0', '0', '1rem', '0']}
               paddingProp={['1rem']}
-              borderprop={setBorder(chat.user)}
+              borderprop={setBorder(chat)}
               borderRadiusprop="4px"
             >
               {chat.user.photo && (

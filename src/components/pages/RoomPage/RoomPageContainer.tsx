@@ -410,7 +410,7 @@ export const RoomPageContainer: React.FC = () => {
       const values = chatGetValues();
       const response = await ChatAPI.createChats(values);
       const { ok, error, chat } = response;
-      if (ok === false && error) dispatch(updateRoomError(error));
+      if (ok === false && error) dispatch(updateChatsError(error));
       if (ok === true && chat) {
         socket.emit('chats:create:server', { roomId: params.id, data: chat });
       }
