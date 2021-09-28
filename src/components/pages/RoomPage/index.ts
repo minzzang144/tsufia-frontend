@@ -60,4 +60,5 @@ export interface IRoomPageContext {
   closeGameResult: boolean;
   fixedRoom: Room | undefined;
   chatListRef: React.RefObject<HTMLDivElement>;
+  audioRef: React.RefObject<HTMLAudioElement>;
 }

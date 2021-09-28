@@ -91,6 +91,7 @@ export const RoomPageContainer: React.FC = () => {
   const [fixedRoom, setFixedRoom] = useState<Room>();
   const [closeGameResult, setCloseGameResult] = useState<boolean>(false);
   const chatListRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const {
     register,
     handleSubmit,
@@ -460,6 +461,33 @@ export const RoomPageContainer: React.FC = () => {
     setCloseGameResult(true);
   }
 
+  // [Game] 오디오 컨트롤 함수
+  function onAudioControl() {
+    if (room?.game && audioRef.current) {
+      switch (room.game.cycle) {
+        case null:
+          break;
+        case Cycle.밤:
+          audioRef.current.pause();
+          audioRef.current.load();
+          audioRef.current.play();
+          break;
+        case Cycle.낮:
+          audioRef.current.pause();
+          audioRef.current.load();
+          audioRef.current.play();
+          break;
+        case Cycle.저녁:
+          audioRef.current.pause();
+          audioRef.current.load();
+          audioRef.current.play();
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
   const roomPageValue = {
     selfUserInRoom,
     onLeaveRoomListClick,
@@ -473,6 +501,7 @@ export const RoomPageContainer: React.FC = () => {
     onCloseGameResult,
     closeGameResult,
     chatListRef,
+    audioRef,
   };
 
   const updateRoomFormValue = {
@@ -606,6 +635,11 @@ export const RoomPageContainer: React.FC = () => {
       chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
     }
   }, [chats, room?.game?.cycle, chatListRef.current]);
+
+  // [Private] 게임 오디오 설정
+  useEffect(() => {
+    onAudioControl();
+  }, [room?.game?.cycle]);
 
   // [Private] 게임이 종료되면 결과를 보여준다
   useEffect(() => {

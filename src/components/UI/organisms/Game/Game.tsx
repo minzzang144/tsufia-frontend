@@ -6,19 +6,24 @@ import { ToastContainer } from 'react-toast';
 import * as I from '.';
 import * as S from '@organisms/Game/style';
 
+import NightAudio from '@assets/night-audio.mp3';
+import AfternoonAudio from '@assets/afternoon-audio.mp3';
+import EveningAudio from '@assets/evening-audio.mp3';
 import { Span } from '@atoms/Span/Span';
+import { Audio } from '@atoms/Audio/Audio';
 import { ChatForm } from '@molecules/ChatForm/ChatForm';
 import { ChatList } from '@molecules/ChatList/ChatList';
 import { FormModal } from '@molecules/FormModal/FormModal';
-import { UserList } from '@molecules/UserList/UserList';
+import { GameResult } from '@molecules/GameResult/GameResult';
 import { Notification } from '@molecules/Notification/Notification';
+import { UserList } from '@molecules/UserList/UserList';
 import { RootState } from '@modules';
 import { useRoomPageContext, useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
 import { Status } from '@room';
-import { GameResult } from '@molecules/GameResult/GameResult';
+import { Cycle } from '@game';
 
 export const Game: React.FC<I.GameProps> = ({ children, ...rest }) => {
-  const { chatListRef } = useRoomPageContext();
+  const { chatListRef, audioRef } = useRoomPageContext();
   const updateRoomFormContext = useUpdateRoomFormContext();
   const { roomLoading, roomError, room } = useSelector(
     (state: RootState) => ({
@@ -28,6 +33,23 @@ export const Game: React.FC<I.GameProps> = ({ children, ...rest }) => {
     }),
     shallowEqual,
   );
+
+  const setAudioSource = React.useCallback((): string | undefined => {
+    if (room?.game) {
+      switch (room.game.cycle) {
+        case null:
+          break;
+        case Cycle.밤:
+          return NightAudio;
+        case Cycle.낮:
+          return AfternoonAudio;
+        case Cycle.저녁:
+          return EveningAudio;
+        default:
+          break;
+      }
+    }
+  }, [room?.game?.cycle]);
 
   return (
     <React.Fragment>
@@ -43,6 +65,7 @@ export const Game: React.FC<I.GameProps> = ({ children, ...rest }) => {
           <ChatList ref={chatListRef} />
           <UserList />
           <ChatForm />
+          <Audio ref={audioRef} src={setAudioSource()} />
         </S.Wrapper>
       ) : (
         <Span displayProp="inline-block" levelProp={3}>
