@@ -13,11 +13,12 @@ import { FormModal } from '@molecules/FormModal/FormModal';
 import { UserList } from '@molecules/UserList/UserList';
 import { Notification } from '@molecules/Notification/Notification';
 import { RootState } from '@modules';
-import { useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
+import { useRoomPageContext, useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
 import { Status } from '@room';
 import { GameResult } from '@molecules/GameResult/GameResult';
 
 export const Game: React.FC<I.GameProps> = ({ children, ...rest }) => {
+  const { chatListRef } = useRoomPageContext();
   const updateRoomFormContext = useUpdateRoomFormContext();
   const { roomLoading, roomError, room } = useSelector(
     (state: RootState) => ({
@@ -39,7 +40,7 @@ export const Game: React.FC<I.GameProps> = ({ children, ...rest }) => {
           />
           <ToastContainer delay={1500} position="top-center" />
           {room.status !== Status.완료 ? <Notification /> : <GameResult />}
-          <ChatList />
+          <ChatList ref={chatListRef} />
           <UserList />
           <ChatForm />
         </S.Wrapper>

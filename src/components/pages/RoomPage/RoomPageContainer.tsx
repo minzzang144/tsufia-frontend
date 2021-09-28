@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import moment from 'moment';
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Prompt, useHistory, useParams } from 'react-router-dom';
@@ -90,6 +90,7 @@ export const RoomPageContainer: React.FC = () => {
   const [citizenCount, setCitizenCount] = useState<number>(0);
   const [fixedRoom, setFixedRoom] = useState<Room>();
   const [closeGameResult, setCloseGameResult] = useState<boolean>(false);
+  const chatListRef = useRef<HTMLDivElement>(null);
   const {
     register,
     handleSubmit,
@@ -106,12 +107,13 @@ export const RoomPageContainer: React.FC = () => {
     formState: { errors: chatErrors, isValid: chatIsValid },
     reset: chatReset,
   } = useForm<I.ChatFormInput>({ mode: 'all', resolver: yupResolver(chatFormSchema) });
-  const { user, room } = useSelector(
+  const { user, room, chats } = useSelector(
     (state: RootState) => ({
       user: state.authentication.user,
       loading: state.room.loading,
       error: state.room.error,
       room: state.room.data,
+      chats: state.chats.data,
     }),
     shallowEqual,
   );
@@ -359,6 +361,15 @@ export const RoomPageContainer: React.FC = () => {
     dispatch(updateRoom(data));
   }
 
+  // [Private] 채팅 리스트 스크롤을 최산화 하는 함수
+  function handleLoad() {
+    setTimeout(() => {
+      if (chatListRef.current) {
+        chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
+      }
+    }, 0);
+  }
+
   // [RoomPagePresenter & GameResult] 게임 결과를 적용하기 위한 함수
   const getGameResult = useCallback(() => {
     if (room && room.status === Status.완료) {
@@ -461,6 +472,7 @@ export const RoomPageContainer: React.FC = () => {
     fixedRoom,
     onCloseGameResult,
     closeGameResult,
+    chatListRef,
   };
 
   const updateRoomFormValue = {
@@ -504,7 +516,6 @@ export const RoomPageContainer: React.FC = () => {
     // 모든 유저에게 해당
     const increment = localStorage.getItem('increment');
     const cycle = localStorage.getItem('cycle');
-    console.log(increment);
     if (room && reciveCountDown === 0 && room.status !== Status.완료) {
       if (room.game.cycle === null && increment === '-1') {
         localStorage.setItem('increment', '0');
@@ -590,6 +601,12 @@ export const RoomPageContainer: React.FC = () => {
     getSelfUserInRoom();
   }, [room?.userList]);
 
+  useEffect(() => {
+    if (chatListRef.current) {
+      chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
+    }
+  }, [chats, room?.game?.cycle, chatListRef.current]);
+
   // [Private] 게임이 종료되면 결과를 보여준다
   useEffect(() => {
     getGameResult();
@@ -599,6 +616,7 @@ export const RoomPageContainer: React.FC = () => {
   useEffect(() => {
     socket.emit('rooms:join-room:server', params.id);
     socket.emit('reconnect', true);
+    window.addEventListener('load', handleLoad);
     return () => {
       localStorage.setItem('increment', '-1');
       localStorage.setItem('cycle', '1');

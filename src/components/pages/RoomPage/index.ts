@@ -59,4 +59,5 @@ export interface IRoomPageContext {
   onCloseGameResult: () => void;
   closeGameResult: boolean;
   fixedRoom: Room | undefined;
+  chatListRef: React.RefObject<HTMLDivElement>;
 }
