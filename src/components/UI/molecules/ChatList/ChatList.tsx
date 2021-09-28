@@ -48,7 +48,9 @@ export const ChatList = React.forwardRef<HTMLDivElement, React.PropsWithChildren
         case Cycle.밤:
           if (currentUser?.role === UserRole.Mafia) {
             Chats = chats?.filter(
-              (chat) => chat.user.role === UserRole.Mafia || chat.user.survive === false,
+              (chat) =>
+                chat.cycle === Cycle.밤 &&
+                (chat.user.role === UserRole.Mafia || chat.user.survive === false),
             );
           } else {
             if (currentUser?.survive === true) {
@@ -56,7 +58,9 @@ export const ChatList = React.forwardRef<HTMLDivElement, React.PropsWithChildren
             }
             if (currentUser?.survive === false) {
               Chats = chats?.filter(
-                (chat) => chat.user.role === UserRole.Mafia || chat.user.survive === false,
+                (chat) =>
+                  chat.cycle === Cycle.밤 &&
+                  (chat.user.role === UserRole.Mafia || chat.user.survive === false),
               );
             }
           }
@@ -64,9 +68,12 @@ export const ChatList = React.forwardRef<HTMLDivElement, React.PropsWithChildren
         case Cycle.낮:
         case Cycle.저녁:
           if (currentUser?.survive === true) {
-            Chats = chats?.filter((chat) => chat.user.survive === true && chat.cycle !== Cycle.밤);
+            Chats = chats?.filter(
+              (chat) =>
+                chat.user.survive === true && chat.cycle !== Cycle.밤 && chat.cycle !== null,
+            );
           } else {
-            Chats = chats?.filter((chat) => chat.user.survive === false);
+            Chats = chats?.filter((chat) => chat.cycle !== Cycle.밤 && chat.cycle !== null);
           }
           return Chats;
         default:
