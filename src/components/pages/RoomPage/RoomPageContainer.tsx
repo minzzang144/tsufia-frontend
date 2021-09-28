@@ -90,6 +90,7 @@ export const RoomPageContainer: React.FC = () => {
   const [citizenCount, setCitizenCount] = useState<number>(0);
   const [fixedRoom, setFixedRoom] = useState<Room>();
   const [closeGameResult, setCloseGameResult] = useState<boolean>(false);
+  const [muted, setMuted] = useState<boolean>(false);
   const chatListRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const {
@@ -309,6 +310,7 @@ export const RoomPageContainer: React.FC = () => {
   // [Private] 방에서 퇴장한 유저를 Broadcast하는 콜백 함수
   function leaveRoomBroadcastCb(data: User) {
     setleaveUser(data);
+    setMuted(true);
   }
 
   // [Private] 방의 마지막 멤버가 방에서 퇴장했을 때 방을 삭제하는 콜백 함수
@@ -360,6 +362,33 @@ export const RoomPageContainer: React.FC = () => {
   // [Private] 저녁 사이클이 끝나면 투표 결과를 반영하는 콜백 함수
   function patchGameVoteCallback(data: Room) {
     dispatch(updateRoom(data));
+  }
+
+  // [Private] 오디오 컨트롤 함수
+  function onAudioControl() {
+    if (room?.game && audioRef.current) {
+      switch (room.game.cycle) {
+        case null:
+          break;
+        case Cycle.밤:
+          audioRef.current.pause();
+          audioRef.current.load();
+          audioRef.current.play();
+          break;
+        case Cycle.낮:
+          audioRef.current.pause();
+          audioRef.current.load();
+          audioRef.current.play();
+          break;
+        case Cycle.저녁:
+          audioRef.current.pause();
+          audioRef.current.load();
+          audioRef.current.play();
+          break;
+        default:
+          break;
+      }
+    }
   }
 
   // [Private] 채팅 리스트 스크롤을 최산화 하는 함수
@@ -456,36 +485,14 @@ export const RoomPageContainer: React.FC = () => {
     }
   }
 
+  // [Game] 오디오 버튼을 클릭할 시 발생하는 함수
+  function onAudioBtnClick() {
+    setMuted(!muted);
+  }
+
   // [GameResult] 유저가 게임 결과 닫기를 클릭했을 때 실행되는 함수
   function onCloseGameResult() {
     setCloseGameResult(true);
-  }
-
-  // [Game] 오디오 컨트롤 함수
-  function onAudioControl() {
-    if (room?.game && audioRef.current) {
-      switch (room.game.cycle) {
-        case null:
-          break;
-        case Cycle.밤:
-          audioRef.current.pause();
-          audioRef.current.load();
-          audioRef.current.play();
-          break;
-        case Cycle.낮:
-          audioRef.current.pause();
-          audioRef.current.load();
-          audioRef.current.play();
-          break;
-        case Cycle.저녁:
-          audioRef.current.pause();
-          audioRef.current.load();
-          audioRef.current.play();
-          break;
-        default:
-          break;
-      }
-    }
   }
 
   const roomPageValue = {
@@ -502,6 +509,8 @@ export const RoomPageContainer: React.FC = () => {
     closeGameResult,
     chatListRef,
     audioRef,
+    onAudioBtnClick,
+    muted,
   };
 
   const updateRoomFormValue = {
@@ -640,6 +649,10 @@ export const RoomPageContainer: React.FC = () => {
   useEffect(() => {
     onAudioControl();
   }, [room?.game?.cycle]);
+
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.muted = muted;
+  }, [audioRef.current, muted]);
 
   // [Private] 게임이 종료되면 결과를 보여준다
   useEffect(() => {

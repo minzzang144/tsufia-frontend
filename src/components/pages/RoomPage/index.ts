@@ -61,4 +61,6 @@ export interface IRoomPageContext {
   fixedRoom: Room | undefined;
   chatListRef: React.RefObject<HTMLDivElement>;
   audioRef: React.RefObject<HTMLAudioElement>;
+  onAudioBtnClick: () => void;
+  muted: boolean;
 }

@@ -9,8 +9,10 @@ import * as S from '@organisms/Game/style';
 import NightAudio from '@assets/night-audio.mp3';
 import AfternoonAudio from '@assets/afternoon-audio.mp3';
 import EveningAudio from '@assets/evening-audio.mp3';
-import { Span } from '@atoms/Span/Span';
 import { Audio } from '@atoms/Audio/Audio';
+import { Button } from '@atoms/Button/Button';
+import { Span } from '@atoms/Span/Span';
+import { Cycle } from '@game';
 import { ChatForm } from '@molecules/ChatForm/ChatForm';
 import { ChatList } from '@molecules/ChatList/ChatList';
 import { FormModal } from '@molecules/FormModal/FormModal';
@@ -20,10 +22,9 @@ import { UserList } from '@molecules/UserList/UserList';
 import { RootState } from '@modules';
 import { useRoomPageContext, useUpdateRoomFormContext } from '@pages/RoomPage/RoomPageContainer';
 import { Status } from '@room';
-import { Cycle } from '@game';
 
 export const Game: React.FC<I.GameProps> = ({ children, ...rest }) => {
-  const { chatListRef, audioRef } = useRoomPageContext();
+  const { chatListRef, audioRef, onAudioBtnClick, muted } = useRoomPageContext();
   const updateRoomFormContext = useUpdateRoomFormContext();
   const { roomLoading, roomError, room } = useSelector(
     (state: RootState) => ({
@@ -66,6 +67,8 @@ export const Game: React.FC<I.GameProps> = ({ children, ...rest }) => {
           <UserList />
           <ChatForm />
           <Audio ref={audioRef} src={setAudioSource()} />
+          {room?.game && muted && <S.VolumeOffOutline onClick={() => onAudioBtnClick()} />}
+          {room?.game && !muted && <S.VolumeUpOutline onClick={() => onAudioBtnClick()} />}
         </S.Wrapper>
       ) : (
         <Span displayProp="inline-block" levelProp={3}>
