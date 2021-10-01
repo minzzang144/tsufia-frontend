@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
@@ -15,6 +15,18 @@ import { getUser, updateError, updateLoading, updateToken } from '@auth/actions'
 import { RootState } from '@modules';
 import { LoginRouter } from '@routers/LoginRouter';
 import { LogoutRouter } from '@routers/LogoutRouter';
+
+interface ILogoutContext {
+  onLogout: () => Promise<void>;
+}
+
+const LoginContext = createContext<ILogoutContext | undefined>(undefined);
+
+export const useLoginContext = () => {
+  const context = useContext(LoginContext);
+  if (!context) throw new Error('Login Context가 존재하지 않습니다');
+  return context;
+};
 
 function App() {
   const [toggle, setToggle] = useState<boolean>(false);
@@ -140,7 +152,9 @@ function App() {
   return (
     <React.Fragment>
       {accessToken ? (
-        <LoginRouter />
+        <LoginContext.Provider value={logoutValue}>
+          <LoginRouter />
+        </LoginContext.Provider>
       ) : (
         <LogoutRouter
           onLogin={onLogin}
