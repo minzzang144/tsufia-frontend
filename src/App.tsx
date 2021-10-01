@@ -67,6 +67,21 @@ function App() {
     }
   }
 
+  /* Logout 진행 시 실행되는 함수 */
+  async function onLogout() {
+    try {
+      const response = await AuthAPI.logout();
+      const { ok, error } = response;
+      if (!ok && error) alert(error);
+      if (ok) {
+        alert('로그아웃 하였습니다');
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   /* Google Login 진행 시 실행되는 함수 */
   async function onGoogleLogin(body: GoogleLoginRequest) {
     try {
@@ -143,6 +158,10 @@ function App() {
       console.log(error);
     }
   }
+
+  const logoutValue = {
+    onLogout,
+  };
 
   /* 새로고침 또는 사이트 재접속 후 실행되는 함수 */
   useEffect(() => {

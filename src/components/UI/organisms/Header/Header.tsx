@@ -4,6 +4,7 @@ import React from 'react';
 import * as I from '.';
 import * as S from '@organisms/Header/style';
 
+import { useLoginContext } from '@/App';
 import SiteLogo from '@assets/site-logo.png';
 import { List } from '@atoms/List/List';
 import { Img } from '@atoms/Img/Img';
@@ -18,6 +19,13 @@ export const Header: React.FC<I.HeaderProps> = ({
   onToggleModal,
   ...rest
 }) => {
+  const loginContext: I.ILogoutContext = {
+    onLogout: undefined,
+  };
+  if (isLoggedIn) {
+    const { onLogout } = useLoginContext();
+    loginContext.onLogout = onLogout;
+  }
   const roomPageContext: I.IRoomPageContext = {
     selfUserInRoom: undefined,
     onLeaveRoomListClick: undefined,
@@ -61,7 +69,11 @@ export const Header: React.FC<I.HeaderProps> = ({
                   <List colorProp="black" paddingProp={['2rem', '1.5rem']}>
                     프로필
                   </List>
-                  <List colorProp="black" paddingProp={['2rem', '1.5rem']}>
+                  <List
+                    onClick={() => loginContext.onLogout && loginContext.onLogout()}
+                    colorProp="black"
+                    paddingProp={['2rem', '1.5rem']}
+                  >
                     로그아웃
                   </List>
                 </>

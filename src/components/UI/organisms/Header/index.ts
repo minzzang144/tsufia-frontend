@@ -11,6 +11,10 @@ export interface HeaderProps {
   colorProp?: ColorProp;
 }
 
+export interface ILogoutContext {
+  onLogout?: () => Promise<void>;
+}
+
 export interface IRoomPageContext {
   selfUserInRoom?: User;
   onLeaveRoomListClick?: () => void;
