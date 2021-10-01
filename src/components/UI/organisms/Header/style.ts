@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 import * as I from '.';
@@ -37,6 +38,6 @@ export const SpaceBetween = styled.div`
   background-color: ${({ theme }) => theme.color.dark};
 `;
 
-export const Logo = styled.div`
+export const Logo = styled(Link)`
   display: flex;
 `;

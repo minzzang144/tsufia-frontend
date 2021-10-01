@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 import * as I from '.';
@@ -263,4 +264,8 @@ export const Wrapper = styled.li`
 
   /* Cursor Styles */
   ${cursorStyles}
+`;
+
+export const Linked = styled(Link)`
+  color: ${({ theme }) => theme.color.light};
 `;

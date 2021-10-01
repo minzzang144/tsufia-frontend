@@ -54,7 +54,7 @@ export const Header: React.FC<I.HeaderProps> = ({
         )}
         {isLoggedIn === true && (
           <S.SpaceBetween>
-            <S.Logo>
+            <S.Logo to="/">
               <Img src={SiteLogo} width="50px" height="50px" />
               <Heading levelProp={2} marginProp={['0', '0', '0', '1rem']}>
                 Tsufia
@@ -66,7 +66,7 @@ export const Header: React.FC<I.HeaderProps> = ({
                   <List onClick={onToggleModal} colorProp="black" paddingProp={['2rem', '1.5rem']}>
                     방 반들기
                   </List>
-                  <List colorProp="black" paddingProp={['2rem', '1.5rem']}>
+                  <List to="/profile" colorProp="black" paddingProp={['2rem', '1.5rem']}>
                     프로필
                   </List>
                   <List
