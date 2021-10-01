@@ -311,6 +311,8 @@ export const RoomPageContainer: React.FC = () => {
   function leaveRoomBroadcastCb(data: User) {
     setleaveUser(data);
     setMuted(true);
+    localStorage.setItem('increment', '-1');
+    localStorage.setItem('cycle', '1');
   }
 
   // [Private] 방의 마지막 멤버가 방에서 퇴장했을 때 방을 삭제하는 콜백 함수
