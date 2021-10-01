@@ -367,25 +367,22 @@ export const RoomPageContainer: React.FC = () => {
   }
 
   // [Private] 오디오 컨트롤 함수
-  function onAudioControl() {
+  async function onAudioControl() {
     if (room?.game && audioRef.current) {
       switch (room.game.cycle) {
         case null:
           break;
         case Cycle.밤:
-          audioRef.current.pause();
           audioRef.current.load();
-          audioRef.current.play();
+          await audioRef.current.play();
           break;
         case Cycle.낮:
-          audioRef.current.pause();
           audioRef.current.load();
-          audioRef.current.play();
+          await audioRef.current.play();
           break;
         case Cycle.저녁:
-          audioRef.current.pause();
           audioRef.current.load();
-          audioRef.current.play();
+          await audioRef.current.play();
           break;
         default:
           break;
