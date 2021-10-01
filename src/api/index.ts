@@ -22,6 +22,7 @@ import {
   LeaveRoomRequest,
   LeaveRoomResponse,
   LoginResponse,
+  LogoutResponse,
   PatchGameRequest,
   PatchGameResponse,
   PatchSurviveRequest,
@@ -71,6 +72,7 @@ const requests = {
 
 export const AuthAPI = {
   login: (body: LoginFormInput): Promise<LoginResponse> => requests.post('auth/login', body),
+  logout: (): Promise<LogoutResponse> => requests.post('auth/logout'),
   silentRefresh: (): Promise<SilentRefreshResponse> => requests.post('auth/silent-refresh'),
   signUp: (body: SignUpFormInput): Promise<SignUpResponse> => requests.post('users/sign-up', body),
   googleLogin: (body: GoogleLoginRequest): Promise<GoogleLoginResponse> =>

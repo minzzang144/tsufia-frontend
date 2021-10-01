@@ -17,6 +17,9 @@ export interface LoginResponse extends CommonResponse {
   accessToken?: string;
 }
 
+// Logout
+export interface LogoutResponse extends CommonResponse {}
+
 // Silent Refresh
 export interface SilentRefreshResponse extends CommonResponse {
   accessToken?: string;
