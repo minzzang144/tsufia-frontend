@@ -554,10 +554,10 @@ export const RoomPageContainer: React.FC = () => {
     const increment = localStorage.getItem('increment');
     const cycle = localStorage.getItem('cycle');
     if (room && reciveCountDown === 0 && room.status !== Status.완료) {
-      if (room.game.cycle === null && increment === '-1') {
+      if (room.game?.cycle === null && increment === '-1') {
         localStorage.setItem('increment', '0');
       }
-      if (room.game.cycle === Cycle.밤 && increment === '0') {
+      if (room.game?.cycle === Cycle.밤 && increment === '0') {
         localStorage.setItem('increment', '1');
         if (cycle === '0') {
           // 투표가 시작되기 전, 게임을 계속 진행하기 위해 상태 리셋
@@ -566,13 +566,13 @@ export const RoomPageContainer: React.FC = () => {
           setVotedUserList([]);
         }
       }
-      if (room.game.cycle === Cycle.낮 && increment === '1') {
+      if (room.game?.cycle === Cycle.낮 && increment === '1') {
         localStorage.setItem('increment', '2');
       }
-      if (room.game.cycle === Cycle.저녁 && increment === '2') {
+      if (room.game?.cycle === Cycle.저녁 && increment === '2') {
         localStorage.setItem('increment', '3');
       }
-      if (room.game.cycle === Cycle.저녁 && increment === '3') {
+      if (room.game?.cycle === Cycle.저녁 && increment === '3') {
         // 밤 사이클로 돌아가 게임을 계속 진행하기 위해 상태 리셋
         localStorage.setItem('increment', '0');
         localStorage.setItem('cycle', '0');
@@ -586,31 +586,31 @@ export const RoomPageContainer: React.FC = () => {
       reciveCountDown === 0 &&
       room.status !== Status.완료
     ) {
-      if (room.game.cycle === null && increment === '-1') {
+      if (room.game?.cycle === null && increment === '-1') {
         socket.emit('games:patch:game/1:server', {
           gameId: room.game.id,
           roomId: room.id,
         });
       }
-      if (room.game.cycle === Cycle.밤 && increment === '0' && cycle === '1') {
+      if (room.game?.cycle === Cycle.밤 && increment === '0' && cycle === '1') {
         socket.emit('games:patch:user-role/1:server', room.id);
       }
-      if (room.game.cycle === Cycle.밤 && increment === '1') {
+      if (room.game?.cycle === Cycle.밤 && increment === '1') {
         socket.emit('games:patch:game/1:server', {
           gameId: room.game.id,
           roomId: room.id,
         });
       }
-      if (room.game.cycle === Cycle.낮 && increment === '1') {
+      if (room.game?.cycle === Cycle.낮 && increment === '1') {
         socket.emit('games:patch:survive/1:server', { roomId: room.id, selectId: selectCitizenId });
       }
-      if (room.game.cycle === Cycle.낮 && increment === '2') {
+      if (room.game?.cycle === Cycle.낮 && increment === '2') {
         socket.emit('games:patch:game/1:server', {
           gameId: room.game.id,
           roomId: room.id,
         });
       }
-      if (room.game.cycle === Cycle.저녁 && increment === '3') {
+      if (room.game?.cycle === Cycle.저녁 && increment === '3') {
         socket.emit('games:patch:game/1:server', {
           gameId: room.game.id,
           roomId: room.id,
