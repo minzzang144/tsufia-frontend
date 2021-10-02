@@ -10,7 +10,6 @@ import NightAudio from '@assets/night-audio.mp3';
 import AfternoonAudio from '@assets/afternoon-audio.mp3';
 import EveningAudio from '@assets/evening-audio.mp3';
 import { Audio } from '@atoms/Audio/Audio';
-import { Button } from '@atoms/Button/Button';
 import { Span } from '@atoms/Span/Span';
 import { Cycle } from '@game';
 import { ChatForm } from '@molecules/ChatForm/ChatForm';
@@ -57,7 +56,7 @@ export const Game: React.FC<I.GameProps> = ({ children, ...rest }) => {
       {roomLoading === false && room ? (
         <S.Wrapper {...rest}>
           <FormModal
-            roomFormContext={updateRoomFormContext}
+            formContext={updateRoomFormContext}
             title="방 수정하기"
             defaultValue={{ input: room.title, radio: String(room.totalHeadCount) }}
           />

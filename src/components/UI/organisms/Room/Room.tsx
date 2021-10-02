@@ -8,7 +8,7 @@ import { Span } from '@atoms/Span/Span';
 import { UnorderedList } from '@atoms/UnorderedList/UnorderedList';
 import { FormModal } from '@molecules/FormModal/FormModal';
 import { RootState } from '@modules';
-import { useCreateRoomFormContext } from '@/App';
+import { useCreateRoomFormContext } from '@routers/LoginRouter';
 
 export const Room: React.FC = () => {
   const createRoomFormContext = useCreateRoomFormContext();
@@ -25,7 +25,7 @@ export const Room: React.FC = () => {
   return (
     <S.Wrapper>
       <FormModal
-        roomFormContext={createRoomFormContext}
+        formContext={createRoomFormContext}
         title="방 만들기"
         defaultValue={{ input: '', radio: '' }}
       />

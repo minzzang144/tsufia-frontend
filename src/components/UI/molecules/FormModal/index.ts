@@ -1,5 +1,5 @@
-import { ICreateRoomFormContext } from '@/App';
 import { IUpdateRoomFormContext } from '@pages/RoomPage/index';
+import { ICreateRoomFormContext } from '@routers/LoginRouter';
 
 type DefaultValue = {
   input: string;
@@ -7,7 +7,7 @@ type DefaultValue = {
 };
 
 export interface FormModalProps {
-  roomFormContext: ICreateRoomFormContext | IUpdateRoomFormContext;
+  formContext: ICreateRoomFormContext | IUpdateRoomFormContext;
   title: string;
   defaultValue: DefaultValue;
 }

@@ -4,13 +4,13 @@ import React from 'react';
 import * as I from '.';
 import * as S from '@organisms/Header/style';
 
-import { useLoginContext } from '@/App';
 import SiteLogo from '@assets/site-logo.png';
 import { List } from '@atoms/List/List';
 import { Img } from '@atoms/Img/Img';
 import { Heading } from '@atoms/Heading/Heading';
 import { UnorderedList } from '@atoms/UnorderedList/UnorderedList';
 import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
+import { useLoginContext } from '@routers/LoginRouter';
 
 export const Header: React.FC<I.HeaderProps> = ({
   children,

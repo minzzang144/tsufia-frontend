@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { useLoginContext } from '@/App';
 import { Header } from '@organisms/Header/Header';
 import { Profile } from '@organisms/Profile/Profile';
 import { Centralization } from '@templates/Centralization/Centralization';
+import { useCreateRoomFormContext } from '@routers/LoginRouter';
 
 export const ProfilePagePresenter: React.FC = () => {
-  const { onToggleModal } = useLoginContext();
+  const { onToggleModal } = useCreateRoomFormContext();
   return (
     <Centralization
       header={

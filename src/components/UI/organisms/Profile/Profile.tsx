@@ -1,13 +1,13 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { useCreateRoomFormContext } from '@/App';
 import { Provider } from '@auth';
 import { Table } from '@atoms/Table/Table';
 import { Tdata } from '@atoms/Tdata/Tdata';
 import { FormModal } from '@molecules/FormModal/FormModal';
 import { RootState } from '@modules';
 import * as S from '@organisms/Profile/style';
+import { useCreateRoomFormContext } from '@routers/LoginRouter';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const Profile: React.FC = ({ children, ...rest }) => {
@@ -38,7 +38,7 @@ export const Profile: React.FC = ({ children, ...rest }) => {
   return (
     <S.Wrapper {...rest}>
       <FormModal
-        roomFormContext={createRoomFormContext}
+        formContext={createRoomFormContext}
         title="방 만들기"
         defaultValue={{ input: '', radio: '' }}
       />
