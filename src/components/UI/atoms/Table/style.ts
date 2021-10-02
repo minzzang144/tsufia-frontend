@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import * as I from '.';
 
 type WidthPick = Pick<I.TableProps, 'widthprop'>;
-type MaxWidthPick = Pick<I.TableProps, 'maxWidthprop'>;
+type MaxWidthPick = Pick<I.TableProps, 'maxwidthprop'>;
 type ColorPick = Pick<I.TableProps, 'colorprop'>;
 
 const widthStyles = css<WidthPick>`
@@ -15,10 +15,10 @@ const widthStyles = css<WidthPick>`
 `;
 
 const maxWidthStyles = css<MaxWidthPick>`
-  ${({ maxWidthprop }) =>
-    maxWidthprop &&
+  ${({ maxwidthprop }) =>
+    maxwidthprop &&
     css`
-      width: ${maxWidthprop};
+      width: ${maxwidthprop};
     `}
 `;
 
@@ -44,6 +44,7 @@ const colorStyles = css<ColorPick>`
 `;
 
 export const Wrapper = styled.table`
+  table-layout: fixed;
   ${widthStyles}
   ${maxWidthStyles}
   ${colorStyles}

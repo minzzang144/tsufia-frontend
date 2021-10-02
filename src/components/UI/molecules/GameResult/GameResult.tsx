@@ -48,7 +48,7 @@ export const GameResult: React.FC = () => {
         <Heading levelProp={2} marginProp={['10%', '0']}>
           {setHeading()}
         </Heading>
-        <Table widthprop="100%" maxWidthprop="70%" colorprop="white">
+        <Table widthprop="100%" maxwidthprop="70%" colorprop="white">
           <thead>
             <tr>
               <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">

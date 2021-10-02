@@ -4,7 +4,7 @@ import * as Auth from '@auth/actions';
 
 export type AuthAction = ActionType<typeof Auth>;
 
-enum Provider {
+export enum Provider {
   Local,
   Google,
   Kakao,

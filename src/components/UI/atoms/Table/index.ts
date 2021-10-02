@@ -1,5 +1,5 @@
 export interface TableProps {
   widthprop?: string;
-  maxWidthprop?: string;
+  maxwidthprop?: string;
   colorprop?: 'white' | 'black' | 'red';
 }

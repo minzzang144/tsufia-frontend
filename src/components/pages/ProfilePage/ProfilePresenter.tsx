@@ -13,6 +13,7 @@ export const ProfilePagePresenter: React.FC = () => {
         <Header isLoggedIn={true} where="CREATE" onToggleModal={onToggleModal} colorProp="black" />
       }
       center={<Profile />}
+      isBackground={false}
     />
   );
 };

@@ -13,6 +13,7 @@ export const LoginHomePresenter: React.FC = () => {
         <Header isLoggedIn={true} where="CREATE" onToggleModal={onToggleModal} colorProp="black" />
       }
       center={<Room />}
+      isBackground={true}
     />
   );
 };

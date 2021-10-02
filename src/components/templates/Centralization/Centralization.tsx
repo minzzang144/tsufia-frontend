@@ -10,7 +10,7 @@ export const Centralization: React.FC<I.CentralizationProps> = ({
 }) => (
   <S.Wrapper>
     <S.Header>{header}</S.Header>
-    <S.Background isBackground={isBackground ?? true} />
+    <S.Background isBackground={isBackground} />
     <S.Center>{center}</S.Center>
   </S.Wrapper>
 );
@@ -18,5 +18,4 @@ export const Centralization: React.FC<I.CentralizationProps> = ({
 Centralization.defaultProps = {
   header: <div></div>,
   center: <div></div>,
-  isBackground: true,
 };
