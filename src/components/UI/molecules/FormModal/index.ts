@@ -1,4 +1,4 @@
-import { ICreateRoomFormContext } from '@pages/LoginHome/LoginHomeContainer';
+import { ICreateRoomFormContext } from '@/App';
 import { IUpdateRoomFormContext } from '@pages/RoomPage/index';
 
 type DefaultValue = {

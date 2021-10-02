@@ -6,6 +6,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 import * as I from '.';
 import * as S from '@molecules/FormModal/style';
 
+import { useLoginContext } from '@/App';
 import { Button } from '@atoms/Button/Button';
 import { Form } from '@atoms/Form/Form';
 import { Heading } from '@atoms/Heading/Heading';
@@ -14,8 +15,8 @@ import { Alert } from '@atoms/Alert/Alert';
 import { RootState } from '@modules';
 
 export const FormModal: React.FC<I.FormModalProps> = ({ roomFormContext, title, defaultValue }) => {
-  const { handleSubmit, control, onValid, errors, isValid, toggleModal, onToggleModal } =
-    roomFormContext;
+  const { toggleModal, onToggleModal } = useLoginContext();
+  const { handleSubmit, control, onValid, errors, isValid } = roomFormContext;
   const { loading, error } = useSelector(
     (state: RootState) => ({
       loading: state.rooms.loading,
