@@ -14,6 +14,7 @@ import * as yup from 'yup';
 import LoginHome from '@pages/LoginHome';
 import ProfilePage from '@pages/ProfilePage';
 import RoomPage from '@pages/RoomPage';
+import ValidatePage from '@pages/ValidatePage';
 import { AuthAPI, RoomAPI } from '@api';
 import { updateRoomsError } from '@rooms';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -162,6 +163,9 @@ export const LoginRouter: React.FC = () => {
           </Route>
           <Route path="/profile" exact>
             <ProfilePage />
+          </Route>
+          <Route path="/users/:id/validate-password" exact>
+            <ValidatePage />
           </Route>
           <Route path="/rooms/:id" exact>
             <RoomPage />
