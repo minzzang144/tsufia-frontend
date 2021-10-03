@@ -27,6 +27,8 @@ import {
   PatchGameResponse,
   PatchSurviveRequest,
   PatchSurviveResponse,
+  PostUserPasswordRequest,
+  PostUserPasswordResonse,
   RemoveRoomResponse,
   SignUpResponse,
   SilentRefreshResponse,
@@ -80,6 +82,8 @@ export const AuthAPI = {
   kakaoLogin: (body: KakaoLoginRequest): Promise<KakaoLoginResponse> =>
     requests.post('kakao', body),
   getUser: (): Promise<GetUserResponse> => requests.get('users/profile'),
+  postUserPassword: (body: PostUserPasswordRequest): Promise<PostUserPasswordResonse> =>
+    requests.post(`users/${body.userId}/validate-password`, { password: body.password }),
 };
 
 export const RoomAPI = {

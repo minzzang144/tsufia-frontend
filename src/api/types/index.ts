@@ -51,9 +51,18 @@ export interface KakaoLoginResponse extends CommonResponse {
   accessToken?: string;
 }
 
+// Get User Profile
 export interface GetUserResponse extends CommonResponse {
   user?: User;
 }
+
+// Validate Password
+export interface PostUserPasswordRequest {
+  userId: number;
+  password: string;
+}
+
+export interface PostUserPasswordResonse extends CommonResponse {}
 
 /**
  * Room API
