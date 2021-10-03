@@ -13,6 +13,7 @@ import * as yup from 'yup';
 
 import LoginHome from '@pages/LoginHome';
 import ProfilePage from '@pages/ProfilePage';
+import ProfileUpdatePage from '@pages/ProfileUpdatePage';
 import RoomPage from '@pages/RoomPage';
 import ValidatePage from '@pages/ValidatePage';
 import { AuthAPI, RoomAPI } from '@api';
@@ -166,6 +167,9 @@ export const LoginRouter: React.FC = () => {
           </Route>
           <Route path="/users/:id/validate-password" exact>
             <ValidatePage />
+          </Route>
+          <Route path="/users/:id/profile-update" exact>
+            <ProfileUpdatePage />
           </Route>
           <Route path="/rooms/:id" exact>
             <RoomPage />
