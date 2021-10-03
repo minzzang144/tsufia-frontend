@@ -1,10 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { createContext, useContext } from 'react';
+import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { useHistory, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 
 import * as I from '.';
 
+import { AuthAPI } from '@api';
+import { PostUserPasswordRequest } from '@api-types';
+import { updateError, updateLoading } from '@auth';
 import { ValidatePagePresenter } from '@pages/ValidatePage/ValidatePagePresenter';
 
 // Validate Context 생성
@@ -30,11 +35,36 @@ export const ValidatePageContainer: React.FC = () => {
     formState: { errors, isValid },
     reset,
   } = useForm<I.ValidateFormInput>({ mode: 'all', resolver: yupResolver(validatePasswordSchema) });
+  const history = useHistory();
+  const params = useParams<{ id: string }>();
+  const dispatch = useDispatch();
+
+  async function postUserPasswordProcess(body: PostUserPasswordRequest) {
+    try {
+      dispatch(updateLoading());
+      const response = await AuthAPI.postUserPassword(body);
+      const { ok, error } = response;
+      if (!ok && error) {
+        dispatch(updateError(error));
+        reset({ password: '' });
+      }
+      if (ok) {
+        history.push(`/users/${body.userId}/profile-update`);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      dispatch(updateLoading());
+    }
+  }
 
   function onValid() {
     const values = getValues();
-    console.log(values);
-    reset({ password: '' });
+    const postParams: PostUserPasswordRequest = {
+      ...values,
+      userId: +params.id,
+    };
+    postUserPasswordProcess(postParams);
   }
 
   const value = {

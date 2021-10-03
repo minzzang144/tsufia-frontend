@@ -1,6 +1,7 @@
 /* eslint-disable no-case-declarations */
 import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import * as I from '.';
 import * as S from '@organisms/FormContainer/style';
@@ -14,13 +15,15 @@ import { RootState } from '@modules';
 import { IValidateContext } from '@pages/ValidatePage';
 
 export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }) => {
-  const { loading, error } = useSelector(
+  const { loading, error, user } = useSelector(
     (state: RootState) => ({
       loading: state.authentication.loading,
       error: state.authentication.error,
+      user: state.authentication.user,
     }),
     shallowEqual,
   );
+  const params = useParams<{ id: string }>();
 
   function makeUpForm() {
     switch (where) {
@@ -59,5 +62,13 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
     }
   }
 
-  return <S.Wrapper>{makeUpForm()}</S.Wrapper>;
+  return (
+    <S.Wrapper>
+      {user?.id === Number(params.id) ? (
+        makeUpForm()
+      ) : (
+        <Alert severity="error">접근 권한이 없습니다</Alert>
+      )}
+    </S.Wrapper>
+  );
 };
