@@ -63,62 +63,66 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
         letContext = { ...(context as IProfileUpdateContext) };
         return (
           <>
-            <Form onSubmit={letContext.handleSubmit(letContext.onValid)}>
-              <Heading levelProp={2} marginProp={['0', '0', '3%']}>
-                Profile Update
-              </Heading>
-              <Input
-                name="firstName"
-                control={letContext.control}
-                defaultValue=""
-                type="text"
-                label="First Name"
-                variant="outlined"
-                errors={!!letContext.errors.firstName}
-                helperText={letContext.errors.firstName ? letContext.errors.firstName.message : ''}
-              />
-              <Input
-                name="lastName"
-                control={letContext.control}
-                defaultValue=""
-                type="text"
-                label="Last Name"
-                variant="outlined"
-                errors={!!letContext.errors.lastName}
-                helperText={letContext.errors.lastName ? letContext.errors.lastName.message : ''}
-              />
-              <Input
-                name="password"
-                control={letContext.control}
-                defaultValue=""
-                type="password"
-                label="Password"
-                variant="outlined"
-                errors={!!letContext.errors.password}
-                helperText={letContext.errors.password ? letContext.errors.password.message : ''}
-              />
-              <Input
-                name="checkPassword"
-                control={letContext.control}
-                defaultValue=""
-                type="password"
-                label="Check Password"
-                variant="outlined"
-                errors={!!letContext.errors.checkPassword}
-                helperText={
-                  letContext.errors.checkPassword ? letContext.errors.checkPassword.message : ''
-                }
-              />
-              <Button
-                isValid={letContext.isValid}
-                colorProp="black"
-                marginProp={['2%', '0', '0', '0']}
-                paddingProp={['1rem', '2rem']}
-              >
-                {letContext.isValid && loading === true ? 'Proceeding' : 'Continue'}
-              </Button>
-              {error && <Alert severity="error">{error}</Alert>}
-            </Form>
+            {user && (
+              <Form onSubmit={letContext.handleSubmit(letContext.onValid)}>
+                <Heading levelProp={2} marginProp={['0', '0', '3%']}>
+                  Profile Update
+                </Heading>
+                <Input
+                  name="firstName"
+                  control={letContext.control}
+                  defaultValue={user.firstName}
+                  type="text"
+                  label="First Name"
+                  variant="outlined"
+                  errors={!!letContext.errors.firstName}
+                  helperText={
+                    letContext.errors.firstName ? letContext.errors.firstName.message : ''
+                  }
+                />
+                <Input
+                  name="lastName"
+                  control={letContext.control}
+                  defaultValue={user.lastName}
+                  type="text"
+                  label="Last Name"
+                  variant="outlined"
+                  errors={!!letContext.errors.lastName}
+                  helperText={letContext.errors.lastName ? letContext.errors.lastName.message : ''}
+                />
+                <Input
+                  name="password"
+                  control={letContext.control}
+                  defaultValue=""
+                  type="password"
+                  label="Password"
+                  variant="outlined"
+                  errors={!!letContext.errors.password}
+                  helperText={letContext.errors.password ? letContext.errors.password.message : ''}
+                />
+                <Input
+                  name="checkPassword"
+                  control={letContext.control}
+                  defaultValue=""
+                  type="password"
+                  label="Check Password"
+                  variant="outlined"
+                  errors={!!letContext.errors.checkPassword}
+                  helperText={
+                    letContext.errors.checkPassword ? letContext.errors.checkPassword.message : ''
+                  }
+                />
+                <Button
+                  isValid={letContext.isValid}
+                  colorProp="black"
+                  marginProp={['2%', '0', '0', '0']}
+                  paddingProp={['1rem', '2rem']}
+                >
+                  {letContext.isValid && loading === true ? 'Proceeding' : 'Continue'}
+                </Button>
+                {error && <Alert severity="error">{error}</Alert>}
+              </Form>
+            )}
           </>
         );
       default:
@@ -128,7 +132,7 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
 
   return (
     <S.Wrapper>
-      {user?.id === Number(params.id) ? (
+      {user && user.id === Number(params.id) ? (
         makeUpForm()
       ) : (
         <Alert severity="error">접근 권한이 없습니다</Alert>

@@ -1,11 +1,16 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { createContext, useContext } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 import * as I from '.';
 
+import { AuthAPI } from '@api';
 import { ProfileUpdatePagePresenter } from '@pages/ProfileUpdatePage/ProfileUpdatePagePresenter';
+import { getUser, updateError, updateLoading } from '@auth';
+import { PatchUserRequest } from '@api-types';
 
 // Validate Context 생성
 const ProfileUpdateContext = createContext<I.IProfileUpdateContext | undefined>(undefined);
@@ -36,11 +41,38 @@ export const ProfileUpdatePageContainer: React.FC = () => {
     mode: 'all',
     resolver: yupResolver(profileUpdateSchema),
   });
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const params = useParams<{ id: string }>();
+
+  async function patchUserProcess(body: PatchUserRequest) {
+    try {
+      dispatch(updateLoading());
+      const response = await AuthAPI.patchUser(body);
+      const { ok, error, user } = response;
+      if (!ok && error) {
+        reset({ firstName: '', lastName: '', password: '', checkPassword: '' });
+        dispatch(updateError(error));
+      }
+      if (ok && user) {
+        dispatch(getUser(user));
+        window.alert('프로필 업데이트를 하였습니다');
+        history.push('/');
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      dispatch(updateLoading());
+    }
+  }
 
   function onValid() {
     const values = getValues();
-    console.log(values);
-    reset({ firstName: '', lastName: '', password: '', checkPassword: '' });
+    const patchParams: PatchUserRequest = {
+      ...values,
+      userId: +params.id,
+    };
+    patchUserProcess(patchParams);
   }
 
   const value = {
