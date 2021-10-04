@@ -27,6 +27,8 @@ import {
   PatchGameResponse,
   PatchSurviveRequest,
   PatchSurviveResponse,
+  PatchUserRequest,
+  PatchUserResponse,
   PostUserPasswordRequest,
   PostUserPasswordResonse,
   RemoveRoomResponse,
@@ -84,6 +86,8 @@ export const AuthAPI = {
   getUser: (): Promise<GetUserResponse> => requests.get('users/profile'),
   postUserPassword: (body: PostUserPasswordRequest): Promise<PostUserPasswordResonse> =>
     requests.post(`users/${body.userId}/validate-password`, { password: body.password }),
+  patchUser: (body: PatchUserRequest): Promise<PatchUserResponse> =>
+    requests.patch(`users/${body.userId}/profile-update`, { ...body, userId: undefined }),
 };
 
 export const RoomAPI = {

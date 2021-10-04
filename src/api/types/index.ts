@@ -64,6 +64,19 @@ export interface PostUserPasswordRequest {
 
 export interface PostUserPasswordResonse extends CommonResponse {}
 
+// Patch User
+export interface PatchUserRequest {
+  userId: number;
+  firstName: string;
+  lastName: string;
+  password: string;
+  checkPassword: string;
+}
+
+export interface PatchUserResponse extends CommonResponse {
+  user?: User;
+}
+
 /**
  * Room API
  */
