@@ -23,10 +23,10 @@ export const useProfileUpdateContext = () => {
 };
 
 const profileUpdateSchema = yup.object().shape({
-  firstName: yup.string().required(),
-  lastName: yup.string().required(),
-  password: yup.string().required(),
-  checkPassword: yup.string().required(),
+  firstName: yup.string(),
+  lastName: yup.string(),
+  password: yup.string(),
+  checkPassword: yup.string(),
 });
 
 export const ProfileUpdatePageContainer: React.FC = () => {
