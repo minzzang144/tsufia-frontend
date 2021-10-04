@@ -13,6 +13,7 @@ import { Input } from '@atoms/Input/Input';
 import { Alert } from '@atoms/Alert/Alert';
 import { RootState } from '@modules';
 import { IValidateContext } from '@pages/ValidatePage';
+import { IProfileUpdateContext } from '@pages/ProfileUpdatePage';
 
 export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }) => {
   const { loading, error, user } = useSelector(
@@ -26,32 +27,95 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
   const params = useParams<{ id: string }>();
 
   function makeUpForm() {
+    let letContext: IValidateContext | IProfileUpdateContext;
     switch (where) {
       case 'validate-password':
-        const { handleSubmit, control, onValid, errors, isValid } = context as IValidateContext;
+        letContext = { ...(context as IValidateContext) };
         return (
           <>
-            <Form onSubmit={handleSubmit(onValid)}>
+            <Form onSubmit={letContext.handleSubmit(letContext.onValid)}>
               <Heading levelProp={2} marginProp={['0', '0', '5%']}>
                 Validate Password
               </Heading>
               <Input
                 name="password"
-                control={control}
+                control={letContext.control}
                 defaultValue=""
                 type="password"
                 label="Password"
                 variant="outlined"
-                errors={!!errors.password}
-                helperText={errors.password ? errors.password.message : ''}
+                errors={!!letContext.errors.password}
+                helperText={letContext.errors.password ? letContext.errors.password.message : ''}
               />
               <Button
-                isValid={isValid}
+                isValid={letContext.isValid}
                 colorProp="black"
                 marginProp={['2%', '0', '0', '0']}
                 paddingProp={['1rem', '2rem']}
               >
-                {isValid && loading === true ? 'Proceeding' : 'Continue'}
+                {letContext.isValid && loading === true ? 'Proceeding' : 'Continue'}
+              </Button>
+              {error && <Alert severity="error">{error}</Alert>}
+            </Form>
+          </>
+        );
+      case 'profile-update':
+        letContext = { ...(context as IProfileUpdateContext) };
+        return (
+          <>
+            <Form onSubmit={letContext.handleSubmit(letContext.onValid)}>
+              <Heading levelProp={2} marginProp={['0', '0', '3%']}>
+                Profile Update
+              </Heading>
+              <Input
+                name="firstName"
+                control={letContext.control}
+                defaultValue=""
+                type="text"
+                label="First Name"
+                variant="outlined"
+                errors={!!letContext.errors.firstName}
+                helperText={letContext.errors.firstName ? letContext.errors.firstName.message : ''}
+              />
+              <Input
+                name="lastName"
+                control={letContext.control}
+                defaultValue=""
+                type="text"
+                label="Last Name"
+                variant="outlined"
+                errors={!!letContext.errors.lastName}
+                helperText={letContext.errors.lastName ? letContext.errors.lastName.message : ''}
+              />
+              <Input
+                name="password"
+                control={letContext.control}
+                defaultValue=""
+                type="password"
+                label="Password"
+                variant="outlined"
+                errors={!!letContext.errors.password}
+                helperText={letContext.errors.password ? letContext.errors.password.message : ''}
+              />
+              <Input
+                name="checkPassword"
+                control={letContext.control}
+                defaultValue=""
+                type="password"
+                label="Check Password"
+                variant="outlined"
+                errors={!!letContext.errors.checkPassword}
+                helperText={
+                  letContext.errors.checkPassword ? letContext.errors.checkPassword.message : ''
+                }
+              />
+              <Button
+                isValid={letContext.isValid}
+                colorProp="black"
+                marginProp={['2%', '0', '0', '0']}
+                paddingProp={['1rem', '2rem']}
+              >
+                {letContext.isValid && loading === true ? 'Proceeding' : 'Continue'}
               </Button>
               {error && <Alert severity="error">{error}</Alert>}
             </Form>
