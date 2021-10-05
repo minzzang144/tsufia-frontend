@@ -33,7 +33,12 @@ export type User = {
 
 export type AuthState = {
   loading: boolean;
-  error: string | undefined;
+  error: {
+    loginError?: string;
+    signUpError?: string;
+    validatePasswordError?: string;
+    profileUpdateError?: string;
+  };
   token: string | undefined;
   user?: User;
 };
