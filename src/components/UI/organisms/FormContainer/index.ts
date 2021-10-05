@@ -1,8 +1,8 @@
-import { ILoginContext } from '@pages/LogoutHome/LogoutHomeContainer';
+import { ILoginContext, ISignUpContext } from '@pages/LogoutHome/LogoutHomeContainer';
 import { IProfileUpdateContext } from '@pages/ProfileUpdatePage';
 import { IValidateContext } from '@pages/ValidatePage';
 
 export interface FormContainerProps {
-  where: 'login' | 'validate-password' | 'profile-update';
-  context: ILoginContext | IValidateContext | IProfileUpdateContext;
+  where: 'login' | 'sign-up' | 'validate-password' | 'profile-update';
+  context: ISignUpContext | ILoginContext | IValidateContext | IProfileUpdateContext;
 }

@@ -15,7 +15,7 @@ import { Span } from '@atoms/Span/Span';
 import { RootState } from '@modules';
 import { IValidateContext } from '@pages/ValidatePage';
 import { IProfileUpdateContext } from '@pages/ProfileUpdatePage';
-import { ILoginContext } from '@pages/LogoutHome/LogoutHomeContainer';
+import { ILoginContext, ISignUpContext } from '@pages/LogoutHome/LogoutHomeContainer';
 
 export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }) => {
   const { loading, error, accessToken, user } = useSelector(
@@ -30,7 +30,7 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
   const params = useParams<{ id: string }>();
 
   function makeUpForm() {
-    let letContext: ILoginContext | IValidateContext | IProfileUpdateContext;
+    let letContext: ILoginContext | ISignUpContext | IValidateContext | IProfileUpdateContext;
 
     // 인증완료
     if (accessToken) {
@@ -192,6 +192,96 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
                 {
                   <Span onClick={letContext.onSpanClick} highlightProp={true}>
                     회원가입
+                  </Span>
+                }
+              </Span>
+            </Form>
+          );
+        case 'sign-up':
+          letContext = { ...(context as ISignUpContext) };
+          return (
+            <Form onSubmit={letContext.handleSubmit(letContext.onValid)}>
+              <Heading levelProp={2} marginProp={['0', '0', '10%']}>
+                Sign Up
+              </Heading>
+              <Input
+                name="email"
+                control={letContext.control}
+                defaultValue=""
+                type="email"
+                label="Email"
+                variant="outlined"
+                errors={!!letContext.errors.email}
+                helperText={letContext.errors.email ? letContext.errors.email.message : ''}
+              />
+              <S.HorizonInputPart>
+                <Input
+                  name="firstName"
+                  control={letContext.control}
+                  defaultValue=""
+                  type="text"
+                  label="First Name"
+                  variant="outlined"
+                  errors={!!letContext.errors.firstName}
+                  helperText={
+                    letContext.errors.firstName ? letContext.errors.firstName.message : ''
+                  }
+                  marginprop={['1rem', '1rem', '0.5rem', '0']}
+                  widthprop="40%"
+                />
+                <Input
+                  name="lastName"
+                  control={letContext.control}
+                  defaultValue=""
+                  type="text"
+                  label="Last Name"
+                  variant="outlined"
+                  errors={!!letContext.errors.lastName}
+                  helperText={letContext.errors.lastName ? letContext.errors.lastName.message : ''}
+                  widthprop="40%"
+                />
+              </S.HorizonInputPart>
+              <S.HorizonInputPart>
+                <Input
+                  name="password"
+                  control={letContext.control}
+                  defaultValue=""
+                  type="password"
+                  label="Password"
+                  variant="outlined"
+                  errors={!!letContext.errors.password}
+                  helperText={letContext.errors.password ? letContext.errors.password.message : ''}
+                  widthprop="40%"
+                  marginprop={['1rem', '1rem', '0.5rem', '0']}
+                />
+                <Input
+                  name="checkPassword"
+                  control={letContext.control}
+                  defaultValue=""
+                  type="password"
+                  label="Password Check"
+                  variant="outlined"
+                  errors={!!letContext.errors.checkPassword}
+                  helperText={
+                    letContext.errors.checkPassword ? letContext.errors.checkPassword.message : ''
+                  }
+                  widthprop="40%"
+                />
+              </S.HorizonInputPart>
+              <Button
+                isValid={letContext.isValid}
+                colorProp="black"
+                marginProp={['5%', '0', '0', '0']}
+                paddingProp={['1rem', '2rem']}
+              >
+                {letContext.isValid && loading === true ? 'Proceeding' : 'Continue'}
+              </Button>
+              {error && <Alert severity="error">{error}</Alert>}
+              <Span marginProp={error ? ['0'] : ['3%', '0', '0', '0']}>
+                이미 회원이신가요?{' '}
+                {
+                  <Span onClick={letContext.onSpanClick} highlightProp={true}>
+                    로그인
                   </Span>
                 }
               </Span>
