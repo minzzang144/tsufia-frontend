@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 import {
   Control,
@@ -13,10 +14,10 @@ import * as yup from 'yup';
 
 import * as I from '.';
 
+import { updateLoginError, updateSignupError } from '@auth';
 import { LoginFormInput, SignUpFormInput } from '@atoms/Input';
 import { LogoutHomePresenter } from '@pages/LogoutHome/LogoutHomePresenter';
-import { useDispatch } from 'react-redux';
-import { updateError } from '@auth';
+import { RootState } from '@modules';
 
 // Login Form Context 인터페이스
 export interface ILoginContext {
@@ -94,6 +95,7 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
     formState: { errors: loginErrors, isValid: loginIsValid },
     reset: loginReset,
   } = useForm<LoginFormInput>({ mode: 'all', resolver: yupResolver(loginSchema) });
+  const error = useSelector((state: RootState) => state.authentication.error);
 
   const {
     register: signUpRegister,
@@ -147,7 +149,8 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
   }
 
   function onSpanClick(e: React.MouseEvent<HTMLSpanElement>) {
-    dispatch(updateError(undefined));
+    if (error.loginError) dispatch(updateLoginError(undefined));
+    if (error.signUpError) dispatch(updateSignupError(undefined));
     e.preventDefault();
     setToggle(!toggle);
   }
@@ -182,6 +185,13 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
   function responseErrorKakao(error: any) {
     console.log(error);
   }
+
+  useEffect(() => {
+    return () => {
+      if (error.loginError) dispatch(updateLoginError(undefined));
+      if (error.signUpError) dispatch(updateSignupError(undefined));
+    };
+  }, [error.loginError, error.signUpError]);
 
   return (
     <LoginFormContext.Provider value={{ ...loginValue, ...toggleValue, ...SocialLoginValue }}>

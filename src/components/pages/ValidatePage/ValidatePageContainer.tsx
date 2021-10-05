@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { createContext, useContext } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { createContext, useContext, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
 import * as yup from 'yup';
@@ -9,8 +9,9 @@ import * as I from '.';
 
 import { AuthAPI } from '@api';
 import { PostUserPasswordRequest } from '@api-types';
-import { updateError, updateLoading } from '@auth';
+import { updateLoading, updateValidatePasswordError } from '@auth';
 import { ValidatePagePresenter } from '@pages/ValidatePage/ValidatePagePresenter';
+import { RootState } from '@modules';
 
 // Validate Context 생성
 const ValidateContext = createContext<I.IValidateContext | undefined>(undefined);
@@ -35,6 +36,9 @@ export const ValidatePageContainer: React.FC = () => {
     formState: { errors, isValid },
     reset,
   } = useForm<I.ValidateFormInput>({ mode: 'all', resolver: yupResolver(validatePasswordSchema) });
+  const validatePasswordError = useSelector(
+    (state: RootState) => state.authentication.error.validatePasswordError,
+  );
   const history = useHistory();
   const params = useParams<{ id: string }>();
   const dispatch = useDispatch();
@@ -45,7 +49,7 @@ export const ValidatePageContainer: React.FC = () => {
       const response = await AuthAPI.postUserPassword(body);
       const { ok, error } = response;
       if (!ok && error) {
-        dispatch(updateError(error));
+        dispatch(updateValidatePasswordError(error));
         reset({ password: '' });
       }
       if (ok) {
@@ -75,6 +79,12 @@ export const ValidatePageContainer: React.FC = () => {
     errors,
     isValid,
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(updateValidatePasswordError(undefined));
+    };
+  }, [validatePasswordError]);
 
   return (
     <ValidateContext.Provider value={value}>

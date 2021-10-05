@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { createContext, useContext } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { createContext, useContext, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -8,9 +8,10 @@ import * as yup from 'yup';
 import * as I from '.';
 
 import { AuthAPI } from '@api';
-import { ProfileUpdatePagePresenter } from '@pages/ProfileUpdatePage/ProfileUpdatePagePresenter';
-import { getUser, updateError, updateLoading } from '@auth';
+import { getUser, updateLoading, updateProfileUpdateError } from '@auth';
 import { PatchUserRequest } from '@api-types';
+import { ProfileUpdatePagePresenter } from '@pages/ProfileUpdatePage/ProfileUpdatePagePresenter';
+import { RootState } from '@modules';
 
 // Validate Context 생성
 const ProfileUpdateContext = createContext<I.IProfileUpdateContext | undefined>(undefined);
@@ -41,6 +42,9 @@ export const ProfileUpdatePageContainer: React.FC = () => {
     mode: 'all',
     resolver: yupResolver(profileUpdateSchema),
   });
+  const profileUpdateError = useSelector(
+    (state: RootState) => state.authentication.error.profileUpdateError,
+  );
   const dispatch = useDispatch();
   const history = useHistory();
   const params = useParams<{ id: string }>();
@@ -52,7 +56,7 @@ export const ProfileUpdatePageContainer: React.FC = () => {
       const { ok, error, user } = response;
       if (!ok && error) {
         reset({ firstName: '', lastName: '', password: '', checkPassword: '' });
-        dispatch(updateError(error));
+        dispatch(updateProfileUpdateError(error));
       }
       if (ok && user) {
         dispatch(getUser(user));
@@ -83,6 +87,12 @@ export const ProfileUpdatePageContainer: React.FC = () => {
     errors,
     isValid,
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(updateProfileUpdateError(undefined));
+    };
+  }, [profileUpdateError]);
 
   return (
     <ProfileUpdateContext.Provider value={value}>

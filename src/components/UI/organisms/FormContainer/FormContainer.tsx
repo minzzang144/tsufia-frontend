@@ -65,7 +65,9 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
                   >
                     {letContext.isValid && loading === true ? 'Proceeding' : 'Continue'}
                   </Button>
-                  {error && <Alert severity="error">{error}</Alert>}
+                  {error?.validatePasswordError && (
+                    <Alert severity="error">{error.validatePasswordError}</Alert>
+                  )}
                 </Form>
               </>
             );
@@ -136,7 +138,9 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
                     >
                       {letContext.isValid && loading === true ? 'Proceeding' : 'Continue'}
                     </Button>
-                    {error && <Alert severity="error">{error}</Alert>}
+                    {error?.profileUpdateError && (
+                      <Alert severity="error">{error.profileUpdateError}</Alert>
+                    )}
                   </Form>
                 )}
               </>
@@ -186,8 +190,8 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
               >
                 {letContext.isValid && loading === true ? 'Proceeding' : 'Continue'}
               </Button>
-              {error && <Alert severity="error">{error}</Alert>}
-              <Span marginProp={error ? ['0'] : ['3%', '0', '0', '0']}>
+              {error?.loginError && <Alert severity="error">{error.loginError}</Alert>}
+              <Span marginProp={error?.loginError ? ['0'] : ['3%', '0', '0', '0']}>
                 아직 회원이 아니신가요?{' '}
                 {
                   <Span onClick={letContext.onSpanClick} highlightProp={true}>
@@ -276,8 +280,8 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
               >
                 {letContext.isValid && loading === true ? 'Proceeding' : 'Continue'}
               </Button>
-              {error && <Alert severity="error">{error}</Alert>}
-              <Span marginProp={error ? ['0'] : ['3%', '0', '0', '0']}>
+              {error?.signUpError && <Alert severity="error">{error.signUpError}</Alert>}
+              <Span marginProp={error?.signUpError ? ['0'] : ['3%', '0', '0', '0']}>
                 이미 회원이신가요?{' '}
                 {
                   <Span onClick={letContext.onSpanClick} highlightProp={true}>

@@ -9,8 +9,9 @@ import {
   LoginResponse,
   SilentRefreshResponse,
 } from '@api-types';
+import { updateSignupError, updateLoginError } from '@auth';
 import { LoginFormInput, SignUpFormInput } from '@atoms/Input';
-import { getUser, updateError, updateLoading, updateToken } from '@auth/actions';
+import { getUser, updateLoading, updateToken } from '@auth/actions';
 import { RootState } from '@modules';
 import { LoginRouter } from '@routers/LoginRouter';
 import { LogoutRouter } from '@routers/LogoutRouter';
@@ -28,7 +29,7 @@ function App() {
       dispatch(updateLoading());
       const response = await AuthAPI.signUp(body);
       const { ok, error } = response;
-      if (ok === false && error) dispatch(updateError(error));
+      if (ok === false && error) dispatch(updateSignupError(error));
       if (ok === true) {
         window.alert('회원가입을 성공했습니다.');
         setToggle(!toggle);
@@ -46,7 +47,7 @@ function App() {
       dispatch(updateLoading());
       const response = await AuthAPI.login(body);
       const { ok, error } = response;
-      if (ok === false && error) dispatch(updateError(error));
+      if (ok === false && error) dispatch(updateLoginError(error));
       if (ok === true) onLoginSuccess(response);
     } catch (error) {
       console.log(error);
@@ -61,7 +62,7 @@ function App() {
       dispatch(updateLoading());
       const response = await AuthAPI.googleLogin(body);
       const { ok, error } = response;
-      if (ok === false && error) dispatch(updateError(error));
+      if (ok === false && error) dispatch(updateLoginError(error));
       if (ok === true) onLoginSuccess(response);
     } catch (error) {
       console.log(error);
@@ -76,7 +77,7 @@ function App() {
       dispatch(updateLoading());
       const response = await AuthAPI.kakaoLogin(body);
       const { ok, error } = response;
-      if (ok === false && error) dispatch(updateError(error));
+      if (ok === false && error) dispatch(updateLoginError(error));
       if (ok === true) onLoginSuccess(response);
     } catch (error) {
       console.log(error);
@@ -122,7 +123,7 @@ function App() {
     try {
       const response = await AuthAPI.getUser();
       const { ok, error, user } = response;
-      if (ok === false && error) dispatch(updateError(error));
+      if (ok === false && error) dispatch(updateLoginError(error));
       if (ok === true && user) {
         dispatch(getUser(user));
         socket.emit('users:get:server', user);
