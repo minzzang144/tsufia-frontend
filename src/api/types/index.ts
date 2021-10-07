@@ -163,6 +163,14 @@ export interface PatchSurviveResponse extends CommonResponse {
   room?: Room;
 }
 
+export interface PatchRestartRoomGameRequest {
+  roomId: number;
+}
+
+export interface PatchRestartRoomGameResponse extends CommonResponse {
+  room?: Room;
+}
+
 /**
  * Chat API
  */

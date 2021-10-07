@@ -27,6 +27,8 @@ import {
   LogoutResponse,
   PatchGameRequest,
   PatchGameResponse,
+  PatchRestartRoomGameRequest,
+  PatchRestartRoomGameResponse,
   PatchSurviveRequest,
   PatchSurviveResponse,
   PatchUserRequest,
@@ -110,6 +112,8 @@ export const RoomAPI = {
     requests.patch(`api/rooms/${body.roomId}/create/user-role`),
   patchSurvive: (body: PatchSurviveRequest): Promise<PatchSurviveResponse> =>
     requests.patch(`api/rooms/${body.roomId}/patch/survive`, { selectId: body.selectId }),
+  patchRestart: (body: PatchRestartRoomGameRequest): Promise<PatchRestartRoomGameResponse> =>
+    requests.patch(`api/rooms/${body.roomId}/patch/restart`),
 };
 
 export const ChatAPI = {
