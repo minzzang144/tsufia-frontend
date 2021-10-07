@@ -64,6 +64,13 @@ export interface PostUserPasswordRequest {
 
 export interface PostUserPasswordResonse extends CommonResponse {}
 
+// Get Will Patch User
+export interface GetWillPatchUserRequest {
+  userId: string;
+}
+
+export interface GetWillPatchUserResponse extends CommonResponse {}
+
 // Patch User
 export interface PatchUserRequest {
   userId: number;

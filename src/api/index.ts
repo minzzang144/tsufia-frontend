@@ -15,6 +15,8 @@ import {
   GetRoomResponse,
   GetRoomsResponse,
   GetUserResponse,
+  GetWillPatchUserRequest,
+  GetWillPatchUserResponse,
   GoogleLoginRequest,
   GoogleLoginResponse,
   KakaoLoginRequest,
@@ -84,6 +86,8 @@ export const AuthAPI = {
   kakaoLogin: (body: KakaoLoginRequest): Promise<KakaoLoginResponse> =>
     requests.post('kakao', body),
   getUser: (): Promise<GetUserResponse> => requests.get('users/profile'),
+  getWillPatchUser: (body: GetWillPatchUserRequest): Promise<GetWillPatchUserResponse> =>
+    requests.get(`users/${body.userId}/profile-update`),
   postUserPassword: (body: PostUserPasswordRequest): Promise<PostUserPasswordResonse> =>
     requests.post(`users/${body.userId}/validate-password`, { password: body.password }),
   patchUser: (body: PatchUserRequest): Promise<PatchUserResponse> =>
