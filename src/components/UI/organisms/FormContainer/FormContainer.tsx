@@ -32,7 +32,7 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
   function makeUpForm() {
     let letContext: ILoginContext | ISignUpContext | IValidateContext | IProfileUpdateContext;
 
-    // 인증완료
+    // 로그인 인증이 된 상태
     if (accessToken) {
       // 업데이트 하는 유저가 본인이면 Form을 보여준다.
       if (user?.id === Number(params.id)) {
@@ -75,7 +75,7 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
             letContext = { ...(context as IProfileUpdateContext) };
             return (
               <>
-                {user && (
+                {user && !error.getWillPatchUserError ? (
                   <Form onSubmit={letContext.handleSubmit(letContext.onValid)}>
                     <Heading levelProp={2} marginProp={['0', '0', '3%']}>
                       Profile Update
@@ -142,6 +142,8 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
                       <Alert severity="error">{error.profileUpdateError}</Alert>
                     )}
                   </Form>
+                ) : (
+                  <Alert severity="error">{error.getWillPatchUserError}</Alert>
                 )}
               </>
             );
@@ -153,6 +155,7 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
       else {
         return <Alert severity="error">접근 권한이 없습니다</Alert>;
       }
+      // 로그인 인증이 필요한 상태
     } else {
       switch (where) {
         case 'login':

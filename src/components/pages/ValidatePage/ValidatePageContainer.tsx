@@ -82,7 +82,7 @@ export const ValidatePageContainer: React.FC = () => {
 
   useEffect(() => {
     return () => {
-      dispatch(updateValidatePasswordError(undefined));
+      if (validatePasswordError) dispatch(updateValidatePasswordError(undefined));
     };
   }, [validatePasswordError]);
 

@@ -8,8 +8,8 @@ import * as yup from 'yup';
 import * as I from '.';
 
 import { AuthAPI } from '@api';
-import { getUser, updateLoading, updateProfileUpdateError } from '@auth';
-import { PatchUserRequest } from '@api-types';
+import { getUser, getWillPatchUserError, updateLoading, updateProfileUpdateError } from '@auth';
+import { GetWillPatchUserRequest, PatchUserRequest } from '@api-types';
 import { ProfileUpdatePagePresenter } from '@pages/ProfileUpdatePage/ProfileUpdatePagePresenter';
 import { RootState } from '@modules';
 
@@ -48,6 +48,18 @@ export const ProfileUpdatePageContainer: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const params = useParams<{ id: string }>();
+
+  async function getWillPatchUserProcess(body: GetWillPatchUserRequest) {
+    try {
+      const response = await AuthAPI.getWillPatchUser(body);
+      const { ok, error } = response;
+      if (!ok && error) {
+        dispatch(getWillPatchUserError(error));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   async function patchUserProcess(body: PatchUserRequest) {
     try {
@@ -90,9 +102,13 @@ export const ProfileUpdatePageContainer: React.FC = () => {
 
   useEffect(() => {
     return () => {
-      dispatch(updateProfileUpdateError(undefined));
+      if (profileUpdateError) dispatch(updateProfileUpdateError(undefined));
     };
   }, [profileUpdateError]);
+
+  useEffect(() => {
+    getWillPatchUserProcess({ userId: params.id });
+  }, []);
 
   return (
     <ProfileUpdateContext.Provider value={value}>
