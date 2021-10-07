@@ -37,6 +37,7 @@ export type AuthState = {
     loginError?: string;
     signUpError?: string;
     validatePasswordError?: string;
+    getWillPatchUserError?: string;
     profileUpdateError?: string;
   };
   token: string | undefined;

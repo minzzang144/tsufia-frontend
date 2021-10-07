@@ -6,6 +6,7 @@ import {
   UPDATE_LOGIN_ERROR,
   UPDATE_SIGNUP_ERROR,
   UPDATE_VALIDATE_PASSWORD_ERROR,
+  GET_WILL_PATCH_USER_ERROR,
   UPDATE_PROFILE_UPDATE_ERROR,
   UPDATE_TOKEN,
   GET_USER,
@@ -48,6 +49,13 @@ const authentication = createReducer<AuthState, AuthAction>(initialState, {
     error: {
       ...state.error,
       validatePasswordError: action.payload,
+    },
+  }),
+  [GET_WILL_PATCH_USER_ERROR]: (state, action) => ({
+    ...state,
+    error: {
+      ...state.error,
+      getWillPatchUserError: action.payload,
     },
   }),
   [UPDATE_PROFILE_UPDATE_ERROR]: (state, action) => ({
