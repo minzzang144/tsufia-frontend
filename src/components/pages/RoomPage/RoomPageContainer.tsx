@@ -617,7 +617,7 @@ export const RoomPageContainer: React.FC = () => {
         });
       }
     }
-  }, [room?.game?.cycle, reciveCountDown, selectUserId]);
+  }, [room?.game?.cycle, reciveCountDown]);
 
   // [Private] 저녁 사이클에서 투표가 완료되면 투표리스트를 서버로 전달
   useEffect(() => {
