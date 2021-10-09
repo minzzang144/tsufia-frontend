@@ -283,6 +283,20 @@ export const RoomPageContainer: React.FC = () => {
     setVotedUserList((prev) => [...prev, userId]);
   }
 
+  // [Private] 게임이 끝나고 재시작 할 때 시작하는 함수
+  async function patchRestartRoomGameProcess(roomId: number) {
+    try {
+      const response = await RoomAPI.patchRestart({ roomId });
+      const { ok, error, room } = response;
+      if (ok === false && error) dispatch(updateRoomError(error));
+      if (ok === true && room) {
+        socket.emit('games:patch:restart:server', room);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   // [Private] 사용자가 방에 처음 입장했을 때 방의 정보를 가져오는 콜백 함수
   function updateRoomCallback(data: any) {
     dispatch(updateRoom(data));
@@ -363,6 +377,11 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 저녁 사이클이 끝나면 투표 결과를 반영하는 콜백 함수
   function patchGameVoteCallback(data: Room) {
+    dispatch(updateRoom(data));
+  }
+
+  // [Private] 게임 재시작을 패치하는 콜백 함수
+  function patchRestartCallback(data: Room) {
     dispatch(updateRoom(data));
   }
 
@@ -619,6 +638,23 @@ export const RoomPageContainer: React.FC = () => {
     }
   }, [room?.game?.cycle, reciveCountDown]);
 
+  // [Private] 게임 재시작
+  useEffect(() => {
+    if (currentUser?.host === true && room?.status === Status.완료 && reciveCountDown === 0) {
+      setTimeout(() => {
+        patchRestartRoomGameProcess(room.id);
+      }, 10000);
+    }
+  }, [room?.status, reciveCountDown]);
+
+  // 게임 재시작 후 LocalStorage 값 초기화
+  useEffect(() => {
+    if (room?.status === Status.완료) {
+      localStorage.setItem('increment', '-1');
+      localStorage.setItem('cycle', '1');
+    }
+  }, [room?.status]);
+
   // [Private] 저녁 사이클에서 투표가 완료되면 투표리스트를 서버로 전달
   useEffect(() => {
     if (votedUserList.length === room?.currentHeadCount) {
@@ -743,6 +779,7 @@ export const RoomPageContainer: React.FC = () => {
     socket.on('games:patch:survive:each-client', patchSurviveCallback);
     socket.on('games:patch:vote:host-client', patchGameVoteProcess);
     socket.on('games:patch:vote:each-client', patchGameVoteCallback);
+    socket.on('games:patch:restart:each-client', patchRestartCallback);
 
     return () => {
       socket.off('rooms:update:each-client', updateRoomCallback);
@@ -764,6 +801,7 @@ export const RoomPageContainer: React.FC = () => {
       socket.off('games:patch:survive:each-client', patchSurviveCallback);
       socket.off('games:patch:vote:host-client', patchGameVoteProcess);
       socket.off('games:patch:vote:each-client', patchGameVoteCallback);
+      socket.off('games:patch:restart:each-client', patchRestartCallback);
     };
   }, []);
 
