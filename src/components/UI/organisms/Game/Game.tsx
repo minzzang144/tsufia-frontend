@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
-import { ToastContainer } from 'react-toast';
+import { ToastContainer } from 'react-toastify';
 
 import * as I from '.';
 import * as S from '@organisms/Game/style';
@@ -60,7 +60,7 @@ export const Game: React.FC<I.GameProps> = ({ children, ...rest }) => {
             title="방 수정하기"
             defaultValue={{ input: room.title, radio: String(room.totalHeadCount) }}
           />
-          <ToastContainer delay={1500} position="top-center" />
+          <ToastContainer autoClose={1500} />
           {room.status !== Status.완료 ? <Notification /> : <GameResult />}
           <ChatList ref={chatListRef} />
           <UserList />
