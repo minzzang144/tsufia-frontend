@@ -7,7 +7,6 @@ export type BorderProp = {
 };
 
 export interface ListProps {
-  to?: string;
   onClick?: (var1?: string) => void;
   positionprop?: 'relative' | 'absolute';
   displayprop?: 'flex';
@@ -15,11 +14,13 @@ export interface ListProps {
   justifyContentprop?: 'flex-start' | 'center' | 'flex-end';
   alignItemsprop?: 'flex-start' | 'center' | 'flex-end';
   alignSelfprop?: 'flex-start' | 'center' | 'flex-end';
+  widthprop?: string;
   maxWidthprop?: string;
   marginprop?: string[];
   paddingProp?: string[];
   borderprop?: BorderProp;
   borderRadiusprop?: string;
-  colorProp?: ColorProp;
+  colorprop?: ColorProp;
+  textalignprop?: 'start' | 'center' | 'end';
   cursorprop?: boolean;
 }

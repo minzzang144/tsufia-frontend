@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 import * as I from '.';
@@ -9,12 +8,14 @@ type FlexDirectionPick = Pick<I.ListProps, 'flexDirectionprop'>;
 type JustifyContentPick = Pick<I.ListProps, 'justifyContentprop'>;
 type AlignItemsPick = Pick<I.ListProps, 'alignItemsprop'>;
 type AlignSelfPick = Pick<I.ListProps, 'alignSelfprop'>;
+type WidthPick = Pick<I.ListProps, 'widthprop'>;
 type MaxWidthPick = Pick<I.ListProps, 'maxWidthprop'>;
 type MarginPick = Pick<I.ListProps, 'marginprop'>;
 type PaddingPick = Pick<I.ListProps, 'paddingProp'>;
 type BorderPick = Pick<I.ListProps, 'borderprop'>;
 type BorderRadiusPick = Pick<I.ListProps, 'borderRadiusprop'>;
-type ColorPick = Pick<I.ListProps, 'colorProp'>;
+type TextAlignPick = Pick<I.ListProps, 'textalignprop'>;
+type ColorPick = Pick<I.ListProps, 'colorprop'>;
 type CursorPick = Pick<I.ListProps, 'cursorprop'>;
 
 const positionStyles = css<PositionPick>`
@@ -127,7 +128,15 @@ const alignSelfStyles = css<AlignSelfPick>`
   }}
 `;
 
-const widthStyles = css<MaxWidthPick>`
+const widthStyles = css<WidthPick>`
+  ${({ widthprop }) =>
+    widthprop &&
+    css`
+      width: ${widthprop};
+    `}
+`;
+
+const maxWidthStyles = css<MaxWidthPick>`
   ${({ maxWidthprop }) =>
     maxWidthprop &&
     css`
@@ -212,16 +221,37 @@ const borderRadiusStyles = css<BorderRadiusPick>`
 `;
 
 const colorStyles = css<ColorPick>`
-  ${({ colorProp }) =>
-    colorProp === 'white' &&
+  ${({ colorprop }) =>
+    colorprop === 'white' &&
     css`
       color: ${({ theme }) => theme.color.dark};
     `}
-  ${({ colorProp }) =>
-    colorProp === 'black' &&
+  ${({ colorprop }) =>
+    colorprop === 'black' &&
     css`
       color: ${({ theme }) => theme.color.light};
     `}
+`;
+
+const textAlignStyles = css<TextAlignPick>`
+  ${({ textalignprop }) => {
+    switch (textalignprop) {
+      case 'start':
+        return css`
+          text-align: start;
+        `;
+      case 'center':
+        return css`
+          text-align: center;
+        `;
+      case 'end':
+        return css`
+          text-align: end;
+        `;
+      default:
+        break;
+    }
+  }}
 `;
 
 const cursorStyles = css<CursorPick>`
@@ -249,9 +279,11 @@ export const Wrapper = styled.li`
   ${justifyContentStyles}
   ${alignItemsStyles}
   ${alignSelfStyles}
+  ${textAlignStyles}
 
   /* Width Styles */
   ${widthStyles}
+  ${maxWidthStyles}
 
   /* Margin Padding Border Styles */
   ${marginStyles}
@@ -264,8 +296,4 @@ export const Wrapper = styled.li`
 
   /* Cursor Styles */
   ${cursorStyles}
-`;
-
-export const Linked = styled(Link)`
-  color: ${({ theme }) => theme.color.light};
 `;

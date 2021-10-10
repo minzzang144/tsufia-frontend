@@ -13,6 +13,8 @@ export interface HeaderProps {
 
 export interface ILogoutContext {
   onLogout?: () => Promise<void>;
+  isOpen?: boolean;
+  toggleDrawer?: () => void;
 }
 
 export interface IRoomPageContext {

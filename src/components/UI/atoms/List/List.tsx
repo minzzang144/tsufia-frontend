@@ -3,21 +3,13 @@ import React from 'react';
 import * as I from '.';
 import * as S from '@atoms/List/style';
 
-export const List: React.FC<I.ListProps> = ({ children, to, onClick, ...rest }) => (
-  <React.Fragment>
-    {to ? (
-      <S.Wrapper {...rest}>
-        <S.Linked to={to}>{children}</S.Linked>
-      </S.Wrapper>
-    ) : (
-      <S.Wrapper onClick={() => onClick && onClick()} {...rest}>
-        {children}
-      </S.Wrapper>
-    )}
-  </React.Fragment>
+export const List: React.FC<I.ListProps> = ({ children, onClick, ...rest }) => (
+  <S.Wrapper onClick={() => onClick && onClick()} {...rest}>
+    {children}
+  </S.Wrapper>
 );
 
 List.defaultProps = {
-  colorProp: 'white',
+  colorprop: 'white',
   paddingProp: ['0'],
 };

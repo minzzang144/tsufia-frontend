@@ -62,7 +62,7 @@ export const Room: React.FC = () => {
             </Span>
             <UnorderedList>
               {room.userList?.map((user) => (
-                <List key={user.id} paddingProp={['1rem', '2rem']} colorProp="black">
+                <List key={user.id} paddingProp={['1rem', '2rem']} colorprop="black">
                   {user.firstName ? `${user.firstName} ${user.lastName}` : `${user.nickname}`}
                 </List>
               ))}

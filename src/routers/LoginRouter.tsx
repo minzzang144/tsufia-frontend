@@ -26,6 +26,8 @@ import socket from '@/socket';
 // Login Context Interface
 interface ILogInContext {
   onLogout: () => Promise<void>;
+  isOpen: boolean;
+  toggleDrawer: () => void;
 }
 
 // Create Room Context Interface
@@ -80,6 +82,7 @@ const LoginWrapper: React.FC = ({ children }) => {
     reset,
   } = useForm<CreateRoomFormInput>({ mode: 'all', resolver: yupResolver(createRoomSchema) });
   const [toggleModal, setToggleModal] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -131,8 +134,15 @@ const LoginWrapper: React.FC = ({ children }) => {
     }
   }
 
+  // [Header] 네비게이션 토글링 기능
+  function toggleDrawer() {
+    setIsOpen((prevState) => !prevState);
+  }
+
   const loginValue = {
     onLogout,
+    isOpen,
+    toggleDrawer,
   };
 
   const value = {

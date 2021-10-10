@@ -8,5 +8,5 @@ export const Link: React.FC<I.LinkProps> = ({ children, ...rest }) => (
 );
 
 Link.defaultProps = {
-  colorProp: 'white',
+  colorprop: 'white',
 };

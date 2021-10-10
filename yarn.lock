@@ -9971,6 +9971,11 @@ react-loading@^2.0.3:
   resolved "https://registry.yarnpkg.com/react-loading/-/react-loading-2.0.3.tgz#e8138fb0c3e4674e481b320802ac7048ae14ffb9"
   integrity sha512-Vdqy79zq+bpeWJqC+xjltUjuGApyoItPgL0vgVfcJHhqwU7bAMKzysfGW/ADu6i0z0JiOCRJjo+IkFNkRNbA3A==
 
+react-modern-drawer@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/react-modern-drawer/-/react-modern-drawer-0.1.1.tgz#96f44690e1314c50cddd34fbf2ef95ac1f4c5489"
+  integrity sha512-d6oMfVjJzXRVvC0ZclU3cU3HZ759HNqieEypeKan8XztzWgbBwcWbElxS0qmWNFCxtgZuLsw1VUbkJ0Nmt95uQ==
+
 react-redux@^7.2.4:
   version "7.2.4"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.2.4.tgz#1ebb474032b72d806de2e0519cd07761e222e225"

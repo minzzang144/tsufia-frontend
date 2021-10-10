@@ -2,5 +2,8 @@ type ColorProp = 'black' | 'white';
 
 export interface LinkProps {
   to: string;
-  colorProp?: ColorProp;
+  displayprop?: 'inline-block';
+  widthprop?: string;
+  colorprop?: ColorProp;
+  hoveropacityprop?: 'string';
 }
