@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 import {
@@ -33,6 +33,8 @@ export interface ILoginContext {
   responseErrorGoogle: (error: any) => void;
   responseSuccessKakao: (response: any) => void;
   responseErrorKakao: (error: any) => void;
+  onStartBtnClick: () => void;
+  rightDivRef: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 // Sign Up Form Context 인터페이스
@@ -105,6 +107,7 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
     formState: { errors: signUpErrors, isValid: signUpIsValid },
     reset: signUpReset,
   } = useForm<SignUpFormInput>({ mode: 'all', resolver: yupResolver(signUpSchema) });
+  const rightDivRef = useRef<HTMLDivElement>(null);
 
   const loginValue = {
     register: loginRegister,
@@ -113,6 +116,8 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
     onValid: onLoginValid,
     errors: loginErrors,
     isValid: loginIsValid,
+    onStartBtnClick,
+    rightDivRef,
   };
 
   const signUpValue = {
@@ -184,6 +189,11 @@ export const LogoutHomeContainer: React.FC<I.LogoutHomeProps> = ({
 
   function responseErrorKakao(error: any) {
     console.log(error);
+  }
+
+  // [Introduction] 시작하기 버튼 클릭 이벤트
+  function onStartBtnClick() {
+    if (rightDivRef.current) rightDivRef.current.scrollIntoView({ behavior: 'smooth' });
   }
 
   useEffect(() => {

@@ -8,7 +8,7 @@ import { SignUp } from '@organisms/SignUp/SignUp';
 import { Authentication } from '@templates/Authentication/Authentication';
 
 export const LogoutHomePresenter: React.FC = () => {
-  const { toggle } = useLoginFormContext();
+  const { toggle, rightDivRef } = useLoginFormContext();
 
   const toggleRightSide = toggle ? <SignUp /> : <Login />;
 
@@ -17,6 +17,7 @@ export const LogoutHomePresenter: React.FC = () => {
       header={<Header isLoggedIn={false} />}
       leftSide={<Introduction />}
       rightSide={toggleRightSide}
+      ref={rightDivRef}
     />
   );
 };
