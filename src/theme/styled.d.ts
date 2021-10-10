@@ -13,5 +13,9 @@ declare module 'styled-components' {
       red: string;
       yellow: string;
     };
+    device: {
+      mobile: string;
+      laptop: string;
+    };
   }
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import * as I from '.';
 import * as S from '@atoms/Button/style';
@@ -14,6 +15,13 @@ export const Button: React.FC<I.ButtonProps> = ({ children, onClick, ...rest }) 
     )}
   </React.Fragment>
 );
+
+export const MobileViewButton = styled(Button)`
+  display: none;
+  @media ${({ theme }) => theme.device.mobile} {
+    display: inline-flex;
+  }
+`;
 
 Button.defaultProps = {
   colorProp: 'black',
