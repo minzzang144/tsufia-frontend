@@ -4,6 +4,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 import * as S from '@molecules/GameResult/style';
 
 import { Heading } from '@atoms/Heading/Heading';
+import { Span } from '@atoms/Span/Span';
 import { Table } from '@atoms/Table/Table';
 import { Tdata } from '@atoms/Tdata/Tdata';
 import { Thead } from '@atoms/Thead/Thead';
@@ -45,9 +46,12 @@ export const GameResult: React.FC = () => {
     <S.Wrapper visible={room?.status === Status.완료 && !closeGameResult}>
       <S.Container>
         <S.CancelIconed onClick={() => onCloseGameResult()} />
-        <Heading levelProp={2} marginProp={['10%', '0']}>
+        <Heading levelProp={2} marginProp={['8%', '0', '8%', '0']}>
           {setHeading()}
         </Heading>
+        <Span colorProp="white" levelProp={3} marginProp={['0', '0', '4%', '0']}>
+          잠시 후 게임이 자동으로 시작됩니다
+        </Span>
         <Table widthprop="100%" maxwidthprop="70%" colorprop="white">
           <thead>
             <tr>

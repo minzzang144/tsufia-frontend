@@ -55,6 +55,9 @@ export const LoginHomeContainer: React.FC = () => {
   const patchStatusCallback = (data: any) => {
     dispatch(updateRooms(data));
   };
+  const patchRestartGameCallback = (data: any) => {
+    dispatch(updateRooms(data));
+  };
 
   useEffect(() => {
     getRoomsProcess();
@@ -75,12 +78,14 @@ export const LoginHomeContainer: React.FC = () => {
     // 실시간으로 삭제되는 방의 정보를 가져오기
     socket.on('rooms:remove:client', removeRoomCallback);
     socket.on('games:patch:status:client', patchStatusCallback);
+    socket.on('games:patch:restart:client', patchRestartGameCallback);
     return () => {
       socket.off('rooms:create:client', addRoomCallback);
       socket.off('rooms:update:client', updateRoomCallback);
       socket.off('rooms:enter:client', enterRoomCallback);
       socket.off('rooms:leave:client', leaveRoomCallback);
       socket.off('games:patch:status:client', patchStatusCallback);
+      socket.off('games:patch:restart:client', patchRestartGameCallback);
     };
   }, []);
 
