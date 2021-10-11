@@ -26,12 +26,14 @@ export const Header: React.FC<I.HeaderProps> = ({
     onLogout: undefined,
     isOpen: undefined,
     toggleDrawer: undefined,
+    onProfileBtnClick: undefined,
   };
   if (isLoggedIn) {
-    const { onLogout, isOpen, toggleDrawer } = useLoginContext();
+    const { onLogout, isOpen, toggleDrawer, onProfileBtnClick } = useLoginContext();
     loginContext.onLogout = onLogout;
     loginContext.isOpen = isOpen;
     loginContext.toggleDrawer = toggleDrawer;
+    loginContext.onProfileBtnClick = onProfileBtnClick;
   }
   const roomPageContext: I.IRoomPageContext = {
     selfUserInRoom: undefined,
@@ -49,7 +51,10 @@ export const Header: React.FC<I.HeaderProps> = ({
         {where === 'CREATE' && (
           <>
             <List
-              onClick={onToggleModal}
+              onClick={() =>
+                (onToggleModal && onToggleModal()) ||
+                (loginContext.toggleDrawer && loginContext.toggleDrawer())
+              }
               marginprop={isMobile ? ['1rem', '0', '0', '0'] : undefined}
               paddingProp={['1.5rem']}
               widthprop={isMobile ? '100%' : undefined}
@@ -62,22 +67,17 @@ export const Header: React.FC<I.HeaderProps> = ({
               방 반들기
             </List>
             <List
-              colorprop={isMobile ? 'white' : 'black'}
+              onClick={() => loginContext.onProfileBtnClick && loginContext.onProfileBtnClick()}
+              marginprop={isMobile ? ['1rem', '0', '0', '0'] : undefined}
+              paddingProp={['1.5rem']}
               widthprop={isMobile ? '100%' : undefined}
               textalignprop="center"
+              colorprop={isMobile ? 'white' : 'black'}
               cursorprop={true}
               shadowprop={true}
               hovershadowprop={true}
             >
-              <Link
-                to="/profile"
-                displayprop="inline-block"
-                paddingprop={['1.5rem']}
-                widthprop={isMobile ? '100%' : undefined}
-                colorprop={isMobile ? 'black' : 'white'}
-              >
-                프로필
-              </Link>
+              프로필
             </List>
             <List
               onClick={() => loginContext.onLogout && loginContext.onLogout()}
@@ -97,7 +97,10 @@ export const Header: React.FC<I.HeaderProps> = ({
           roomPageContext.selfUserInRoom &&
           roomPageContext.selfUserInRoom.host === true && (
             <List
-              onClick={onToggleModal}
+              onClick={() =>
+                (onToggleModal && onToggleModal()) ||
+                (loginContext.toggleDrawer && loginContext.toggleDrawer())
+              }
               colorprop={isMobile ? 'white' : 'black'}
               paddingProp={['1.5rem']}
               widthprop={isMobile ? '100%' : undefined}
@@ -112,7 +115,8 @@ export const Header: React.FC<I.HeaderProps> = ({
         {where === 'UPDATE' && (
           <List
             onClick={() =>
-              roomPageContext.onLeaveRoomListClick && roomPageContext.onLeaveRoomListClick()
+              (onToggleModal && onToggleModal()) ||
+              (roomPageContext.onLeaveRoomListClick && roomPageContext.onLeaveRoomListClick())
             }
             colorprop={isMobile ? 'white' : 'black'}
             paddingProp={['1.5rem']}

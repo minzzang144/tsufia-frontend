@@ -28,6 +28,7 @@ interface ILogInContext {
   onLogout: () => Promise<void>;
   isOpen: boolean;
   toggleDrawer: () => void;
+  onProfileBtnClick: () => void;
 }
 
 // Create Room Context Interface
@@ -139,10 +140,17 @@ const LoginWrapper: React.FC = ({ children }) => {
     setIsOpen((prevState) => !prevState);
   }
 
+  // [Header] 프로필 링크 연동
+  function onProfileBtnClick() {
+    setIsOpen((prevState) => !prevState);
+    history.push('/profile');
+  }
+
   const loginValue = {
     onLogout,
     isOpen,
     toggleDrawer,
+    onProfileBtnClick,
   };
 
   const value = {

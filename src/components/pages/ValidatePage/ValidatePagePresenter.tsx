@@ -8,13 +8,20 @@ import { useValidateContext } from '@pages/ValidatePage/ValidatePageContainer';
 
 export const ValidatePagePresenter: React.FC = () => {
   const validateContext = useValidateContext();
-  const { onToggleModal } = useCreateRoomFormContext();
+  const createRoomFormContext = useCreateRoomFormContext();
+  const { onToggleModal } = createRoomFormContext;
   return (
     <Centralization
       header={
         <Header isLoggedIn={true} where="CREATE" onToggleModal={onToggleModal} colorProp="black" />
       }
-      center={<FormContainer where="validate-password" context={validateContext} />}
+      center={
+        <FormContainer
+          where="validate-password"
+          context={validateContext}
+          modalContext={createRoomFormContext}
+        />
+      }
       isBackground={false}
     />
   );

@@ -16,8 +16,9 @@ import { RootState } from '@modules';
 import { IValidateContext } from '@pages/ValidatePage';
 import { IProfileUpdateContext } from '@pages/ProfileUpdatePage';
 import { ILoginContext, ISignUpContext } from '@pages/LogoutHome/LogoutHomeContainer';
+import { FormModal } from '@molecules/FormModal/FormModal';
 
-export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }) => {
+export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context, modalContext }) => {
   const { loading, error, accessToken, user } = useSelector(
     (state: RootState) => ({
       loading: state.authentication.loading,
@@ -41,6 +42,11 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
             letContext = { ...(context as IValidateContext) };
             return (
               <>
+                <FormModal
+                  formContext={modalContext!}
+                  title="방 만들기"
+                  defaultValue={{ input: '', radio: '' }}
+                />
                 <Form onSubmit={letContext.handleSubmit(letContext.onValid)}>
                   <Heading levelProp={2} marginProp={['0', '0', '5%']}>
                     Validate Password
@@ -76,72 +82,79 @@ export const FormContainer: React.FC<I.FormContainerProps> = ({ where, context }
             return (
               <>
                 {user && !error.getWillPatchUserError ? (
-                  <Form onSubmit={letContext.handleSubmit(letContext.onValid)}>
-                    <Heading levelProp={2} marginProp={['0', '0', '3%']}>
-                      Profile Update
-                    </Heading>
-                    <Input
-                      name="firstName"
-                      control={letContext.control}
-                      defaultValue={user.firstName}
-                      type="text"
-                      label="First Name"
-                      variant="outlined"
-                      errors={!!letContext.errors.firstName}
-                      helperText={
-                        letContext.errors.firstName ? letContext.errors.firstName.message : ''
-                      }
+                  <>
+                    <FormModal
+                      formContext={modalContext!}
+                      title="방 만들기"
+                      defaultValue={{ input: '', radio: '' }}
                     />
-                    <Input
-                      name="lastName"
-                      control={letContext.control}
-                      defaultValue={user.lastName}
-                      type="text"
-                      label="Last Name"
-                      variant="outlined"
-                      errors={!!letContext.errors.lastName}
-                      helperText={
-                        letContext.errors.lastName ? letContext.errors.lastName.message : ''
-                      }
-                    />
-                    <Input
-                      name="password"
-                      control={letContext.control}
-                      defaultValue=""
-                      type="password"
-                      label="Password"
-                      variant="outlined"
-                      errors={!!letContext.errors.password}
-                      helperText={
-                        letContext.errors.password ? letContext.errors.password.message : ''
-                      }
-                    />
-                    <Input
-                      name="checkPassword"
-                      control={letContext.control}
-                      defaultValue=""
-                      type="password"
-                      label="Check Password"
-                      variant="outlined"
-                      errors={!!letContext.errors.checkPassword}
-                      helperText={
-                        letContext.errors.checkPassword
-                          ? letContext.errors.checkPassword.message
-                          : ''
-                      }
-                    />
-                    <Button
-                      isValid={letContext.isValid}
-                      colorProp="black"
-                      marginProp={['2%', '0', '0', '0']}
-                      paddingProp={['1rem', '2rem']}
-                    >
-                      {letContext.isValid && loading === true ? 'Proceeding' : 'Continue'}
-                    </Button>
-                    {error?.profileUpdateError && (
-                      <Alert severity="error">{error.profileUpdateError}</Alert>
-                    )}
-                  </Form>
+                    <Form onSubmit={letContext.handleSubmit(letContext.onValid)}>
+                      <Heading levelProp={2} marginProp={['0', '0', '3%']}>
+                        Profile Update
+                      </Heading>
+                      <Input
+                        name="firstName"
+                        control={letContext.control}
+                        defaultValue={user.firstName}
+                        type="text"
+                        label="First Name"
+                        variant="outlined"
+                        errors={!!letContext.errors.firstName}
+                        helperText={
+                          letContext.errors.firstName ? letContext.errors.firstName.message : ''
+                        }
+                      />
+                      <Input
+                        name="lastName"
+                        control={letContext.control}
+                        defaultValue={user.lastName}
+                        type="text"
+                        label="Last Name"
+                        variant="outlined"
+                        errors={!!letContext.errors.lastName}
+                        helperText={
+                          letContext.errors.lastName ? letContext.errors.lastName.message : ''
+                        }
+                      />
+                      <Input
+                        name="password"
+                        control={letContext.control}
+                        defaultValue=""
+                        type="password"
+                        label="Password"
+                        variant="outlined"
+                        errors={!!letContext.errors.password}
+                        helperText={
+                          letContext.errors.password ? letContext.errors.password.message : ''
+                        }
+                      />
+                      <Input
+                        name="checkPassword"
+                        control={letContext.control}
+                        defaultValue=""
+                        type="password"
+                        label="Check Password"
+                        variant="outlined"
+                        errors={!!letContext.errors.checkPassword}
+                        helperText={
+                          letContext.errors.checkPassword
+                            ? letContext.errors.checkPassword.message
+                            : ''
+                        }
+                      />
+                      <Button
+                        isValid={letContext.isValid}
+                        colorProp="black"
+                        marginProp={['2%', '0', '0', '0']}
+                        paddingProp={['1rem', '2rem']}
+                      >
+                        {letContext.isValid && loading === true ? 'Proceeding' : 'Continue'}
+                      </Button>
+                      {error?.profileUpdateError && (
+                        <Alert severity="error">{error.profileUpdateError}</Alert>
+                      )}
+                    </Form>
+                  </>
                 ) : (
                   <Alert severity="error">{error.getWillPatchUserError}</Alert>
                 )}
