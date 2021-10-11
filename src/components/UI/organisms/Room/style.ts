@@ -14,6 +14,15 @@ export const Wrapper = styled.div`
   justify-content: space-between;
   margin: 0 auto;
   width: 70%;
+
+  @media ${({ theme }) => theme.device.laptop} {
+    width: 90%;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    flex-direction: column;
+    align-items: center;
+    justify-content: unset;
+  }
 `;
 
 export const RoomContainer = styled.div`
@@ -26,6 +35,10 @@ export const RoomContainer = styled.div`
   width: 49%;
   height: 45%;
   cursor: pointer;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+  }
 `;
 
 export const ErrorPart = styled.span`
