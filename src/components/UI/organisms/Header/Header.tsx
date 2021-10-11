@@ -56,19 +56,23 @@ export const Header: React.FC<I.HeaderProps> = ({
               textalignprop="center"
               colorprop={isMobile ? 'white' : 'black'}
               cursorprop={true}
+              shadowprop={true}
+              hovershadowprop={true}
             >
               방 반들기
             </List>
             <List
               colorprop={isMobile ? 'white' : 'black'}
-              paddingProp={['1.5rem']}
               widthprop={isMobile ? '100%' : undefined}
               textalignprop="center"
               cursorprop={true}
+              shadowprop={true}
+              hovershadowprop={true}
             >
               <Link
                 to="/profile"
                 displayprop="inline-block"
+                paddingprop={['1.5rem']}
                 widthprop={isMobile ? '100%' : undefined}
                 colorprop={isMobile ? 'black' : 'white'}
               >
@@ -82,6 +86,8 @@ export const Header: React.FC<I.HeaderProps> = ({
               widthprop={isMobile ? '100%' : undefined}
               textalignprop="center"
               cursorprop={true}
+              shadowprop={true}
+              hovershadowprop={true}
             >
               로그아웃
             </List>
@@ -97,6 +103,8 @@ export const Header: React.FC<I.HeaderProps> = ({
               widthprop={isMobile ? '100%' : undefined}
               textalignprop="center"
               cursorprop={true}
+              shadowprop={true}
+              hovershadowprop={true}
             >
               방 수정하기
             </List>
@@ -111,6 +119,8 @@ export const Header: React.FC<I.HeaderProps> = ({
             widthprop={isMobile ? '100%' : undefined}
             textalignprop="center"
             cursorprop={true}
+            shadowprop={true}
+            hovershadowprop={true}
           >
             나가기
           </List>

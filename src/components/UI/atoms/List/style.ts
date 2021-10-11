@@ -17,6 +17,8 @@ type BorderRadiusPick = Pick<I.ListProps, 'borderRadiusprop'>;
 type TextAlignPick = Pick<I.ListProps, 'textalignprop'>;
 type ColorPick = Pick<I.ListProps, 'colorprop'>;
 type CursorPick = Pick<I.ListProps, 'cursorprop'>;
+type ShadowPick = Pick<I.ListProps, 'shadowprop'>;
+type HoverShadowPick = Pick<I.ListProps, 'hovershadowprop'>;
 
 const positionStyles = css<PositionPick>`
   ${({ positionprop }) => {
@@ -267,6 +269,37 @@ const cursorStyles = css<CursorPick>`
   }}
 `;
 
+const shadowStyles = css<ShadowPick>`
+  ${({ shadowprop }) => {
+    switch (shadowprop) {
+      case true:
+        return css`
+          box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        `;
+      default:
+        break;
+    }
+  }}
+`;
+
+const hoverShadowStyles = css<HoverShadowPick>`
+  ${({ hovershadowprop }) => {
+    switch (hovershadowprop) {
+      case true:
+        return css`
+          &:hover {
+            box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 0 #0000,
+              0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+              0 4px 6px -2px rgba(0, 0, 0, 0.05);
+          }
+        `;
+      default:
+        break;
+    }
+  }}
+`;
+
 export const Wrapper = styled.li`
   list-style: none;
 
@@ -296,4 +329,8 @@ export const Wrapper = styled.li`
 
   /* Cursor Styles */
   ${cursorStyles}
+
+  /* Box Shadow Styles */
+  ${shadowStyles}
+  ${hoverShadowStyles}
 `;

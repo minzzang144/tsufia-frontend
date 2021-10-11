@@ -23,4 +23,6 @@ export interface ListProps {
   colorprop?: ColorProp;
   textalignprop?: 'start' | 'center' | 'end';
   cursorprop?: boolean;
+  shadowprop?: boolean;
+  hovershadowprop?: boolean;
 }
