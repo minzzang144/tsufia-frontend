@@ -43,6 +43,13 @@ export const FormContainer = styled.div`
   border: 2px solid ${({ theme }) => theme.color.light};
   border-radius: 4px;
   width: 50%;
+
+  @media ${({ theme }) => theme.device.laptop} {
+    width: 70%;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 90%;
+  }
 `;
 
 const CommonStyles = withStyles({
