@@ -26,32 +26,33 @@ export const Wrapper = styled.div`
 
   /* Background Styles */
   ${backgroundStyles}
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 90%;
+  }
 `;
 
-export const VolumeUpOutline = withStyles({
+const VolumeStyle = withStyles({
   root: {
     cursor: 'pointer',
     color: 'white',
     position: 'absolute',
-    bottom: '1.5rem',
-    right: '1.5rem',
+    top: '2.5rem',
+    left: '30%',
     opacity: 0.7,
+    transform: 'translate(-50%, -50%)',
     '&:hover': {
       opacity: 1,
     },
+    '@media screen and (max-width: 1024px)': {
+      left: '40%',
+    },
+    '@media screen and (max-width: 640px)': {
+      left: '60%',
+    },
   },
-})(VolumeUpOutlined);
+});
 
-export const VolumeOffOutline = withStyles({
-  root: {
-    cursor: 'pointer',
-    color: 'white',
-    position: 'absolute',
-    bottom: '1.5rem',
-    right: '1.5rem',
-    opacity: 0.7,
-    '&:hover': {
-      opacity: 1,
-    },
-  },
-})(VolumeOffOutlined);
+export const VolumeUpOutline = VolumeStyle(VolumeUpOutlined);
+
+export const VolumeOffOutline = VolumeStyle(VolumeOffOutlined);

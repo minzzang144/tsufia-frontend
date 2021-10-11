@@ -4,7 +4,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 
 import * as S from '@molecules/Notification/style';
 
-import { Span } from '@atoms/Span/Span';
+import { SpanWidthMedia } from '@atoms/Span/Span';
 import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
 import { User, UserRole } from '@auth';
 import { RootState } from '@modules';
@@ -38,7 +38,7 @@ export const Notification: React.FC = ({ children, ...rest }) => {
     if (room && !room.game) {
       return (
         <>
-          <Span
+          <SpanWidthMedia
             positionprop="absolute"
             topprop="6rem"
             displayProp="inline-flex"
@@ -49,8 +49,8 @@ export const Notification: React.FC = ({ children, ...rest }) => {
             colorProp="white"
           >
             Tsufia 게임에 참여하신 것을 환영합니다!
-          </Span>
-          <Span
+          </SpanWidthMedia>
+          <SpanWidthMedia
             positionprop="absolute"
             topprop="7.5rem"
             displayProp="inline-flex"
@@ -61,8 +61,8 @@ export const Notification: React.FC = ({ children, ...rest }) => {
             colorProp="white"
           >
             곧 게임이 시작됩니다
-          </Span>
-          <Span
+          </SpanWidthMedia>
+          <SpanWidthMedia
             positionprop="absolute"
             topprop="9rem"
             displayProp="inline-flex"
@@ -73,7 +73,7 @@ export const Notification: React.FC = ({ children, ...rest }) => {
             colorProp="white"
           >{`게임이 시작되기까지 ${
             room.totalHeadCount - room.currentHeadCount
-          }명 남았습니다`}</Span>
+          }명 남았습니다`}</SpanWidthMedia>
         </>
       );
     }
@@ -81,7 +81,7 @@ export const Notification: React.FC = ({ children, ...rest }) => {
       switch (room.game.cycle) {
         case null:
           return (
-            <Span
+            <SpanWidthMedia
               positionprop="absolute"
               topprop="6rem"
               displayProp="inline-flex"
@@ -90,12 +90,12 @@ export const Notification: React.FC = ({ children, ...rest }) => {
               levelProp={4}
               marginProp={['0']}
               colorProp="white"
-            >{`게임 시작까지 ${countDown}초 남았습니다`}</Span>
+            >{`게임 시작까지 ${countDown}초 남았습니다`}</SpanWidthMedia>
           );
         case Cycle.밤:
           return (
             <>
-              <Span
+              <SpanWidthMedia
                 positionprop="absolute"
                 topprop="6rem"
                 displayProp="inline-flex"
@@ -106,8 +106,8 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                 colorProp="white"
               >
                 밤이 되었습니다. 마피아는 서로를 확인하시기 바랍니다
-              </Span>
-              <Span
+              </SpanWidthMedia>
+              <SpanWidthMedia
                 positionprop="absolute"
                 topprop="7.5rem"
                 displayProp="inline-flex"
@@ -118,8 +118,8 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                 colorProp="white"
               >
                 마피아는 죽일 사람을 선택해 주세요
-              </Span>
-              <Span
+              </SpanWidthMedia>
+              <SpanWidthMedia
                 positionprop="absolute"
                 topprop="9rem"
                 displayProp="inline-flex"
@@ -128,9 +128,9 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                 levelProp={4}
                 marginProp={['0']}
                 colorProp="white"
-              >{`${countDown}초 남았습니다`}</Span>
+              >{`${countDown}초 남았습니다`}</SpanWidthMedia>
               {currentUser?.role === UserRole.Mafia && (
-                <Span
+                <SpanWidthMedia
                   positionprop="absolute"
                   topprop="11rem"
                   displayProp="inline-flex"
@@ -141,10 +141,10 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                   colorProp="red"
                 >
                   당신은 마피아입니다. 시민을 모두 죽여 게임을 승리하세요!
-                </Span>
+                </SpanWidthMedia>
               )}
               {currentUser?.role === UserRole.Citizen && (
-                <Span
+                <SpanWidthMedia
                   positionprop="absolute"
                   topprop="11rem"
                   displayProp="inline-flex"
@@ -155,14 +155,14 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                   colorProp="white"
                 >
                   당신은 시민입니다. 마피아를 모두 찾아 게임을 승리하세요!
-                </Span>
+                </SpanWidthMedia>
               )}
             </>
           );
         case Cycle.낮:
           return currentUser?.survive ? (
             <>
-              <Span
+              <SpanWidthMedia
                 positionprop="absolute"
                 topprop="6rem"
                 displayProp="inline-flex"
@@ -173,9 +173,9 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                 colorProp="white"
               >
                 낮이 되었습니다
-              </Span>
+              </SpanWidthMedia>
               {selectUser ? (
-                <Span
+                <SpanWidthMedia
                   positionprop="absolute"
                   topprop="7.5rem"
                   displayProp="inline-flex"
@@ -190,9 +190,9 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                     selectUser.lastName,
                     selectUser.nickname,
                   )}님이 살해당하였습니다`}
-                </Span>
+                </SpanWidthMedia>
               ) : (
-                <Span
+                <SpanWidthMedia
                   positionprop="absolute"
                   topprop="7.5rem"
                   displayProp="inline-flex"
@@ -203,9 +203,9 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                   colorProp="white"
                 >
                   밤 사이 아무일도 일어나지 않았습니다
-                </Span>
+                </SpanWidthMedia>
               )}
-              <Span
+              <SpanWidthMedia
                 positionprop="absolute"
                 topprop="9rem"
                 displayProp="inline-flex"
@@ -216,11 +216,11 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                 colorProp="white"
               >
                 {`시민 여러분께 낮 동안 자유롭게 대화할 시간 ${countDown}초를 드립니다`}
-              </Span>
+              </SpanWidthMedia>
             </>
           ) : (
             <>
-              <Span
+              <SpanWidthMedia
                 positionprop="absolute"
                 topprop="6rem"
                 displayProp="inline-flex"
@@ -231,8 +231,8 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                 colorProp="red"
               >
                 당신은 살해당하였습니다
-              </Span>
-              <Span
+              </SpanWidthMedia>
+              <SpanWidthMedia
                 positionprop="absolute"
                 topprop="7.5rem"
                 displayProp="inline-flex"
@@ -243,8 +243,8 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                 colorProp="white"
               >
                 지금부터 다른 유저와의 소통은 불가하며 죽은 사람 또는 마피아와 채팅할 수 있습니다
-              </Span>
-              <Span
+              </SpanWidthMedia>
+              <SpanWidthMedia
                 positionprop="absolute"
                 topprop="9rem"
                 displayProp="inline-flex"
@@ -255,13 +255,13 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                 colorProp="white"
               >
                 {`${countDown}초 남았습니다`}
-              </Span>
+              </SpanWidthMedia>
             </>
           );
         case Cycle.저녁:
           return (
             <>
-              <Span
+              <SpanWidthMedia
                 positionprop="absolute"
                 topprop="6rem"
                 displayProp="inline-flex"
@@ -272,8 +272,8 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                 colorProp="white"
               >
                 투표의 시간이 찾아왔습니다
-              </Span>
-              <Span
+              </SpanWidthMedia>
+              <SpanWidthMedia
                 positionprop="absolute"
                 topprop="7.5rem"
                 displayProp="inline-flex"
@@ -284,8 +284,8 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                 colorProp="white"
               >
                 투표는 비공개로 이루어지며 아래 사용자 박스에서 클릭하여 선택할 수 있습니다
-              </Span>
-              <Span
+              </SpanWidthMedia>
+              <SpanWidthMedia
                 positionprop="absolute"
                 topprop="9rem"
                 displayProp="inline-flex"
@@ -296,7 +296,7 @@ export const Notification: React.FC = ({ children, ...rest }) => {
                 colorProp="white"
               >
                 {`${countDown}초 남았습니다`}
-              </Span>
+              </SpanWidthMedia>
             </>
           );
         default:
@@ -304,7 +304,7 @@ export const Notification: React.FC = ({ children, ...rest }) => {
       }
     } else if (roomError) {
       return (
-        <Span
+        <SpanWidthMedia
           positionprop="absolute"
           topprop="6rem"
           displayProp="inline-flex"
@@ -315,7 +315,7 @@ export const Notification: React.FC = ({ children, ...rest }) => {
           colorProp="white"
         >
           {roomError}
-        </Span>
+        </SpanWidthMedia>
       );
     }
   }

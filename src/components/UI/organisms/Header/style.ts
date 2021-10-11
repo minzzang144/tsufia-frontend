@@ -28,6 +28,7 @@ const colorStyles = css<ColorPick>`
 
 export const Wrapper = styled.div`
   width: 100%;
+  height: 5rem;
 
   /* Color Styles */
   ${colorStyles}
@@ -38,7 +39,8 @@ export const SpaceBetween = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 70%;
-  margin: 1rem auto;
+  margin: 0 auto;
+  height: 100%;
   background-color: ${({ theme }) => theme.color.dark};
 
   @media ${({ theme }) => theme.device.mobile} {
