@@ -18,7 +18,7 @@ const maxWidthStyles = css<MaxWidthPick>`
   ${({ maxwidthprop }) =>
     maxwidthprop &&
     css`
-      width: ${maxwidthprop};
+      max-width: ${maxwidthprop};
     `}
 `;
 

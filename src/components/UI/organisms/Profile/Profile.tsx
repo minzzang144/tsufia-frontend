@@ -6,7 +6,7 @@ import * as S from '@organisms/Profile/style';
 import { Provider } from '@auth';
 import { Button } from '@atoms/Button/Button';
 import { Img } from '@atoms/Img/Img';
-import { Table } from '@atoms/Table/Table';
+import { MediaTable } from '@atoms/Table/Table';
 import { Tdata } from '@atoms/Tdata/Tdata';
 import { FormModal } from '@molecules/FormModal/FormModal';
 import { RootState } from '@modules';
@@ -83,7 +83,7 @@ export const Profile: React.FC = ({ children, ...rest }) => {
           {getUserInitial(user.firstName, user.nickname)}
         </Img>
       )}
-      <Table widthprop="100%" maxwidthprop="50%" colorprop="white">
+      <MediaTable widthprop="100%" maxwidthprop="50%" colorprop="white">
         <tbody>
           <tr>
             <Tdata paddingprop={['4%', '0']} colorprop="white">
@@ -104,7 +104,7 @@ export const Profile: React.FC = ({ children, ...rest }) => {
             <Tdata paddingprop={['4%', '0']}>{getLoginMethod(user.provider ?? 0)}</Tdata>
           </tr>
         </tbody>
-      </Table>
+      </MediaTable>
       <Button
         onClick={() => onProfileUpdateClick(user.id)}
         colorProp="black"
