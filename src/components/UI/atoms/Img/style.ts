@@ -168,6 +168,7 @@ export const Wrapper = styled.img`
 
 export const SubWrapper = styled.div`
   display: flex;
+  flex-shrink: 0;
 
   /* Flex Styles */
   ${justifyContentStyles}

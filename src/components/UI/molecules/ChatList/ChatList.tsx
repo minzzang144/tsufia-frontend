@@ -6,7 +6,7 @@ import * as S from '@molecules/ChatList/style';
 
 import { UnorderedList } from '@atoms/UnorderedList/UnorderedList';
 import { BorderProp } from '@atoms/List';
-import { List } from '@atoms/List/List';
+import { ListMediaQuery } from '@atoms/List/List';
 import { Img } from '@atoms/Img/Img';
 import { Span } from '@atoms/Span/Span';
 import { Paragraph } from '@atoms/Paragraph/Paragraph';
@@ -113,7 +113,7 @@ export const ChatList = React.forwardRef<HTMLDivElement, React.PropsWithChildren
         {loading === false && !error && (
           <UnorderedList flexDirection="column" justifyContentProp="flex-start" widthProp="100%">
             {renderFilteringChats()?.map((chat) => (
-              <List
+              <ListMediaQuery
                 key={chat.id}
                 displayprop="flex"
                 alignItemsprop="flex-start"
@@ -159,7 +159,7 @@ export const ChatList = React.forwardRef<HTMLDivElement, React.PropsWithChildren
                   )}
                   <Paragraph marginprop={['0.5rem', '0']}>{chat.content}</Paragraph>
                 </S.Content>
-              </List>
+              </ListMediaQuery>
             ))}
           </UnorderedList>
         )}
