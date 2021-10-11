@@ -15,7 +15,7 @@ export interface ILogoutContext {
   onLogout?: () => Promise<void>;
   isOpen?: boolean;
   toggleDrawer?: () => void;
-  onProfileBtnClick?: () => void;
+  onProfileBtnClick?: (isMobile: boolean) => void;
 }
 
 export interface IRoomPageContext {

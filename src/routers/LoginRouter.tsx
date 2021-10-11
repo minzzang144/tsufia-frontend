@@ -28,7 +28,7 @@ interface ILogInContext {
   onLogout: () => Promise<void>;
   isOpen: boolean;
   toggleDrawer: () => void;
-  onProfileBtnClick: () => void;
+  onProfileBtnClick: (isMobile: boolean) => void;
 }
 
 // Create Room Context Interface
@@ -141,9 +141,13 @@ const LoginWrapper: React.FC = ({ children }) => {
   }
 
   // [Header] 프로필 링크 연동
-  function onProfileBtnClick() {
-    setIsOpen((prevState) => !prevState);
-    history.push('/profile');
+  function onProfileBtnClick(isMobile: boolean) {
+    if (isMobile) {
+      setIsOpen((prevState) => !prevState);
+      history.push('/profile');
+    } else {
+      history.push('/profile');
+    }
   }
 
   const loginValue = {

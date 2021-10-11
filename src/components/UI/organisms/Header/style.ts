@@ -40,6 +40,10 @@ export const SpaceBetween = styled.div`
   width: 70%;
   margin: 1rem auto;
   background-color: ${({ theme }) => theme.color.dark};
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 85%;
+  }
 `;
 
 export const UnorderedListStyled = styled(UnorderedList)`

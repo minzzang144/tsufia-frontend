@@ -52,8 +52,10 @@ export const Header: React.FC<I.HeaderProps> = ({
           <>
             <List
               onClick={() =>
-                (onToggleModal && onToggleModal()) ||
-                (loginContext.toggleDrawer && loginContext.toggleDrawer())
+                isMobile
+                  ? (onToggleModal && onToggleModal()) ||
+                    (loginContext.toggleDrawer && loginContext.toggleDrawer())
+                  : onToggleModal && onToggleModal()
               }
               marginprop={isMobile ? ['1rem', '0', '0', '0'] : undefined}
               paddingProp={['1.5rem']}
@@ -67,7 +69,11 @@ export const Header: React.FC<I.HeaderProps> = ({
               방 반들기
             </List>
             <List
-              onClick={() => loginContext.onProfileBtnClick && loginContext.onProfileBtnClick()}
+              onClick={() =>
+                isMobile
+                  ? loginContext.onProfileBtnClick && loginContext.onProfileBtnClick(true)
+                  : loginContext.onProfileBtnClick && loginContext.onProfileBtnClick(false)
+              }
               marginprop={isMobile ? ['1rem', '0', '0', '0'] : undefined}
               paddingProp={['1.5rem']}
               widthprop={isMobile ? '100%' : undefined}
@@ -98,8 +104,10 @@ export const Header: React.FC<I.HeaderProps> = ({
           roomPageContext.selfUserInRoom.host === true && (
             <List
               onClick={() =>
-                (onToggleModal && onToggleModal()) ||
-                (loginContext.toggleDrawer && loginContext.toggleDrawer())
+                isMobile
+                  ? (onToggleModal && onToggleModal()) ||
+                    (loginContext.toggleDrawer && loginContext.toggleDrawer())
+                  : onToggleModal && onToggleModal()
               }
               colorprop={isMobile ? 'white' : 'black'}
               paddingProp={['1.5rem']}
@@ -115,8 +123,10 @@ export const Header: React.FC<I.HeaderProps> = ({
         {where === 'UPDATE' && (
           <List
             onClick={() =>
-              (onToggleModal && onToggleModal()) ||
-              (roomPageContext.onLeaveRoomListClick && roomPageContext.onLeaveRoomListClick())
+              isMobile
+                ? (loginContext.toggleDrawer && loginContext.toggleDrawer()) ||
+                  (roomPageContext.onLeaveRoomListClick && roomPageContext.onLeaveRoomListClick())
+                : roomPageContext.onLeaveRoomListClick && roomPageContext.onLeaveRoomListClick()
             }
             colorprop={isMobile ? 'white' : 'black'}
             paddingProp={['1.5rem']}
