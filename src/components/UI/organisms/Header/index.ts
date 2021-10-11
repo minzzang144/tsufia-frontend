@@ -21,4 +21,6 @@ export interface ILogoutContext {
 export interface IRoomPageContext {
   selfUserInRoom?: User;
   onLeaveRoomListClick?: () => void;
+  onAudioBtnClick?: () => void;
+  muted?: boolean;
 }

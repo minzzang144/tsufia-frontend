@@ -1,6 +1,3 @@
-import { withStyles } from '@material-ui/core';
-import VolumeUpOutlined from '@material-ui/icons/VolumeUpOutlined';
-import VolumeOffOutlined from '@material-ui/icons/VolumeOffOutlined';
 import styled, { css } from 'styled-components';
 
 import * as I from '.';
@@ -31,28 +28,3 @@ export const Wrapper = styled.div`
     width: 90%;
   }
 `;
-
-const VolumeStyle = withStyles({
-  root: {
-    cursor: 'pointer',
-    color: 'white',
-    position: 'absolute',
-    top: '2.5rem',
-    left: '30%',
-    opacity: 0.7,
-    transform: 'translate(-50%, -50%)',
-    '&:hover': {
-      opacity: 1,
-    },
-    '@media screen and (max-width: 1024px)': {
-      left: '40%',
-    },
-    '@media screen and (max-width: 640px)': {
-      left: '60%',
-    },
-  },
-});
-
-export const VolumeUpOutline = VolumeStyle(VolumeUpOutlined);
-
-export const VolumeOffOutline = VolumeStyle(VolumeOffOutlined);

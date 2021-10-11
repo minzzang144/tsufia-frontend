@@ -4,7 +4,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 
 import * as S from '@molecules/Notification/style';
 
-import { Span, SpanWidthMedia } from '@atoms/Span/Span';
+import { Span } from '@atoms/Span/Span';
 import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
 import { User, UserRole } from '@auth';
 import { RootState } from '@modules';

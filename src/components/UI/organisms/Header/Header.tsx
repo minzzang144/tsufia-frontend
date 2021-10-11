@@ -14,6 +14,8 @@ import { UnorderedList } from '@atoms/UnorderedList/UnorderedList';
 import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
 import { useLoginContext } from '@routers/LoginRouter';
 import { Link } from '@atoms/Link/Link';
+import { useSelector } from 'react-redux';
+import { RootState } from '@modules';
 
 export const Header: React.FC<I.HeaderProps> = ({
   children,
@@ -38,11 +40,33 @@ export const Header: React.FC<I.HeaderProps> = ({
   const roomPageContext: I.IRoomPageContext = {
     selfUserInRoom: undefined,
     onLeaveRoomListClick: undefined,
+    muted: undefined,
   };
   if (where === 'UPDATE') {
-    const { selfUserInRoom, onLeaveRoomListClick } = useRoomPageContext();
+    const { selfUserInRoom, onLeaveRoomListClick, onAudioBtnClick, muted } = useRoomPageContext();
     roomPageContext.onLeaveRoomListClick = onLeaveRoomListClick;
     roomPageContext.selfUserInRoom = selfUserInRoom;
+    roomPageContext.onAudioBtnClick = onAudioBtnClick;
+    roomPageContext.muted = muted;
+  }
+  const room = useSelector((state: RootState) => state.room.data);
+
+  function renderAudio(isMobile: boolean) {
+    if (where === 'UPDATE' && !isMobile) {
+      return (
+        <List marginprop={['0', '1.5rem', '0', '0']}>
+          {room?.game && roomPageContext.muted ? (
+            <S.VolumeOffOutline
+              onClick={() => roomPageContext.onAudioBtnClick && roomPageContext.onAudioBtnClick()}
+            />
+          ) : (
+            <S.VolumeUpOutline
+              onClick={() => roomPageContext.onAudioBtnClick && roomPageContext.onAudioBtnClick()}
+            />
+          )}
+        </List>
+      );
+    }
   }
 
   function renderNavigationMenu(isMobile: boolean) {
@@ -99,6 +123,7 @@ export const Header: React.FC<I.HeaderProps> = ({
             </List>
           </>
         )}
+        {renderAudio(isMobile)}
         {where === 'UPDATE' &&
           roomPageContext.selfUserInRoom &&
           roomPageContext.selfUserInRoom.host === true && (
@@ -168,19 +193,25 @@ export const Header: React.FC<I.HeaderProps> = ({
                   Tsufia
                 </Heading>
               </S.Logo>
-              <S.UnorderedListStyled alignItemsProp="center">
-                {renderNavigationMenu(false)}
-              </S.UnorderedListStyled>
 
-              {loginContext.isOpen ? (
-                <S.MenuOpened
-                  onClick={() => loginContext.toggleDrawer && loginContext.toggleDrawer()}
-                />
-              ) : (
-                <S.Menued
-                  onClick={() => loginContext.toggleDrawer && loginContext.toggleDrawer()}
-                />
-              )}
+              {/* 데크스탑 이상에서만 보이는 네비게이션 모드 */}
+              <S.UnorderedListDesktop alignItemsProp="center">
+                {renderNavigationMenu(false)}
+              </S.UnorderedListDesktop>
+
+              {/* 모바일에서 보이는 네비게이션 모드 */}
+              <S.UnorderedListMobile>
+                {renderAudio(false)}
+                {loginContext.isOpen ? (
+                  <S.MenuOpened
+                    onClick={() => loginContext.toggleDrawer && loginContext.toggleDrawer()}
+                  />
+                ) : (
+                  <S.Menued
+                    onClick={() => loginContext.toggleDrawer && loginContext.toggleDrawer()}
+                  />
+                )}
+              </S.UnorderedListMobile>
             </S.SpaceBetween>
             <Drawer
               open={loginContext.isOpen ? loginContext.isOpen : false}
