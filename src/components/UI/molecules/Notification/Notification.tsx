@@ -4,11 +4,12 @@ import { shallowEqual, useSelector } from 'react-redux';
 
 import * as S from '@molecules/Notification/style';
 
-import { SpanWidthMedia } from '@atoms/Span/Span';
+import { Span, SpanWidthMedia } from '@atoms/Span/Span';
 import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
 import { User, UserRole } from '@auth';
 import { RootState } from '@modules';
 import { Cycle } from '@game';
+import { Paragraph } from '@atoms/Paragraph/Paragraph';
 
 export const Notification: React.FC = ({ children, ...rest }) => {
   const { countDown, selectCitizenId } = useRoomPageContext();
@@ -38,42 +39,12 @@ export const Notification: React.FC = ({ children, ...rest }) => {
     if (room && !room.game) {
       return (
         <>
-          <SpanWidthMedia
-            positionprop="absolute"
-            topprop="6rem"
-            displayProp="inline-flex"
-            justifyContentprop="center"
-            widthprop="70%"
-            levelProp={4}
-            marginProp={['0']}
-            colorProp="white"
-          >
-            Tsufia 게임에 참여하신 것을 환영합니다!
-          </SpanWidthMedia>
-          <SpanWidthMedia
-            positionprop="absolute"
-            topprop="7.5rem"
-            displayProp="inline-flex"
-            justifyContentprop="center"
-            widthprop="70%"
-            levelProp={4}
-            marginProp={['0']}
-            colorProp="white"
-          >
+          <Paragraph wordbreakprop="break-word" whitespaceprop="pre-line" textalignprop="center">
+            {`Tsufia 게임에 참여하신 것을 환영합니다!
             곧 게임이 시작됩니다
-          </SpanWidthMedia>
-          <SpanWidthMedia
-            positionprop="absolute"
-            topprop="9rem"
-            displayProp="inline-flex"
-            justifyContentprop="center"
-            widthprop="70%"
-            levelProp={4}
-            marginProp={['0']}
-            colorProp="white"
-          >{`게임이 시작되기까지 ${
-            room.totalHeadCount - room.currentHeadCount
-          }명 남았습니다`}</SpanWidthMedia>
+            게임이 시작되기까지 ${room.totalHeadCount - room.currentHeadCount}명 남았습니다
+            `}
+          </Paragraph>
         </>
       );
     }
@@ -81,241 +52,68 @@ export const Notification: React.FC = ({ children, ...rest }) => {
       switch (room.game.cycle) {
         case null:
           return (
-            <SpanWidthMedia
-              positionprop="absolute"
-              topprop="6rem"
-              displayProp="inline-flex"
-              justifyContentprop="center"
-              widthprop="70%"
-              levelProp={4}
-              marginProp={['0']}
-              colorProp="white"
-            >{`게임 시작까지 ${countDown}초 남았습니다`}</SpanWidthMedia>
+            <Paragraph wordbreakprop="break-word" whitespaceprop="pre-line" textalignprop="center">
+              {`게임 시작까지 ${countDown}초 남았습니다`}
+            </Paragraph>
           );
         case Cycle.밤:
           return (
-            <>
-              <SpanWidthMedia
-                positionprop="absolute"
-                topprop="6rem"
-                displayProp="inline-flex"
-                justifyContentprop="center"
-                widthprop="70%"
-                levelProp={4}
-                marginProp={['0']}
-                colorProp="white"
-              >
-                밤이 되었습니다. 마피아는 서로를 확인하시기 바랍니다
-              </SpanWidthMedia>
-              <SpanWidthMedia
-                positionprop="absolute"
-                topprop="7.5rem"
-                displayProp="inline-flex"
-                justifyContentprop="center"
-                widthprop="70%"
-                levelProp={4}
-                marginProp={['0']}
-                colorProp="white"
-              >
-                마피아는 죽일 사람을 선택해 주세요
-              </SpanWidthMedia>
-              <SpanWidthMedia
-                positionprop="absolute"
-                topprop="9rem"
-                displayProp="inline-flex"
-                justifyContentprop="center"
-                widthprop="70%"
-                levelProp={4}
-                marginProp={['0']}
-                colorProp="white"
-              >{`${countDown}초 남았습니다`}</SpanWidthMedia>
+            <Paragraph wordbreakprop="break-word" whitespaceprop="pre-line" textalignprop="center">
+              {`밤이 되었습니다. 마피아는 서로를 확인하시기 바랍니다
+                  마피아는 죽일 사람을 선택해 주세요
+                  ${countDown}초 남았습니다
+                `}
               {currentUser?.role === UserRole.Mafia && (
-                <SpanWidthMedia
-                  positionprop="absolute"
-                  topprop="11rem"
-                  displayProp="inline-flex"
-                  justifyContentprop="center"
-                  widthprop="70%"
-                  levelProp={4}
-                  marginProp={['0']}
-                  colorProp="red"
-                >
+                <Span displayProp="inline-flex" levelProp={4} colorProp="red">
                   당신은 마피아입니다. 시민을 모두 죽여 게임을 승리하세요!
-                </SpanWidthMedia>
+                </Span>
               )}
-              {currentUser?.role === UserRole.Citizen && (
-                <SpanWidthMedia
-                  positionprop="absolute"
-                  topprop="11rem"
-                  displayProp="inline-flex"
-                  justifyContentprop="center"
-                  widthprop="70%"
-                  levelProp={4}
-                  marginProp={['0']}
-                  colorProp="white"
-                >
-                  당신은 시민입니다. 마피아를 모두 찾아 게임을 승리하세요!
-                </SpanWidthMedia>
-              )}
-            </>
+              {currentUser?.role === UserRole.Citizen &&
+                `당신은 시민입니다. 마피아를 모두 찾아 게임을 승리하세요!`}
+            </Paragraph>
           );
         case Cycle.낮:
           return currentUser?.survive ? (
-            <>
-              <SpanWidthMedia
-                positionprop="absolute"
-                topprop="6rem"
-                displayProp="inline-flex"
-                justifyContentprop="center"
-                widthprop="70%"
-                levelProp={4}
-                marginProp={['0']}
-                colorProp="white"
-              >
-                낮이 되었습니다
-              </SpanWidthMedia>
+            <Paragraph wordbreakprop="break-word" whitespaceprop="pre-line" textalignprop="center">
+              {`낮이 되었습니다
+              `}
               {selectUser ? (
-                <SpanWidthMedia
-                  positionprop="absolute"
-                  topprop="7.5rem"
-                  displayProp="inline-flex"
-                  justifyContentprop="center"
-                  widthprop="70%"
-                  levelProp={4}
-                  marginProp={['0']}
-                  colorProp="red"
-                >
-                  {`${getUserFullName(
-                    selectUser.firstName,
-                    selectUser.lastName,
-                    selectUser.nickname,
-                  )}님이 살해당하였습니다`}
-                </SpanWidthMedia>
+                <Span displayProp="inline-flex" levelProp={4} colorProp="red">{`${getUserFullName(
+                  selectUser.firstName,
+                  selectUser.lastName,
+                  selectUser.nickname,
+                )}님이 살해당하였습니다`}</Span>
               ) : (
-                <SpanWidthMedia
-                  positionprop="absolute"
-                  topprop="7.5rem"
-                  displayProp="inline-flex"
-                  justifyContentprop="center"
-                  widthprop="70%"
-                  levelProp={4}
-                  marginProp={['0']}
-                  colorProp="white"
-                >
-                  밤 사이 아무일도 일어나지 않았습니다
-                </SpanWidthMedia>
+                `밤 사이 아무일도 일어나지 않았습니다`
               )}
-              <SpanWidthMedia
-                positionprop="absolute"
-                topprop="9rem"
-                displayProp="inline-flex"
-                justifyContentprop="center"
-                widthprop="70%"
-                levelProp={4}
-                marginProp={['0']}
-                colorProp="white"
-              >
-                {`시민 여러분께 낮 동안 자유롭게 대화할 시간 ${countDown}초를 드립니다`}
-              </SpanWidthMedia>
-            </>
+              {`
+              시민 여러분께 낮 동안 자유롭게 대화할 시간 ${countDown}초를 드립니다`}
+            </Paragraph>
           ) : (
-            <>
-              <SpanWidthMedia
-                positionprop="absolute"
-                topprop="6rem"
-                displayProp="inline-flex"
-                justifyContentprop="center"
-                widthprop="70%"
-                levelProp={4}
-                marginProp={['0']}
-                colorProp="red"
-              >
-                당신은 살해당하였습니다
-              </SpanWidthMedia>
-              <SpanWidthMedia
-                positionprop="absolute"
-                topprop="7.5rem"
-                displayProp="inline-flex"
-                justifyContentprop="center"
-                widthprop="70%"
-                levelProp={4}
-                marginProp={['0']}
-                colorProp="white"
-              >
-                지금부터 다른 유저와의 소통은 불가하며 죽은 사람 또는 마피아와 채팅할 수 있습니다
-              </SpanWidthMedia>
-              <SpanWidthMedia
-                positionprop="absolute"
-                topprop="9rem"
-                displayProp="inline-flex"
-                justifyContentprop="center"
-                widthprop="70%"
-                levelProp={4}
-                marginProp={['0']}
-                colorProp="white"
-              >
-                {`${countDown}초 남았습니다`}
-              </SpanWidthMedia>
-            </>
+            <Paragraph wordbreakprop="break-word" whitespaceprop="pre-line" textalignprop="center">
+              {`당신은 살해당하였습니다
+              지금부터 다른 유저와의 소통은 불가하며 죽은 사람 또는 마피아와 채팅할 수 있습니다
+              ${countDown}초 남았습니다
+              `}
+            </Paragraph>
           );
         case Cycle.저녁:
           return (
-            <>
-              <SpanWidthMedia
-                positionprop="absolute"
-                topprop="6rem"
-                displayProp="inline-flex"
-                justifyContentprop="center"
-                widthprop="70%"
-                levelProp={4}
-                marginProp={['0']}
-                colorProp="white"
-              >
-                투표의 시간이 찾아왔습니다
-              </SpanWidthMedia>
-              <SpanWidthMedia
-                positionprop="absolute"
-                topprop="7.5rem"
-                displayProp="inline-flex"
-                justifyContentprop="center"
-                widthprop="70%"
-                levelProp={4}
-                marginProp={['0']}
-                colorProp="white"
-              >
-                투표는 비공개로 이루어지며 아래 사용자 박스에서 클릭하여 선택할 수 있습니다
-              </SpanWidthMedia>
-              <SpanWidthMedia
-                positionprop="absolute"
-                topprop="9rem"
-                displayProp="inline-flex"
-                justifyContentprop="center"
-                widthprop="70%"
-                levelProp={4}
-                marginProp={['0']}
-                colorProp="white"
-              >
-                {`${countDown}초 남았습니다`}
-              </SpanWidthMedia>
-            </>
+            <Paragraph wordbreakprop="break-word" whitespaceprop="pre-line" textalignprop="center">
+              {`투표의 시간이 찾아왔습니다
+              투표는 비공개로 이루어지며 아래 사용자 박스에서 클릭하여 선택할 수 있습니다
+              ${countDown}초 남았습니다
+              `}
+            </Paragraph>
           );
         default:
           break;
       }
     } else if (roomError) {
       return (
-        <SpanWidthMedia
-          positionprop="absolute"
-          topprop="6rem"
-          displayProp="inline-flex"
-          justifyContentprop="center"
-          widthprop="70%"
-          levelProp={4}
-          marginProp={['0']}
-          colorProp="white"
-        >
+        <Paragraph wordbreakprop="break-word" whitespaceprop="pre-line" textalignprop="center">
           {roomError}
-        </SpanWidthMedia>
+        </Paragraph>
       );
     }
   }

@@ -5,6 +5,9 @@ import * as I from '.';
 type MarginPick = Pick<I.ParagraphProps, 'marginprop'>;
 type FontSizePick = Pick<I.ParagraphProps, 'fontSizeProp'>;
 type ColorPick = Pick<I.ParagraphProps, 'colorProp'>;
+type WorkBreakPick = Pick<I.ParagraphProps, 'wordbreakprop'>;
+type WhiteSpacePick = Pick<I.ParagraphProps, 'whitespaceprop'>;
+type TextAlignPick = Pick<I.ParagraphProps, 'textalignprop'>;
 
 const marginStyles = css<MarginPick>`
   ${({ marginprop }) => {
@@ -71,6 +74,81 @@ const colorStyles = css<ColorPick>`
     `}
 `;
 
+const wordBreakStyles = css<WorkBreakPick>`
+  ${({ wordbreakprop }) => {
+    switch (wordbreakprop) {
+      case 'normal':
+        return css`
+          word-break: normal;
+        `;
+      case 'break-all':
+        return css`
+          word-break: break-all;
+        `;
+      case 'break-word':
+        return css`
+          word-break: break-word;
+        `;
+      case 'keep-all':
+        return css`
+          word-break: keep-all;
+        `;
+      default:
+        break;
+    }
+  }}
+`;
+
+const whiteSpaceStyles = css<WhiteSpacePick>`
+  ${({ whitespaceprop }) => {
+    switch (whitespaceprop) {
+      case 'normal':
+        return css`
+          white-space: normal;
+        `;
+      case 'nowrap':
+        return css`
+          white-space: nowrap;
+        `;
+      case 'pre':
+        return css`
+          white-space: pre;
+        `;
+      case 'pre-line':
+        return css`
+          white-space: pre-line;
+        `;
+      case 'pre-wrap':
+        return css`
+          white-space: pre-wrap;
+        `;
+      default:
+        break;
+    }
+  }}
+`;
+
+const textAlignStyles = css<TextAlignPick>`
+  ${({ textalignprop }) => {
+    switch (textalignprop) {
+      case 'start':
+        return css`
+          text-align: start;
+        `;
+      case 'center':
+        return css`
+          text-align: center;
+        `;
+      case 'end':
+        return css`
+          text-align: end;
+        `;
+      default:
+        break;
+    }
+  }}
+`;
+
 export const Wrapper = styled.p`
   line-height: 1.5;
   word-break: break-all;
@@ -84,4 +162,9 @@ export const Wrapper = styled.p`
 
   /* Color Size Styles */
   ${colorStyles}
+
+  /* Word Styles */
+  ${wordBreakStyles}
+  ${whiteSpaceStyles}
+  ${textAlignStyles}
 `;

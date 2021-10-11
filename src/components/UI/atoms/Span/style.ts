@@ -200,7 +200,7 @@ const opacityStyles = css<OpacityPick>`
 `;
 
 export const Wrapper = styled.span`
-  line-height: 2em;
+  line-height: 1.5;
 
   /* Level Styles */
   ${levelStyles}
