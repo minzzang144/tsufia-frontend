@@ -44,6 +44,10 @@ const displayStyles = css<DisplayPick>`
         return css`
           display: flex;
         `;
+      case 'none':
+        return css`
+          display: none;
+        `;
       default:
         break;
     }

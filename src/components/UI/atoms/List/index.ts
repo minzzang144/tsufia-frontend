@@ -9,7 +9,7 @@ export type BorderProp = {
 export interface ListProps {
   onClick?: (var1?: string) => void;
   positionprop?: 'relative' | 'absolute';
-  displayprop?: 'flex';
+  displayprop?: 'flex' | 'none';
   flexDirectionprop?: 'row' | 'column';
   justifyContentprop?: 'flex-start' | 'center' | 'flex-end';
   alignItemsprop?: 'flex-start' | 'center' | 'flex-end';

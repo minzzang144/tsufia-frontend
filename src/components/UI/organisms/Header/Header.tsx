@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
+import { useLocation } from 'react-router';
+import { useSelector } from 'react-redux';
 import Drawer from 'react-modern-drawer';
 import 'react-modern-drawer/dist/index.css';
 
@@ -8,13 +10,12 @@ import * as S from '@organisms/Header/style';
 
 import SiteLogo from '@assets/site-logo.png';
 import { List } from '@atoms/List/List';
+import { Link } from '@atoms/Link/Link';
 import { Img } from '@atoms/Img/Img';
 import { Heading } from '@atoms/Heading/Heading';
 import { UnorderedList } from '@atoms/UnorderedList/UnorderedList';
 import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
 import { useLoginContext } from '@routers/LoginRouter';
-import { Link } from '@atoms/Link/Link';
-import { useSelector } from 'react-redux';
 import { RootState } from '@modules';
 
 export const Header: React.FC<I.HeaderProps> = ({
@@ -24,7 +25,8 @@ export const Header: React.FC<I.HeaderProps> = ({
   onToggleModal,
   ...rest
 }) => {
-  const loginContext: I.ILogoutContext = {
+  // 로그인 상태일 때 헤더가 가지는 컨텍스트
+  const loginContext: I.ILoginContext = {
     onLogout: undefined,
     isOpen: undefined,
     toggleDrawer: undefined,
@@ -37,6 +39,8 @@ export const Header: React.FC<I.HeaderProps> = ({
     loginContext.toggleDrawer = toggleDrawer;
     loginContext.onProfileBtnClick = onProfileBtnClick;
   }
+
+  // 게임 룸에 입장했을 때 헤더가 가지는 컨텍스트
   const roomPageContext: I.IRoomPageContext = {
     selfUserInRoom: undefined,
     onLeaveRoomListClick: undefined,
@@ -50,6 +54,7 @@ export const Header: React.FC<I.HeaderProps> = ({
     roomPageContext.muted = muted;
   }
   const room = useSelector((state: RootState) => state.room.data);
+  const location = useLocation();
 
   function renderAudio(isMobile: boolean) {
     if (where === 'UPDATE' && !isMobile) {
@@ -164,6 +169,25 @@ export const Header: React.FC<I.HeaderProps> = ({
             나가기
           </List>
         )}
+        {!isLoggedIn && (
+          <React.Fragment>
+            <List displayprop={location.pathname === '/game-introduction' ? 'none' : undefined}>
+              <Link to="/game-introduction" paddingprop={['2rem', '1.5rem']}>
+                게임 소개
+              </Link>
+            </List>
+            <List>
+              <Link to="/" paddingprop={['2rem', '1.5rem']}>
+                게임 설명
+              </Link>
+            </List>
+            <List>
+              <Link to="/" paddingprop={['2rem', '1.5rem']}>
+                연락하기
+              </Link>
+            </List>
+          </React.Fragment>
+        )}
       </React.Fragment>
     );
   }
@@ -171,10 +195,16 @@ export const Header: React.FC<I.HeaderProps> = ({
   return (
     <S.Wrapper {...rest}>
       <>
-        {isLoggedIn === false && (
+        {location.pathname === '/' && !isLoggedIn && (
           <UnorderedList justifyContentProp="space-evenly">
-            <List colorprop="black" paddingProp={['2rem', '1.5rem']}>
-              게임 소개
+            <List>
+              <Link
+                to="/game-introduction"
+                paddingprop={['2rem', '1.5rem']}
+                displayprop="inline-block"
+              >
+                게임 소개
+              </Link>
             </List>
             <List colorprop="black" paddingProp={['2rem', '1.5rem']}>
               게임 설명
@@ -184,7 +214,7 @@ export const Header: React.FC<I.HeaderProps> = ({
             </List>
           </UnorderedList>
         )}
-        {isLoggedIn === true && (
+        {(location.pathname === '/' && !isLoggedIn) === false && (
           <>
             <S.SpaceBetween>
               <S.Logo to="/">
@@ -213,17 +243,19 @@ export const Header: React.FC<I.HeaderProps> = ({
                 )}
               </S.UnorderedListMobile>
             </S.SpaceBetween>
-            <Drawer
-              open={loginContext.isOpen ? loginContext.isOpen : false}
-              onClose={() => loginContext.toggleDrawer && loginContext.toggleDrawer()}
-              direction="right"
-              style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
-            >
-              <UnorderedList flexDirection="column" alignItemsProp="center">
-                {renderNavigationMenu(true)}
-              </UnorderedList>
-            </Drawer>
           </>
+        )}
+        {isLoggedIn && (
+          <Drawer
+            open={loginContext.isOpen ? loginContext.isOpen : false}
+            onClose={() => loginContext.toggleDrawer && loginContext.toggleDrawer()}
+            direction="right"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+          >
+            <UnorderedList flexDirection="column" alignItemsProp="center">
+              {renderNavigationMenu(true)}
+            </UnorderedList>
+          </Drawer>
         )}
       </>
     </S.Wrapper>

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import { GoogleLoginRequest, KakaoLoginRequest } from '@api-types';
 import { LoginFormInput, SignUpFormInput } from '@atoms/Input';
 import LogoutHome from '@pages/LogoutHome';
+import IntroductionPage from '@pages/IntroductionPage';
 
 interface LogoutRouterProps {
   onLogin: (body: LoginFormInput) => Promise<void>;
@@ -25,7 +26,7 @@ export const LogoutRouter: React.FC<LogoutRouterProps> = ({
   return (
     <Router>
       <Switch>
-        <Route path="/">
+        <Route path="/" exact>
           <LogoutHome
             onLogin={onLogin}
             onGoogleLogin={onGoogleLogin}
@@ -34,6 +35,9 @@ export const LogoutRouter: React.FC<LogoutRouterProps> = ({
             toggle={toggle}
             setToggle={setToggle}
           />
+        </Route>
+        <Route path="/game-introduction" exact>
+          <IntroductionPage />
         </Route>
         <Redirect to="*" />
       </Switch>

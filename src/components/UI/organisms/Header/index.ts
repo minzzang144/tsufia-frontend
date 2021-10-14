@@ -11,7 +11,7 @@ export interface HeaderProps {
   colorProp?: ColorProp;
 }
 
-export interface ILogoutContext {
+export interface ILoginContext {
   onLogout?: () => Promise<void>;
   isOpen?: boolean;
   toggleDrawer?: () => void;
