@@ -6,6 +6,11 @@ import NightMafia from '@assets/night-mafia.png';
 import AfternoonNoKilled from '@assets/afternoon-no-killed.png';
 import AfternoonKilled from '@assets/afternoon-killed.png';
 import AfternoonNothing from '@assets/afternoon-nothing.png';
+import Evening from '@assets/evening.png';
+import GameResult from '@assets/game-result.png';
+import Pending from '@assets/pending.png';
+import Proceeding from '@assets/proceeding.png';
+import Complete from '@assets/complete.png';
 import { Heading } from '@atoms/Heading/Heading';
 import { Img, ImgMedia } from '@atoms/Img/Img';
 import { List } from '@atoms/List/List';
@@ -33,6 +38,7 @@ const Container = styled.div`
 const FlexContainer = styled.div<{ flexDirection?: string }>`
   display: flex;
   margin-bottom: 1rem;
+  width: 100%;
 
   ${({ flexDirection }) => {
     switch (flexDirection) {
@@ -104,7 +110,8 @@ export const ExplanationPresenter: React.FC = () => {
               lineheightprop="2"
               colorprop="black"
               liststyleprop="circle"
-            >{`마피아들은 합의를 통해 죽일 사람 한 명을 정한다. 자살은 불가능하다.`}</List>
+            >{`마피아들은 합의를 통해 죽일 사람 한 명을 정한다. 투표는 강제가 아닌 선택으로 지목하지 않고 넘어갈 수도 있으며 
+            자기 자신을 선택해 자살하는 것은 불가능하다.`}</List>
           </UnorderedList>
           <Heading marginProp={['1rem', '0', '1.5rem', '0']}>{`낮(30초)`}</Heading>
           <FlexMediaContainer>
@@ -147,13 +154,139 @@ export const ExplanationPresenter: React.FC = () => {
               lineheightprop="2"
               colorprop="black"
               liststyleprop="circle"
-            >{`밤에는 마피아 팀 외에는 아무도 대화할 수 없다. 예외적으로 시민 팀의 죽은 사람 한에서 마피아와 소통할 수 있다.`}</List>
+            >{`낮이 되면 마피아가 선택한 플레이어가 사망하며, '~가 살해당하였습니다'라고 문구가 뜬다. 
+            단, 마피아가 죽일 사람을 지목하지 않았다면 밤은 조용히 넘어간다.`}</List>
             <List
               lineheightprop="2"
               colorprop="black"
               liststyleprop="circle"
-            >{`마피아들은 합의를 통해 죽일 사람 한 명을 정한다. 자살은 불가능하다.`}</List>
+            >{`이때부터 죽은 자를 제외한 모든 플레이어가 대화할 수 있다. 
+            시민들은 대화를 통해 누가 마피아인지 추리하여 모든 마피아를 죽여야 하고, 
+            마피아는 시민을 사칭하여 시민들을 속이고 시민들을 죽여나가야 한다.`}</List>
           </UnorderedList>
+          <Heading marginProp={['1rem', '0', '1.5rem', '0']}>{`저녁(15초)`}</Heading>
+          <FlexMediaContainer>
+            <FlexContainer flexDirection="column">
+              <Span
+                levelProp={4}
+                marginProp={['0', '0', '1rem', '0']}
+                colorProp="white"
+                fontweightprop="600"
+              >
+                투표
+              </Span>
+              <ImgMedia src={Evening} width="auto" />
+            </FlexContainer>
+          </FlexMediaContainer>
+          <UnorderedList flexDirection="column">
+            <List
+              lineheightprop="2"
+              colorprop="black"
+              liststyleprop="circle"
+            >{`대화 시간이 끝나면 투표시간으로 넘어간다.`}</List>
+            <List
+              lineheightprop="2"
+              colorprop="black"
+              liststyleprop="circle"
+            >{`기본적으로 플레이어 당 하나의 투표권이 있으며, 한 사람당 한 명에게 투표할 수 있다. 
+            또한 자기 자신에게도 투표할 수 있는데, 이를 '자투'라 한다.`}</List>
+            <List
+              lineheightprop="2"
+              colorprop="black"
+              liststyleprop="circle"
+            >{`투표 시간에 투표 대상을 계속해서 변경할 수 있다. 
+            투표 시간이 종료되었을 때 마지막으로 지목한 대상에게 최종적으로 투표를 행사한다.`}</List>
+            <List
+              lineheightprop="2"
+              colorprop="black"
+              liststyleprop="circle"
+            >{`투표는 비공개로 표시되며 투표 시간이 종료되면 최종적인 투표 결과가 공개된다.`}</List>
+            <List
+              lineheightprop="2"
+              colorprop="black"
+              liststyleprop="circle"
+            >{`투표를 가장 많이 받은 플레이어의 투표 수가 살아있는 유저의 과반수를 넘게되면 사형당하게 되며 
+            그렇지 않을 경우 아무 일도 없이 다음 사이클로 넘어가게 된다.`}</List>
+          </UnorderedList>
+          <Heading marginProp={['1rem', '0', '1.5rem', '0']}>승리 조건</Heading>
+          <FlexMediaContainer>
+            <FlexContainer flexDirection="column">
+              <Span
+                levelProp={4}
+                marginProp={['0', '0', '1rem', '0']}
+                colorProp="white"
+                fontweightprop="600"
+              >
+                게임 결과
+              </Span>
+              <ImgMedia src={GameResult} width="100%" />
+            </FlexContainer>
+          </FlexMediaContainer>
+          <UnorderedList flexDirection="column">
+            <List
+              lineheightprop="2"
+              colorprop="black"
+              liststyleprop="circle"
+            >{`"승리 조건"은 마피아 팀의 경우 마피아 측 인원이 시민 측 인원과 동등하거나 그 이하가 되면 충족되며, 
+            시민 팀의 경우 모든 마피아를 찾아 사형하면 충족되어, 
+            어느 한 팀이 판정 시기에 승리 조건을 충족하는 즉시 해당 팀의 승리로 게임이 종료된다.`}</List>
+            <List
+              lineheightprop="2"
+              colorprop="black"
+              liststyleprop="circle"
+            >{`판정 시기는 매일 2번, 밤이 종료될 때, 일반 투표가 종료될 때다.`}</List>
+          </UnorderedList>
+          <Heading marginProp={['1rem', '0', '1.5rem', '0']}>추가 정보</Heading>
+          <FlexMediaContainer>
+            <FlexContainer flexDirection="column">
+              <Span
+                levelProp={4}
+                marginProp={['0', '0', '1rem', '0']}
+                colorProp="white"
+                fontweightprop="600"
+              >
+                대기중
+              </Span>
+              <ImgMedia src={Pending} width="100%" />
+            </FlexContainer>
+            <FlexContainer flexDirection="column">
+              <Span
+                levelProp={4}
+                marginProp={['0', '0', '1rem', '0']}
+                colorProp="red"
+                fontweightprop="600"
+              >
+                진행중
+              </Span>
+              <ImgMedia src={Proceeding} width="100%" />
+            </FlexContainer>
+            <FlexContainer flexDirection="column">
+              <Span
+                levelProp={4}
+                marginProp={['0', '0', '1rem', '0']}
+                colorProp="white"
+                fontweightprop="600"
+              >
+                완료
+              </Span>
+              <ImgMedia src={Complete} width="100%" />
+            </FlexContainer>
+          </FlexMediaContainer>
+          <UnorderedList flexDirection="column">
+            <List
+              lineheightprop="2"
+              colorprop="black"
+              liststyleprop="circle"
+            >{`방 입장은 대기중 상태일 때만 입장이 가능하며 진행중 또는 완료 상태일 때는 입장이 불가능 합니다.`}</List>
+            <List
+              lineheightprop="2"
+              colorprop="black"
+              liststyleprop="circle"
+            >{`현재까지 가능한 모드는 4인용이며 6, 8인용은 잠정적으로 중단되며 추후 개발할 예정입니다.`}</List>
+          </UnorderedList>
+          <Paragraph whitespaceprop="pre-line" wordbreakprop="break-all">
+            {`Tsufia 게임에 대한 모든 설명을 마쳤습니다. 이제 다른 사용자와 함께 참여하여 게임을 재밌게 플레이 하시길 바랍니다.`}
+          </Paragraph>
         </Container>
       }
       centerHeight="auto"
