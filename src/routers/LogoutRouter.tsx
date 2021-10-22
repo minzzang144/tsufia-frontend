@@ -5,6 +5,7 @@ import { GoogleLoginRequest, KakaoLoginRequest } from '@api-types';
 import { LoginFormInput, SignUpFormInput } from '@atoms/Input';
 import LogoutHome from '@pages/LogoutHome';
 import IntroductionPage from '@pages/IntroductionPage';
+import ExplanationPage from '@pages/ExplanationPage';
 
 interface LogoutRouterProps {
   onLogin: (body: LoginFormInput) => Promise<void>;
@@ -38,6 +39,9 @@ export const LogoutRouter: React.FC<LogoutRouterProps> = ({
         </Route>
         <Route path="/game-introduction" exact>
           <IntroductionPage />
+        </Route>
+        <Route path="/game-explanation" exact>
+          <ExplanationPage />
         </Route>
         <Redirect to="*" />
       </Switch>

@@ -176,8 +176,8 @@ export const Header: React.FC<I.HeaderProps> = ({
                 게임 소개
               </Link>
             </List>
-            <List>
-              <Link to="/" paddingprop={['2rem', '1.5rem']}>
+            <List displayprop={location.pathname === '/game-explanation' ? 'none' : undefined}>
+              <Link to="/game-explanation" paddingprop={['2rem', '1.5rem']}>
                 게임 설명
               </Link>
             </List>
@@ -206,8 +206,14 @@ export const Header: React.FC<I.HeaderProps> = ({
                 게임 소개
               </Link>
             </List>
-            <List colorprop="black" paddingProp={['2rem', '1.5rem']}>
-              게임 설명
+            <List>
+              <Link
+                to="/game-explanation"
+                paddingprop={['2rem', '1.5rem']}
+                displayprop="inline-block"
+              >
+                게임 설명
+              </Link>
             </List>
             <List colorprop="black" paddingProp={['2rem', '1.5rem']}>
               연락하기
