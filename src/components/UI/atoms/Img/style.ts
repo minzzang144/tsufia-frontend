@@ -157,6 +157,7 @@ const opacityStyles = css<OpacityPick>`
 `;
 
 export const Wrapper = styled.img`
+  object-fit: cover;
   /* Padding & Border Styles */
   ${marginStyles}
   ${paddingStyles}

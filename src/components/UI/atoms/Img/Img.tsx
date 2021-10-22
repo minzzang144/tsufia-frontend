@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import * as I from '.';
 import * as S from '@atoms/Img/style';
@@ -10,3 +11,9 @@ export const Img: React.FC<I.ImgProps> = ({ children, src, ...rest }) => {
     </React.Fragment>
   );
 };
+
+export const ImgMedia = styled(Img)`
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+  }
+`;

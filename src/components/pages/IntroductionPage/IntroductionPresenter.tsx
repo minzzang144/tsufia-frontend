@@ -11,12 +11,19 @@ import IntroductionPoster from '@assets/introduction-poster.jpg';
 import { Header } from '@organisms/Header/Header';
 import { Centralization } from '@templates/Centralization/Centralization';
 
-export const Container = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 50%;
   margin-top: 2rem;
   margin-bottom: 5%;
+
+  @media ${({ theme }) => theme.device.laptop} {
+    width: 70%;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 90%;
+  }
 `;
 
 export const IntroductionPresenter: React.FC = () => {
