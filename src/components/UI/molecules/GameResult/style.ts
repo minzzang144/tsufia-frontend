@@ -47,4 +47,11 @@ export const Container = styled.div`
   border-radius: 4px;
   width: 50%;
   height: 70%;
+
+  @media ${({ theme }) => theme.device.laptop} {
+    width: 70%;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 90%;
+  }
 `;

@@ -66,8 +66,6 @@ export const Game: React.FC<I.GameProps> = ({ children, ...rest }) => {
           <UserList />
           <ChatForm />
           <Audio ref={audioRef} src={setAudioSource()} />
-          {/* {room?.game && muted && <S.VolumeOffOutline onClick={() => onAudioBtnClick()} />} */}
-          {/* {room?.game && !muted && <S.VolumeUpOutline onClick={() => onAudioBtnClick()} />} */}
         </S.Wrapper>
       ) : (
         <Span displayProp="inline-block" levelProp={3}>

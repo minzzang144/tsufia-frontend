@@ -5,9 +5,9 @@ import * as S from '@molecules/GameResult/style';
 
 import { Heading } from '@atoms/Heading/Heading';
 import { Span } from '@atoms/Span/Span';
-import { Table } from '@atoms/Table/Table';
-import { Tdata } from '@atoms/Tdata/Tdata';
-import { Thead } from '@atoms/Thead/Thead';
+import { TableMedia } from '@atoms/Table/Table';
+import { TdataMedia } from '@atoms/Tdata/Tdata';
+import { TheadMedia } from '@atoms/Thead/Thead';
 import { RootState } from '@modules';
 import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
 import { Status } from '@room';
@@ -52,45 +52,45 @@ export const GameResult: React.FC = () => {
         <Span colorProp="white" levelProp={3} marginProp={['0', '0', '4%', '0']}>
           잠시 후 게임이 자동으로 시작됩니다
         </Span>
-        <Table widthprop="100%" maxwidthprop="70%" colorprop="white">
+        <TableMedia widthprop="100%" maxwidthprop="70%" colorprop="white">
           <thead>
             <tr>
-              <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
+              <TheadMedia paddingprop={['0', '0', '4%', '0']} colorprop="white">
                 번호
-              </Thead>
-              <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
+              </TheadMedia>
+              <TheadMedia paddingprop={['0', '0', '4%', '0']} colorprop="white">
                 닉네임
-              </Thead>
-              <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
+              </TheadMedia>
+              <TheadMedia paddingprop={['0', '0', '4%', '0']} colorprop="white">
                 직업
-              </Thead>
-              <Thead paddingprop={['0', '0', '4%', '0']} colorprop="white">
+              </TheadMedia>
+              <TheadMedia paddingprop={['0', '0', '4%', '0']} colorprop="white">
                 생사
-              </Thead>
+              </TheadMedia>
             </tr>
           </thead>
           <tbody>
             {fixedRoom?.userList.map((user, index) => (
               <tr key={user.id}>
-                <Tdata paddingprop={['4%', '0']} colorprop="white">
+                <TdataMedia paddingprop={['4%', '0']} colorprop="white">
                   {index + 1}
-                </Tdata>
-                <Tdata paddingprop={['4%', '0']} colorprop="white">
+                </TdataMedia>
+                <TdataMedia paddingprop={['4%', '0']} colorprop="white">
                   {getUserFullName(user.firstName, user.lastName, user.nickname)}
-                </Tdata>
-                <Tdata
+                </TdataMedia>
+                <TdataMedia
                   paddingprop={['4%', '0']}
                   colorprop={user.role === UserRole.Mafia ? 'red' : 'white'}
                 >
                   {user.role === UserRole.Mafia ? '마피아' : '시민'}
-                </Tdata>
-                <Tdata paddingprop={['4%', '0']} colorprop={user.survive ? 'white' : 'red'}>
+                </TdataMedia>
+                <TdataMedia paddingprop={['4%', '0']} colorprop={user.survive ? 'white' : 'red'}>
                   {user.survive ? '생존' : '사망'}
-                </Tdata>
+                </TdataMedia>
               </tr>
             ))}
           </tbody>
-        </Table>
+        </TableMedia>
       </S.Container>
     </S.Wrapper>
   );

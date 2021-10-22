@@ -8,7 +8,7 @@ export const Table: React.FC<I.TableProps> = ({ children, ...rest }) => {
   return <S.Wrapper {...rest}>{children}</S.Wrapper>;
 };
 
-export const MediaTable = styled(Table)`
+export const TableMedia = styled(Table)`
   @media ${({ theme }) => theme.device.laptop} {
     max-width: 70%;
   }
