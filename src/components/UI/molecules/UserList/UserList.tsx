@@ -40,6 +40,9 @@ export const UserList: React.FC = () => {
       if (room.game?.cycle === Cycle.밤) {
         return currentUser?.role === UserRole.Mafia ? 'gray' : 'initial';
       }
+      if (room.game?.cycle === Cycle.저녁) {
+        return currentUser?.survive ? 'gray' : 'initial';
+      }
     }
     return undefined;
   }, [room?.game?.cycle, currentUser?.role]);
