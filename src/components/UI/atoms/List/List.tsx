@@ -22,4 +22,5 @@ export const ListMediaQuery = styled(List)`
 List.defaultProps = {
   colorprop: 'white',
   paddingProp: ['0'],
+  liststyleprop: 'none',
 };

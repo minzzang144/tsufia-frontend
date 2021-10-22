@@ -25,4 +25,6 @@ export interface ListProps {
   cursorprop?: boolean;
   shadowprop?: boolean;
   hovershadowprop?: boolean;
+  liststyleprop?: string;
+  lineheightprop?: string;
 }

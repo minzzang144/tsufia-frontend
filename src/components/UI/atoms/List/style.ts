@@ -19,6 +19,8 @@ type ColorPick = Pick<I.ListProps, 'colorprop'>;
 type CursorPick = Pick<I.ListProps, 'cursorprop'>;
 type ShadowPick = Pick<I.ListProps, 'shadowprop'>;
 type HoverShadowPick = Pick<I.ListProps, 'hovershadowprop'>;
+type ListStylePick = Pick<I.ListProps, 'liststyleprop'>;
+type LineHeightPick = Pick<I.ListProps, 'lineheightprop'>;
 
 const positionStyles = css<PositionPick>`
   ${({ positionprop }) => {
@@ -304,8 +306,25 @@ const hoverShadowStyles = css<HoverShadowPick>`
   }}
 `;
 
+const listStyleStyles = css<ListStylePick>`
+  ${({ liststyleprop }) =>
+    liststyleprop &&
+    css`
+      list-style: ${liststyleprop};
+    `}
+`;
+
+const lineHeightStyles = css<LineHeightPick>`
+  ${({ lineheightprop }) =>
+    lineheightprop &&
+    css`
+      line-height: ${lineheightprop};
+    `}
+`;
+
 export const Wrapper = styled.li`
-  list-style: none;
+  ${listStyleStyles}
+  ${lineHeightStyles}
 
   /* Position Styles */
   ${positionStyles}

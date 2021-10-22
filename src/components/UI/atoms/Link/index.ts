@@ -6,5 +6,5 @@ export interface LinkProps {
   paddingprop?: string[];
   widthprop?: string;
   colorprop?: ColorProp;
-  hoveropacityprop?: 'string';
+  hoveropacityprop?: string;
 }

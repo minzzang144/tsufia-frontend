@@ -2,10 +2,10 @@ import styled, { css } from 'styled-components';
 
 import MainPoster from '@assets/room-container.jpg';
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<{ centerHeight?: string }>`
   display: flex;
   width: 100%;
-  height: 100vh;
+  height: ${(props) => props.centerHeight};
 `;
 
 export const Header = styled.div`
@@ -42,12 +42,12 @@ export const Background = styled.div<{ isBackground: boolean }>`
   }}
 `;
 
-export const Center = styled.div`
+export const Center = styled.div<{ centerHeight?: string }>`
   box-sizing: border-box;
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 100vh;
+  height: ${(props) => props.centerHeight};
   padding: 0;
   padding-top: 5rem;
 `;
