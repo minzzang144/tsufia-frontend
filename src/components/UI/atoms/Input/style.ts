@@ -41,6 +41,11 @@ const CommonStyles = withStyles({
     },
     '& .MuiFormHelperText-root': {
       color: 'red',
+      margin: '.5rem 14px 0 14px !important',
+    },
+    '& .MuiInputBase-inputMultiline': {
+      color: 'white',
+      width: '40vw',
     },
   },
 })(TextField);

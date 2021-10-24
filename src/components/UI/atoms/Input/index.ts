@@ -7,10 +7,14 @@ export interface InputProps {
   variant: any;
   disabled?: boolean;
   errors?: any;
+  multiline?: boolean;
+  minRows?: number;
+  maxRows?: number;
   helperText?: any;
   marginprop?: string[];
   widthprop?: string;
   flexprop?: string[];
+  fullwidth?: boolean;
 }
 
 export interface LoginFormInput {

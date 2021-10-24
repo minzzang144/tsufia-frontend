@@ -16,6 +16,10 @@ export const Input: React.FC<I.InputProps> = ({
   disabled,
   errors,
   helperText,
+  multiline,
+  minRows,
+  maxRows,
+  fullwidth,
   ...rest
 }) => {
   return (
@@ -28,11 +32,15 @@ export const Input: React.FC<I.InputProps> = ({
           margin="normal"
           {...field}
           disabled={disabled}
+          multiline={multiline}
+          minRows={minRows}
+          maxRows={maxRows}
           type={type}
           label={label}
           variant={variant}
           error={errors}
           helperText={helperText}
+          fullWidth={fullwidth}
           {...rest}
         />
       )}
