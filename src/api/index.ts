@@ -33,6 +33,8 @@ import {
   PatchSurviveResponse,
   PatchUserRequest,
   PatchUserResponse,
+  PostContactUserRequest,
+  PostContactUserResponse,
   PostUserPasswordRequest,
   PostUserPasswordResonse,
   RemoveRoomResponse,
@@ -126,4 +128,9 @@ export const GameAPI = {
   createGame: (): Promise<CreateGameResponse> => requests.post('games/create'),
   patchGame: (body: PatchGameRequest): Promise<PatchGameResponse> =>
     requests.patch(`games/${body.id}/update`),
+};
+
+export const MailAPI = {
+  postContactUser: (body: PostContactUserRequest): Promise<PostContactUserResponse> =>
+    requests.post(`mail/contact`, body),
 };

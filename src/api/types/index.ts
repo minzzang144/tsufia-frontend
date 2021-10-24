@@ -205,3 +205,16 @@ export interface PatchGameRequest {
 export interface PatchGameResponse extends CommonResponse {
   game?: Game;
 }
+
+/**
+ * Mail API
+ *  */
+
+// Post Contact User
+export interface PostContactUserRequest {
+  email: string;
+  subject: string;
+  message: string;
+}
+
+export interface PostContactUserResponse extends CommonResponse {}
