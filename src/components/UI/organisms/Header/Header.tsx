@@ -181,8 +181,8 @@ export const Header: React.FC<I.HeaderProps> = ({
                 게임 설명
               </Link>
             </List>
-            <List>
-              <Link to="/" paddingprop={['2rem', '1.5rem']}>
+            <List displayprop={location.pathname === '/contact' ? 'none' : undefined}>
+              <Link to="/contact" paddingprop={['2rem', '1.5rem']}>
                 연락하기
               </Link>
             </List>
@@ -215,8 +215,10 @@ export const Header: React.FC<I.HeaderProps> = ({
                 게임 설명
               </Link>
             </List>
-            <List colorprop="black" paddingProp={['2rem', '1.5rem']}>
-              연락하기
+            <List>
+              <Link to="/contact" paddingprop={['2rem', '1.5rem']} displayprop="inline-block">
+                연락하기
+              </Link>
             </List>
           </UnorderedList>
         )}
