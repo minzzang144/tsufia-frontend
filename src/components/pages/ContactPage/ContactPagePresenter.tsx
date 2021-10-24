@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import GithubIcon from '@material-ui/icons/GitHub';
 
 import * as I from '.';
 
@@ -28,6 +29,10 @@ const Container = styled.div`
   @media ${({ theme }) => theme.device.mobile} {
     width: 80%;
   }
+`;
+
+const GithubLink = styled.a`
+  color: white;
 `;
 
 export const ContactPagePresenter: React.FC<I.ContactPagePresenterProps> = ({ loading, state }) => {
@@ -100,6 +105,9 @@ export const ContactPagePresenter: React.FC<I.ContactPagePresenterProps> = ({ lo
               Transmit
             </Button>
           </Form>
+          <GithubLink href="https://github.com/ShigatsuEl/tsufia-frontend" target="_blank">
+            <GithubIcon />
+          </GithubLink>
         </Container>
       }
       centerHeight="100vh"
