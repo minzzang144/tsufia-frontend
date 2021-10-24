@@ -1,11 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 import * as I from '.';
 
 import { ContactPagePresenter } from '@pages/ContactPage/ContactPagePresenter';
+import { MailAPI } from '@api';
+import { PostContactUserRequest } from '@api-types';
 
 // Contact Context 생성
 const ContactPageContext = createContext<I.IContactPageContext | undefined>(undefined);
@@ -31,10 +33,27 @@ export const ContactPageContainer: React.FC = () => {
     formState: { errors, isValid },
     reset,
   } = useForm<I.ContactInput>({ mode: 'all', resolver: yupResolver(contactSchema) });
+  const [loading, setLoading] = useState<boolean>(false);
+  const [state, setState] = useState<{ ok: boolean; content: string } | undefined>(undefined);
 
-  const onValid = () => {
-    console.log(getValues());
-    reset({ email: '', subject: '', message: '' });
+  const onValid = async () => {
+    const values = getValues();
+    await onContactUser(values);
+  };
+
+  const onContactUser = async (body: PostContactUserRequest) => {
+    try {
+      setLoading(true);
+      const response = await MailAPI.postContactUser(body);
+      const { ok, error } = response;
+      if (!ok && error) setState({ ok: false, content: error });
+      if (ok) setState({ ok: true, content: '메일 전송을 성공하였습니다!' });
+      reset({ email: '', subject: '', message: '' });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const contactValues = {
@@ -48,7 +67,7 @@ export const ContactPageContainer: React.FC = () => {
 
   return (
     <ContactPageContext.Provider value={contactValues}>
-      <ContactPagePresenter />
+      <ContactPagePresenter loading={loading} state={state} />
     </ContactPageContext.Provider>
   );
 };

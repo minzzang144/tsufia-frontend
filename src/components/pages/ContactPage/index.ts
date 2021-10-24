@@ -9,6 +9,15 @@ import {
 
 export default ContactPageContainer;
 
+// Contact Page Presenter 인터페이스
+export interface ContactPagePresenterProps {
+  loading: boolean;
+  state?: {
+    ok: boolean;
+    content: string;
+  };
+}
+
 // Contact Page Context 인터페이스
 export interface IContactPageContext {
   register: UseFormRegister<ContactInput>;

@@ -1,5 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+import * as I from '.';
 
 import { Form } from '@atoms/Form/Form';
 import { Heading } from '@atoms/Heading/Heading';
@@ -8,6 +11,7 @@ import { useContactPageContext } from '@pages/ContactPage/ContactPageContainer';
 import { Centralization } from '@templates/Centralization/Centralization';
 import { Input } from '@atoms/Input/Input';
 import { Button } from '@atoms/Button/Button';
+import { Span } from '@atoms/Span/Span';
 
 const Container = styled.div`
   display: flex;
@@ -26,7 +30,7 @@ const Container = styled.div`
   }
 `;
 
-export const ContactPagePresenter: React.FC = () => {
+export const ContactPagePresenter: React.FC<I.ContactPagePresenterProps> = ({ loading, state }) => {
   const { handleSubmit, control, onValid, errors, isValid } = useContactPageContext();
 
   return (
@@ -34,6 +38,9 @@ export const ContactPagePresenter: React.FC = () => {
       header={<Header isLoggedIn={false} colorProp="black" />}
       center={
         <Container>
+          {loading && <CircularProgress />}
+          {!loading && state?.ok && <Span>{state?.content}</Span>}
+          {!loading && !state?.ok && <Span highlightProp={true}>{state?.content}</Span>}
           <Heading marginProp={['1rem', '0', '1.5rem', '0']}>Contact</Heading>
           <Form
             onSubmit={handleSubmit(onValid)}
