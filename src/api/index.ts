@@ -45,7 +45,10 @@ import {
 } from '@api-types';
 import { LoginFormInput, SignUpFormInput } from '@atoms/Input';
 
-const SERVER_ADDRESS = 'http://localhost:4000/';
+const SERVER_ADDRESS =
+  process.env.NODE_ENV === 'production'
+    ? 'https://tsufia-backend.herokuapp.com/'
+    : 'http://localhost:4000/';
 
 export const axiosInstance: AxiosInstance = axios.create({
   baseURL: `${SERVER_ADDRESS}`,

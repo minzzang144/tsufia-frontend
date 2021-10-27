@@ -1,6 +1,11 @@
 import io from 'socket.io-client';
 
-const socket = io('wss://tsufia-backend.herokuapp.com/', {
+const URI =
+  process.env.NODE_ENV === 'production'
+    ? 'wss://tsufia-backend.herokuapp.com/'
+    : 'ws://localhost:4000/';
+
+const socket = io(URI, {
   transports: ['websocket'],
   withCredentials: true,
 });
