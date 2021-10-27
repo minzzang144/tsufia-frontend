@@ -558,6 +558,7 @@ export const RoomPageContainer: React.FC = () => {
       if (room && room.game) {
         const substract = room.game.countDown - moment().unix();
         const duration = moment.duration(substract, 'seconds');
+        console.log(substract, duration.seconds());
         if (duration.seconds() < 0) {
           setCountDown(0);
         } else {
@@ -600,6 +601,7 @@ export const RoomPageContainer: React.FC = () => {
       }
     }
     // 방장만 해당
+
     if (
       currentUser?.host === true &&
       room &&
@@ -665,6 +667,7 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 카운트다운을 동기화시키기 위한 소켓 이벤트
   useEffect(() => {
+    console.log(countDown);
     if (currentUser?.host) {
       socket.emit('games:countDown:server', { roomId: room?.id, countDown });
     }
