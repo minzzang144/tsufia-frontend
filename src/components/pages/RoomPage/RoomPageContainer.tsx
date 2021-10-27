@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import moment from 'moment';
+import 'moment-timezone';
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
@@ -556,7 +557,8 @@ export const RoomPageContainer: React.FC = () => {
   useInterval(
     () => {
       if (room && room.game) {
-        const substract = room.game.countDown - moment().unix();
+        moment.tz.setDefault('Asia/Seoul');
+        const substract = room.game.countDown - moment().utc(false).unix();
         const duration = moment.duration(substract, 'seconds');
         console.log(substract, duration.seconds());
         if (duration.seconds() < 0) {
