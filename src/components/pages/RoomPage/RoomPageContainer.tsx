@@ -1,6 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import moment from 'moment';
-import 'moment-timezone';
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
@@ -556,15 +554,15 @@ export const RoomPageContainer: React.FC = () => {
   // [Private] 카운트다운을 하기 위해 필요한 Hook
   useInterval(
     () => {
-      if (room && room.game) {
-        moment.tz.setDefault('Asia/Seoul');
-        const substract = room.game.countDown - moment().utc(false).unix();
-        const duration = moment.duration(substract, 'seconds');
-        console.log(substract, duration.seconds());
-        if (duration.seconds() < 0) {
+      if (room?.game?.countDown) {
+        // moment.tz.setDefault('Asia/Seoul');
+        const duration = room.game.countDown - new Date().getTime();
+        // const duration = moment.duration(substract, 'seconds');
+        console.log(duration, room.game.countDown, new Date().getTime());
+        if (duration / 1000 < 0) {
           setCountDown(0);
         } else {
-          setCountDown(duration.seconds());
+          setCountDown(Math.floor(duration / 1000));
         }
       }
     },
