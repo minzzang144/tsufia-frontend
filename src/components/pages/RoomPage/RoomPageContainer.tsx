@@ -555,11 +555,8 @@ export const RoomPageContainer: React.FC = () => {
   useInterval(
     () => {
       if (room?.game?.countDown) {
-        // moment.tz.setDefault('Asia/Seoul');
         const date = new Date();
         const duration = room.game.countDown - date.setSeconds(date.getSeconds() - 46);
-        // const duration = moment.duration(substract, 'seconds');
-        console.log(duration, room.game.countDown, new Date().getTime());
         if (duration / 1000 < 0) {
           setCountDown(0);
         } else {

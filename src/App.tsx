@@ -15,13 +15,11 @@ import { getUser, updateLoading, updateToken } from '@auth/actions';
 import { RootState } from '@modules';
 import { LoginRouter } from '@routers/LoginRouter';
 import { LogoutRouter } from '@routers/LogoutRouter';
-import { useHistory } from 'react-router';
 
 function App() {
   const [toggle, setToggle] = useState<boolean>(false);
   const accessToken = useSelector((state: RootState) => state.authentication.token);
   const dispatch = useDispatch();
-  const history = useHistory();
 
   /* Sign Up 진행 시 실행되는 함수 */
   async function onSignUp(body: SignUpFormInput) {
@@ -93,7 +91,7 @@ function App() {
       const response = await AuthAPI.silentRefresh();
       const { ok, error } = response;
       if (ok === false && error) {
-        history.push('/');
+        window.location.reload();
       }
       if (ok === true) onLoginSuccess(response);
     } catch (error) {
