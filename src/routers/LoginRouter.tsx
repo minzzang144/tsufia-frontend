@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import {
   Control,
@@ -11,17 +12,16 @@ import {
 import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
 
+import socket from '@/socket';
+import { AuthAPI, RoomAPI } from '@api';
+import { yupResolver } from '@hookform/resolvers/yup';
 import LoginHome from '@pages/LoginHome';
 import ProfilePage from '@pages/ProfilePage';
 import ProfileUpdatePage from '@pages/ProfileUpdatePage';
 import RoomPage from '@pages/RoomPage';
 import ValidatePage from '@pages/ValidatePage';
-import { AuthAPI, RoomAPI } from '@api';
-import { updateRoomsError } from '@rooms';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { updateRoomsError, updateRoomsLoading } from '@rooms';
 import { Room } from '@room';
-import { useDispatch } from 'react-redux';
-import socket from '@/socket';
 
 // Login Context Interface
 interface ILogInContext {
@@ -90,6 +90,7 @@ const LoginWrapper: React.FC = ({ children }) => {
   // Create Room Form 값들이 유효하면 방을 생성한다
   async function onValid() {
     try {
+      dispatch(updateRoomsLoading());
       const { title, totalHeadCount } = getValues();
       const response = await RoomAPI.createRoom({ title, totalHeadCount: +totalHeadCount });
       const { ok, error, room } = response;
@@ -102,6 +103,8 @@ const LoginWrapper: React.FC = ({ children }) => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      dispatch(updateRoomsLoading());
     }
   }
 

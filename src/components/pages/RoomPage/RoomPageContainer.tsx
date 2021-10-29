@@ -12,6 +12,15 @@ import * as I from '.';
 import socket from '@/socket';
 import { ChatAPI, GameAPI, RoomAPI } from '@api';
 import { User, UserRole } from '@auth';
+import {
+  Chat,
+  createChats,
+  getChats,
+  resetChats,
+  updateChatsError,
+  updateChatsLoading,
+} from '@chats';
+import { Cycle, Game } from '@game';
 import useInterval from '@hooks/useInterval';
 import { RootState } from '@modules';
 import {
@@ -26,17 +35,8 @@ import {
   updateRoomGame,
   updateRoomLoading,
 } from '@room';
-import { resetRooms } from '@rooms';
+import { resetRooms, updateRoomsLoading } from '@rooms';
 import { RoomPagePresenter } from '@pages/RoomPage/RoomPagePresenter';
-import {
-  Chat,
-  createChats,
-  getChats,
-  resetChats,
-  updateChatsError,
-  updateChatsLoading,
-} from '@chats';
-import { Cycle, Game } from '@game';
 
 // Update Room Validate Schema
 const updateRoomSchema = yup.object().shape({
@@ -450,6 +450,7 @@ export const RoomPageContainer: React.FC = () => {
   // [FormModal] Update Room Form이 유효한 경우 실행되는 함수
   async function onValid() {
     try {
+      dispatch(updateRoomsLoading());
       const { title, totalHeadCount } = getValues();
       const response = await RoomAPI.updateRoom({ title, totalHeadCount: +totalHeadCount });
       const { ok, error, room } = response;
@@ -460,6 +461,8 @@ export const RoomPageContainer: React.FC = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      dispatch(updateRoomsLoading());
     }
   }
 
