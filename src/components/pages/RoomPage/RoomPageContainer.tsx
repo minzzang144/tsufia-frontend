@@ -469,6 +469,7 @@ export const RoomPageContainer: React.FC = () => {
   // [ChatForm] Chat Form이 유효한 경우 실행되는 함수
   async function onChatValid() {
     try {
+      dispatch(updateChatsLoading());
       const values = chatGetValues();
       const response = await ChatAPI.createChats(values);
       const { ok, error, chat } = response;
@@ -479,6 +480,8 @@ export const RoomPageContainer: React.FC = () => {
       chatReset({ content: '' });
     } catch (error) {
       console.log(error);
+    } finally {
+      dispatch(updateChatsLoading());
     }
   }
 

@@ -13,8 +13,9 @@ import { Cycle } from '@game';
 
 export const ChatForm: React.FC = () => {
   const { handleSubmit, control, onValid, isValid } = useChatFormContext();
-  const { user, room } = useSelector(
+  const { loading, user, room } = useSelector(
     (state: RootState) => ({
+      loading: state.chats.loading,
       user: state.authentication.user,
       room: state.room.data,
     }),
@@ -63,7 +64,7 @@ export const ChatForm: React.FC = () => {
           marginProp={['0', '0', '0', '1rem']}
           paddingProp={['1rem', '1rem']}
         >
-          전송하기
+          {isValid && loading === true ? '전송중' : '전송하기'}
         </Button>
       </Form>
     </S.Wrapper>
