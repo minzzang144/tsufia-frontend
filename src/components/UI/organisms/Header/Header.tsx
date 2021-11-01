@@ -16,6 +16,7 @@ import { Heading } from '@atoms/Heading/Heading';
 import { UnorderedList } from '@atoms/UnorderedList/UnorderedList';
 import { useRoomPageContext } from '@pages/RoomPage/RoomPageContainer';
 import { useLoginContext } from '@routers/LoginRouter';
+import { useLogoutContext } from '@routers/LogoutRouter';
 import { RootState } from '@modules';
 
 export const Header: React.FC<I.HeaderProps> = ({
@@ -32,12 +33,21 @@ export const Header: React.FC<I.HeaderProps> = ({
     toggleDrawer: undefined,
     onProfileBtnClick: undefined,
   };
+  // 로그아웃 상태일 때 헤더가 가지는 컨텍스트
+  const logoutContext: I.ILogoutContext = {
+    isOpen: undefined,
+    toggleDrawer: undefined,
+  };
   if (isLoggedIn) {
     const { onLogout, isOpen, toggleDrawer, onProfileBtnClick } = useLoginContext();
     loginContext.onLogout = onLogout;
     loginContext.isOpen = isOpen;
     loginContext.toggleDrawer = toggleDrawer;
     loginContext.onProfileBtnClick = onProfileBtnClick;
+  } else {
+    const { isOpen, toggleDrawer } = useLogoutContext();
+    logoutContext.isOpen = isOpen;
+    logoutContext.toggleDrawer = toggleDrawer;
   }
 
   // 게임 룸에 입장했을 때 헤더가 가지는 컨텍스트
@@ -171,24 +181,74 @@ export const Header: React.FC<I.HeaderProps> = ({
         )}
         {!isLoggedIn && (
           <React.Fragment>
-            <List displayprop={location.pathname === '/game-introduction' ? 'none' : undefined}>
-              <Link to="/game-introduction" paddingprop={['2rem', '1.5rem']}>
+            <List
+              displayprop={location.pathname === '/game-introduction' ? 'none' : undefined}
+              colorprop={isMobile ? 'white' : 'black'}
+              paddingProp={['1.5rem']}
+              widthprop={isMobile ? '100%' : undefined}
+              textalignprop="center"
+              cursorprop={true}
+              shadowprop={true}
+              hovershadowprop={true}
+            >
+              <Link to="/game-introduction" paddingprop={['2rem', '1.5rem']} colorprop="black">
                 게임 소개
               </Link>
             </List>
-            <List displayprop={location.pathname === '/game-explanation' ? 'none' : undefined}>
-              <Link to="/game-explanation" paddingprop={['2rem', '1.5rem']}>
+            <List
+              displayprop={location.pathname === '/game-explanation' ? 'none' : undefined}
+              colorprop={isMobile ? 'white' : 'black'}
+              paddingProp={['1.5rem']}
+              widthprop={isMobile ? '100%' : undefined}
+              textalignprop="center"
+              cursorprop={true}
+              shadowprop={true}
+              hovershadowprop={true}
+            >
+              <Link to="/game-explanation" paddingprop={['2rem', '1.5rem']} colorprop="black">
                 게임 설명
               </Link>
             </List>
-            <List displayprop={location.pathname === '/contact' ? 'none' : undefined}>
-              <Link to="/contact" paddingprop={['2rem', '1.5rem']}>
+            <List
+              displayprop={location.pathname === '/contact' ? 'none' : undefined}
+              colorprop={isMobile ? 'white' : 'black'}
+              paddingProp={['1.5rem']}
+              widthprop={isMobile ? '100%' : undefined}
+              textalignprop="center"
+              cursorprop={true}
+              shadowprop={true}
+              hovershadowprop={true}
+            >
+              <Link to="/contact" paddingprop={['2rem', '1.5rem']} colorprop="black">
                 연락하기
               </Link>
             </List>
           </React.Fragment>
         )}
       </React.Fragment>
+    );
+  }
+
+  function renderNavigation(context: I.ILoginContext | I.ILogoutContext) {
+    if (context.isOpen) {
+      return <S.MenuOpened onClick={() => context.toggleDrawer && context.toggleDrawer()} />;
+    } else {
+      return <S.Menued onClick={() => context.toggleDrawer && context.toggleDrawer()} />;
+    }
+  }
+
+  function setDrawer(context: I.ILoginContext | I.ILogoutContext) {
+    return (
+      <Drawer
+        open={context.isOpen ? context.isOpen : false}
+        onClose={() => context.toggleDrawer && context.toggleDrawer()}
+        direction="right"
+        style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+      >
+        <UnorderedList flexDirection="column" alignItemsProp="center">
+          {renderNavigationMenu(true)}
+        </UnorderedList>
+      </Drawer>
     );
   }
 
@@ -240,31 +300,12 @@ export const Header: React.FC<I.HeaderProps> = ({
               {/* 모바일에서 보이는 네비게이션 모드 */}
               <S.UnorderedListMobile>
                 {renderAudio(false)}
-                {loginContext.isOpen ? (
-                  <S.MenuOpened
-                    onClick={() => loginContext.toggleDrawer && loginContext.toggleDrawer()}
-                  />
-                ) : (
-                  <S.Menued
-                    onClick={() => loginContext.toggleDrawer && loginContext.toggleDrawer()}
-                  />
-                )}
+                {isLoggedIn ? renderNavigation(loginContext) : renderNavigation(logoutContext)}
               </S.UnorderedListMobile>
             </S.SpaceBetween>
           </>
         )}
-        {isLoggedIn && (
-          <Drawer
-            open={loginContext.isOpen ? loginContext.isOpen : false}
-            onClose={() => loginContext.toggleDrawer && loginContext.toggleDrawer()}
-            direction="right"
-            style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
-          >
-            <UnorderedList flexDirection="column" alignItemsProp="center">
-              {renderNavigationMenu(true)}
-            </UnorderedList>
-          </Drawer>
-        )}
+        {isLoggedIn ? setDrawer(loginContext) : setDrawer(logoutContext)}
       </>
     </S.Wrapper>
   );

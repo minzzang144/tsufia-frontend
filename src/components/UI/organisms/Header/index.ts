@@ -18,6 +18,11 @@ export interface ILoginContext {
   onProfileBtnClick?: (isMobile: boolean) => void;
 }
 
+export interface ILogoutContext {
+  isOpen?: boolean;
+  toggleDrawer?: () => void;
+}
+
 export interface IRoomPageContext {
   selfUserInRoom?: User;
   onLeaveRoomListClick?: () => void;
