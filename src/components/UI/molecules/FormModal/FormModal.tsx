@@ -45,7 +45,9 @@ export const FormModal: React.FC<I.FormModalProps> = ({ formContext, title, defa
             helperText={errors.title ? errors.title.message : ''}
           />
           <S.FormControled>
-            <FormLabel component="legend">총 인원수</FormLabel>
+            <FormLabel component="legend" style={{ textAlign: 'center' }}>
+              총 인원수
+            </FormLabel>
             <Controller
               name="totalHeadCount"
               control={control}
@@ -58,8 +60,18 @@ export const FormModal: React.FC<I.FormModalProps> = ({ formContext, title, defa
                   onChange={(e) => onChange(e)}
                 >
                   <FormControlLabel value="4" control={<Radio />} label="4명" />
-                  <FormControlLabel value="6" control={<Radio />} label="6명" />
-                  <FormControlLabel value="8" control={<Radio />} label="8명" />
+                  <FormControlLabel
+                    value="6"
+                    disabled={true}
+                    control={<Radio />}
+                    label="6명(준비중)"
+                  />
+                  <FormControlLabel
+                    value="8"
+                    disabled={true}
+                    control={<Radio />}
+                    label="8명(준비중)"
+                  />
                 </RadioGroup>
               )}
             />
