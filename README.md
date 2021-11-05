@@ -88,14 +88,11 @@
 
 ### Built With
 
-- [Next.js](https://nextjs.org/)
 - [React.js](https://reactjs.org/)
-- [Vue.js](https://vuejs.org/)
-- [Angular](https://angular.io/)
-- [Svelte](https://svelte.dev/)
-- [Laravel](https://laravel.com)
-- [Bootstrap](https://getbootstrap.com)
-- [JQuery](https://jquery.com)
+- [Typescript](https://www.typescriptlang.org/)
+- [Socket.io](https://socket.io/)
+- [Redux](https://ko.redux.js.org/)
+- [Material UI](https://mui.com/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -103,32 +100,44 @@
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+다음은 프로젝트를 로컬로 설정하는 방법에 대한 예입니다. 로컬 복사본을 설정하고 실행하려면 다음 간단한 예제 단계를 수행하십시오.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+다음은 소프트웨어를 사용하는 데 필요한 항목을 나열하고 설치하는 방법의 예입니다.
 
 - npm
+
   ```sh
   npm install npm@latest -g
   ```
 
+  or
+
+- yarn
+  ```sh
+  npm install yarn@latest -g
+  ```
+
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. [Google Cloud](https://console.cloud.google.com/apis/dashboard?hl=ko)와 [Kakao Developers Application](https://developers.kakao.com/console/app)에서 CLIENT_ID 및 SECRET_KEY를 가져옵니다.
+2. 레포지토리 클론
    ```sh
    git clone https://github.com/ShigatsuEl/tsufia-frontend.git
    ```
-3. Install NPM packages
+3. NPM 패키지들 설치
    ```sh
    npm install
+   // or
+   yarn install
    ```
-4. Enter your API in `config.js`
+4. 루트에서 `.env`파일 생성 후 API KEY를 입력합니다.
    ```js
-   const API_KEY = 'ENTER YOUR API';
+   REACT_APP_EXPIRES_IN = ENTER_YOUR_CUSTOM_EXPIRES_IN;
+   REACT_APP_GOOGLE_CLIENT_ID = ENTER_YOUR_API;
+   REACT_APP_GOOGLE_SECRET = ENTER_YOUR_API;
+   REACT_APP_KAKAO_CLIENT_ID = ENTER_YOUR_API;
    ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -138,8 +147,6 @@ This is an example of how to list things you need to use the software and how to
 ## Usage
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
