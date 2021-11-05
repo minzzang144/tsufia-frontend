@@ -562,7 +562,9 @@ export const RoomPageContainer: React.FC = () => {
     () => {
       if (room?.game?.countDown) {
         const date = new Date();
-        const duration = room.game.countDown - date.setSeconds(date.getSeconds() - 46);
+        const duration =
+          room.game.countDown -
+          date.setSeconds(date.getSeconds() - (process.env.NODE_ENV === 'production' ? 46 : 0));
         if (duration / 1000 < 0) {
           setCountDown(0);
         } else {
