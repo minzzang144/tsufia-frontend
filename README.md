@@ -197,7 +197,7 @@ yarn start
 
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+MIT 라이센스에 따라 배포됩니다. 자세한 내용은 `LICENSE.txt`를 참조하십시오.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -205,7 +205,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact
 
-Minchan Lee(ShigatsuEl) - shigatsu970704@gmail.com
+Minchan Lee(ShigatsuEl) - [shigatsu970704@gmail.com](mailto:shigatsu970704@gmail.com)
 
 Project Link: [https://github.com/ShigatsuEl/tsufia-frontend](https://github.com/ShigatsuEl/tsufia-frontend)
 
@@ -215,9 +215,10 @@ Project Link: [https://github.com/ShigatsuEl/tsufia-frontend](https://github.com
 
 ## Acknowledgments
 
-- []()
-- []()
-- []()
+- [Choose an Open Source License](https://choosealicense.com)
+- [Img Shields](https://shields.io)
+- [Socket.io](https://socket.io/)
+- [Material UI](https://mui.com/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
