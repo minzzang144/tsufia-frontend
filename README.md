@@ -76,7 +76,13 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Tsufia Introduction][product-introduction]](https://tsufia.netlify.app)
+
+<br />
+
+|                             Mafia Screenshot                             |                            Citizen Screenshot                            |
+| :----------------------------------------------------------------------: | :----------------------------------------------------------------------: |
+| [![Tsufia Screen Shot][product-screenshot1]](https://tsufia.netlify.app) | [![Tsufia Screen Shot][product-screenshot2]](https://tsufia.netlify.app) |
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -210,4 +216,6 @@ Project Link: [https://github.com/ShigatsuEl/tsufia-frontend](https://github.com
 [license-url]: https://github.com/ShigatsuEl/tsufia-frontend/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/민찬-이-8030a4200
-[product-screenshot]: images/screenshot.png
+[product-introduction]: images/introduction.jpg
+[product-screenshot1]: images/screenshot1.png
+[product-screenshot2]: images/screenshot2.png
