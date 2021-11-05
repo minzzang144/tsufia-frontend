@@ -201,6 +201,15 @@ MIT 라이센스에 따라 배포됩니다. 자세한 내용은 `LICENSE.txt`를
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+<!-- Copyright -->
+
+## Copyright
+
+프로젝트에서 사용된 이미지와 오디오들은 아래의 라이센스를 따르고 있습니다.
+
+- [이미지(Pixabay License)](https://pixabay.com/ko/service/license/)
+- 오디오(Youtube 오디오 보관함 라이센스 - 저작자 표시 필요 없음)
+
 <!-- CONTACT -->
 
 ## Contact
