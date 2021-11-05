@@ -146,7 +146,15 @@
 
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+```sh
+npm start
+# or
+yarn start
+```
+
+아래 이미지를 클릭하여 프로젝트가 어떻게 사용되는지 확인할 수 있습니다.
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/tCC3m92m6dk/0.jpg)](https://www.youtube.com/watch?v=tCC3m92m6dk)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -154,12 +162,17 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 ## Roadmap
 
-- [] Feature 1
-- [] Feature 2
-- [] Feature 3
-  - [] Nested Feature
+- [x] 로그인 및 회원가입
+- [x] 소셜 로그인
+  - [x] 구글
+  - [x] 카카오
+- [x] 패스워드 확인 및 프로필 업데이트
+- [x] 소켓 연결
+  - [x] 방 입장/수정/퇴장 실시간 연동
+  - [x] 게임 사이클 실시간 연동
+  - [x] 새로고침 후에도 소켓 연결 유지(실수로 게임 중단되는 것을 방지)
 
-See the [open issues](https://github.com/ShigatsuEl/tsufia-frontend/issues) for a full list of proposed features (and known issues).
+제안된 기능(알려진 이슈)의 전체 목록은 [미해결 이슈](https://github.com/ShigatsuEl/tsufia-frontend/issues)를 참조하십시오.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -167,16 +180,16 @@ See the [open issues](https://github.com/ShigatsuEl/tsufia-frontend/issues) for 
 
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+기여는 오픈 소스 커뮤니티를 배우고, 영감을 주고, 창조할 수 있는 놀라운 장소로 만드는 것입니다. 어떠한 기여도 대단히 감사합니다:)
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
+여러분이 더 좋은 제안을 가지고 있는 경우 레포지토리를 포크하고 풀 리퀘스트 요청을 작성하십시오. 또한 "향상" 태그로 이슈를 간단히 열 수도 있습니다. 프로젝트에 스타를 주는 것을 잊지 마세요! 다시 한 번 감사드립니다!
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. 프로젝트를 Fork합니다
+1. Fork된 프로젝트로부터 로컬 환경으로 복사합니다.(`git clone https://github.com/your_name/tsufia-frontend`)
+1. 새로운 브랜치를 생성합니다 (`git checkout -b feature/AmazingFeature`)
+1. 변경된 점을 커밋으로 남깁니다 (`git commit -m 'Add some AmazingFeature'`)
+1. 브랜치를 푸쉬합니다 (`git push origin feature/AmazingFeature`)
+1. 풀 리퀘스트를 오픈합니다
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
