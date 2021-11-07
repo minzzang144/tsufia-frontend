@@ -35,7 +35,9 @@
   <p align="center">
     소켓을 활용하여 실시간으로 적용되는 마피아 게임을 만들어보자!
     <br />
-    <a href="https://github.com/ShigatsuEl/tsufia-frontend"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/ShigatsuEl/tsufia-frontend/blob/master/MEMOIRS.md"><strong>개발 후기 »</strong></a>
+    <br />
+    <a href="https://github.com/ShigatsuEl/tsufia-backend"><strong>Backend Repo »</strong></a>
     <br />
     <br />
     <a href="https://tsufia.netlify.app">View Demo</a>
@@ -67,6 +69,7 @@
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
+    <li><a href="#copyright">Copyright</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
