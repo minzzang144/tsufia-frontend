@@ -191,7 +191,11 @@ export const Header: React.FC<I.HeaderProps> = ({
               shadowprop={true}
               hovershadowprop={true}
             >
-              <Link to="/game-introduction" paddingprop={['2rem', '1.5rem']} colorprop="black">
+              <Link
+                to="/game-introduction"
+                paddingprop={['2rem', '1.5rem']}
+                colorprop={isMobile ? 'black' : 'white'}
+              >
                 게임 소개
               </Link>
             </List>
@@ -205,7 +209,11 @@ export const Header: React.FC<I.HeaderProps> = ({
               shadowprop={true}
               hovershadowprop={true}
             >
-              <Link to="/game-explanation" paddingprop={['2rem', '1.5rem']} colorprop="black">
+              <Link
+                to="/game-explanation"
+                paddingprop={['2rem', '1.5rem']}
+                colorprop={isMobile ? 'black' : 'white'}
+              >
                 게임 설명
               </Link>
             </List>
@@ -219,7 +227,11 @@ export const Header: React.FC<I.HeaderProps> = ({
               shadowprop={true}
               hovershadowprop={true}
             >
-              <Link to="/contact" paddingprop={['2rem', '1.5rem']} colorprop="black">
+              <Link
+                to="/contact"
+                paddingprop={['2rem', '1.5rem']}
+                colorprop={isMobile ? 'black' : 'white'}
+              >
                 연락하기
               </Link>
             </List>
