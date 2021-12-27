@@ -105,7 +105,7 @@ export const Header: React.FC<I.HeaderProps> = ({
               shadowprop={true}
               hovershadowprop={true}
             >
-              방 반들기
+              방 만들기
             </List>
             <List
               onClick={() =>
