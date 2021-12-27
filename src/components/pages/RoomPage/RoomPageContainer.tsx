@@ -564,12 +564,8 @@ export const RoomPageContainer: React.FC = () => {
         const date = new Date();
         const duration =
           room.game.countDown -
-          date.setSeconds(date.getSeconds() - (process.env.NODE_ENV === 'production' ? 46 : 0));
-        console.log(
-          duration / 1000,
-          room.game.countDown,
-          date.setSeconds(date.getSeconds() - (process.env.NODE_ENV === 'production' ? 46 : 0)),
-        );
+          (date.setSeconds(date.getSeconds()) - (process.env.NODE_ENV === 'production' ? 9000 : 0));
+        // console.log(room.game.countDown, date.setSeconds(date.getSeconds()), duration);
         if (duration / 1000 < 0) {
           setCountDown(0);
         } else {
@@ -678,7 +674,6 @@ export const RoomPageContainer: React.FC = () => {
 
   // [Private] 카운트다운을 동기화시키기 위한 소켓 이벤트
   useEffect(() => {
-    console.log(countDown);
     if (currentUser?.host) {
       socket.emit('games:countDown:server', { roomId: room?.id, countDown });
     }
